@@ -54,12 +54,14 @@ class Customer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
     profile = models.ImageField(null=True, blank=True, upload_to="customer_profiles/")
     name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
     address = models.TextField()
     mobile = models.CharField(max_length=20)
     whatsapp_number = models.CharField(max_length=20)
     installed_product = models.ManyToManyField(Product, blank=True)
     customer_code = models.CharField(max_length=50, blank=True, unique=True)
     location = models.CharField(max_length=250, null=True, blank=True)
+    initial_password = models.CharField(max_length=150, blank=True, null=True)
     
     created_on = models.DateField(auto_now_add=True)
     

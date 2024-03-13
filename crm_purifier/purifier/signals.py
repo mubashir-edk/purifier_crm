@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from user_management.models import CustomUser
 from .models import Employee, ServiceWork, Notification, Customer, CustomerProduct
 import string
 import random
@@ -9,39 +10,56 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 
-# def generate_random_password(length=8):
-#     special_character = '@'
-#     characters = string.ascii_letters + special_character + string.digits
+def generate_random_password(length=8):
+    special_character = '@'
+    characters = string.ascii_letters + special_character + string.digits
     
-#     # Initialize the password with one lowercase and one uppercase letter
-#     password = random.choice(string.ascii_lowercase) + random.choice(string.ascii_uppercase)
-#     # Use length - 2 to accommodate for the two letters already added
-#     password += ''.join(random.choice(characters) for _ in range(length - 2))
-#     # Add one digit
-#     password += random.choice(string.digits)
-#     # Add one or two special characters
-#     password += ''.join(random.choice(special_character) for _ in range(random.randint(1, 2)))
-#     # Convert password to a list for shuffling
-#     password = list(password)
-#     # Shuffle the password
-#     random.shuffle(password)
-#     # Convert the shuffled list back to a string
-#     password = ''.join(password)
+    # Initialize the password with one lowercase and one uppercase letter
+    password = random.choice(string.ascii_lowercase) + random.choice(string.ascii_uppercase)
+    # Use length - 2 to accommodate for the two letters already added
+    password += ''.join(random.choice(characters) for _ in range(length - 2))
+    # Add one digit
+    password += random.choice(string.digits)
+    # Add one or two special characters
+    password += ''.join(random.choice(special_character) for _ in range(random.randint(1, 2)))
+    # Convert password to a list for shuffling
+    password = list(password)
+    # Shuffle the password
+    random.shuffle(password)
+    # Convert the shuffled list back to a string
+    password = ''.join(password)
     
-#     return password
+    return password
 
-# generate_random_password()
+generate_random_password()
 
-# @receiver(post_save, sender=Employee)
-# def create_user(sender, instance, created, **kwargs):
-#     if created:
-#         username = instance.employee_code
-#         email = instance.email
-#         random_password = generate_random_password()  # Generate a random password
-#         instance.initial_password = random_password
-#         instance.save()
-#         User.objects.create_user(username=username, password=random_password, email=email)
-#         print(f'username: {username} ----- password: {random_password} ----- password: {email} -----')
+@receiver(post_save, sender=Employee)
+def create_user(sender, instance, created, **kwargs):
+    print("EMPLOYEE POSTED")
+    if created:
+        print("EMPLOYEE CREATED")
+        username = instance.employee_code
+        email = instance.email
+        
+        random_password = generate_random_password()  # Generate a random password
+        instance.initial_password = random_password
+        instance.save()
+        CustomUser.objects.create_employee(username=username, email=email, password=random_password)
+        print(f'username: {username} ----- password: {random_password} ----- password: {email} -----')
+
+@receiver(post_save, sender=Customer)
+def create_user(sender, instance, created, **kwargs):
+    print("CUSTOMER POSTED")
+    if created:
+        print("CUSTOMER CREATED")
+        username = instance.customer_code
+        email = instance.email
+        
+        random_password = generate_random_password()  # Generate a random password
+        instance.initial_password = random_password
+        instance.save()
+        CustomUser.objects.create_employee(username=username, email=email, password=random_password)
+        print(f'username: {username} ----- password: {random_password} ----- password: {email} -----')
 
 
 # @receiver(post_save, sender=User)
