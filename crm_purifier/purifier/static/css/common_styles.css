@@ -1,0 +1,47 @@
+a {
+    cursor: pointer;
+}
+
+.anchor_tag {
+    text-decoration: none;
+    color: black;
+}
+
+.anchor_tag:hover {
+    color: black;
+    cursor: pointer;
+}
+
+.page_heading {
+    line-height: normal;
+    font-size: 24px;
+    font-weight: 700;
+    /* margin-bottom: -8px; */
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+/* delete bin */
+.bi-trash {
+    color: #ff0000;
+}
+
+/* edit pen */
+.bi-pencil-square {
+    color: dodgerblue;
+}
+
+/* table */
+table thead {
+    background: #0c768a;
+}
+
+/* modal */
+.modal {
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+/* page heading row */

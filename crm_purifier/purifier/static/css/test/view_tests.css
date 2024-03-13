@@ -1,0 +1,13 @@
+/* .anchor_tag {
+    text-decoration: none;
+    color: black;
+}
+
+.anchor_tag:hover {
+    color: black;
+} */
+
+.test_heading {
+    font-size: 25px;
+    font-weight: 500;
+}

@@ -1,0 +1,311 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Font Awesome Icons CDN -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <!-- Bootstrap5 CSS CDN -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+        <!-- Bootstrap Icons CSS from CDN -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+
+        <!-- JQUERY CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <!-- FOOTABLE -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+        <!-- External CSS Links -->
+        <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'css/common_styles.css' %}" rel="stylesheet" type="text/css">
+
+        {% block head %}{% endblock head %}
+
+    </head>
+    <body id="pageBodyView">
+
+        <div id="loadingPage">
+        </div>
+        
+        {% comment %} NAVBAR {% endcomment %}
+        <div id="navBar">
+
+            <div class="mainnav d-flex justify-content-between align-items-center">
+                
+                <div id="iksdf" class="d-flex align-items-center">
+
+                    <div id="smallScreenMenu">
+                        {% comment %} <i class="fa-solid fa-bars"></i> {% endcomment %}
+
+                        <div class="dropdown">
+                            <a class="anchor_tag" href="#" id="menuDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-bars"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="menuDropdownMenuLink">
+
+                                <li>
+                                    <a class="dropdown-item" href="{% url "purifier:view_dashboard" %}">
+                                        <i class="fa-solid fa-house me-2"></i>Dashboard
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url "purifier:view_customers" %}">
+                                        <i class="fa-solid fa-user-group me-2"></i>Customers
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url "purifier:view_employees" %}">
+                                        <i class="fa-solid fa-people-group me-2"></i>Employees
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url "purifier:view_products" %}">
+                                        <i class="fa-solid fa-cart-shopping me-2"></i>Products
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url "purifier:view_services" %}">
+                                        <i class="fa-solid fa-gears me-2"></i>Services
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url "purifier:view_servicers" %}">
+                                        <i class="fa-solid fa-users-gear me-2"></i>Servicers
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url "purifier:view_serviceworks" %}">
+                                        <i class="fa-solid fa-screwdriver-wrench me-2"></i>Service Works
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url "purifier:view_assigns" %}">
+                                        <i class="fa-solid fa-handshake me-2"></i>Work Assigns
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url "purifier:view_tests" %}">
+                                        <i class="fa-solid fa-flask me-2"></i>Tests
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-center brand-area">
+                        <a class="anchor_tag d-flex" href="{% url "purifier:view_dashboard" %}">
+                            <img src="{% static "images/brandlogo.png" %}" id="navBrand">
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="navbar_profile d-flex align-items-center dropdown" id="navbarProfile">
+
+                    {% comment %} Notification Dropdown {% endcomment %}
+                    <div class="me-2">
+                        <a class="anchor_tag" href="#" id="notificationDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i id="bellIcon" class="fa-solid fa-bell position-relative"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-center p-1" id="notificationDropdownItems" aria-labelledby="notificationDropdownMenuLink">
+                        </ul>
+                    </div>
+
+                    {% comment %} Profile Dropdown {% endcomment %}
+                    <div>
+                        <a class="anchor_tag" href="#" id="profileDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="user-name ms-1">{{request.user}}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-center p-1" aria-labelledby="profileDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#">My Profile</a></li>
+                            <li><hr class="mt-1 mb-1"></li>
+                            <li><form method="post" id="logoutFormUrl" action="/auth/logout/">
+                                <a class="dropdown-item" href="" onclick="this.closest('#logoutFormUrl').submit(); return false;">
+                                {% csrf_token %}
+                                    Logout<i class="fa-solid fa-power-off ms-2"></i>
+                                </a>
+                            </form></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="sidenav" id="sideNav">
+
+                <div class="sidenav_content">
+                    
+                    <label for="sideNavBoolean" id="hideSideNavBtn"><i class="fa-solid fa-angle-left"></i></label>
+                    <input type="checkbox" id="sideNavBoolean" class="d-none"/>
+
+                    <div class="sidenav-items">
+                        <a href="{% url "purifier:view_dashboard" %}">
+                            <div class="content_link p-1">
+                                <div class="icon_container">
+                                    <i class="fa-solid fa-house"></i>
+                                </div>
+                                <div class="text_container">
+                                    <li class="">Dashboard</li>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{% url "purifier:view_customers" %}">
+                            <div class="content_link p-1">
+                                <div class="icon_container">
+                                    <i class="fa-solid fa-user-group"></i>
+                                </div>
+                                <div class="text_container">
+                                    <li class="">Customers</li>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{% url "purifier:view_employees" %}">
+                            <div class="content_link p-1">
+                                <div class="icon_container">
+                                    <i class="fa-solid fa-people-group"></i>
+                                </div>
+                                <div class="text_container">
+                                    <li class="">Employees</li>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{% url "purifier:view_products" %}">
+                            <div class="content_link p-1">
+                                <div class="icon_container">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </div>
+                                <div class="text_container">
+                                    <li class="">Products</li>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{% url "purifier:view_services" %}">
+                            <div class="content_link p-1">
+                                <div class="icon_container">
+                                    <i class="fa-solid fa-gears"></i>
+                                </div>
+                                <div class="text_container">
+                                    <li class="">Services</li>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{% url "purifier:view_servicers" %}">
+                            <div class="content_link p-1">
+                                <div class="icon_container">
+                                    <i class="fa-solid fa-users-gear"></i>
+                                </div>
+                                <div class="text_container">
+                                    <li class="">Servicers</li>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{% url "purifier:view_serviceworks" %}">
+                            <div class="content_link p-1">
+                                <div class="icon_container">
+                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                </div>
+                                <div class="text_container">
+                                    <li class="">Service Works</li>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{% url "purifier:view_assigns" %}">
+                            <div class="content_link p-1">
+                                <div class="icon_container">
+                                    <i class="fa-solid fa-handshake"></i>
+                                </div>
+                                <div class="text_container">
+                                    <li class="">Work Assigns</li>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{% url "purifier:view_tests" %}">
+                            <div class="content_link p-1">
+                                <div class="icon_container">
+                                    <i class="fa-solid fa-flask"></i>
+                                </div>
+                                <div class="text_container">
+                                    <li class="">Tests</li>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Extended Contents -->
+        <div class="main_content" id="mainContent">
+            {% block content %}{% endblock content %}
+        </div>  
+
+        <button id="scrollToTopBtn"><i class="bi bi-caret-up-fill"></i></button>
+
+
+        <script>
+            $(document).ready(function(){
+                var socket = new WebSocket('ws://localhost:8080/ws/notifications/');
+        
+                socket.onopen = function(){
+                    console.log('WebSocket connection established.');
+                };
+        
+                socket.onmessage = function(event){
+
+                    var notification = JSON.parse(event.data);
+                    console.log({notification});
+
+                    $('#notificationDropdownItems').append('<li>' + notification + '</li>');
+
+                    $.toast({
+                        text: notification,
+                        heading: 'Service Work',
+                        icon: 'success',
+                        showHideTransition: 'fade',
+                        allowToastClose: true,
+                        hideAfter: 5000,
+                        position: 'bottom-right',
+                        textAlign: 'left',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                    });
+                };
+        
+                socket.onclose = function(){
+                    console.log('WebSocket connection closed.');
+                };
+            });
+        </script>
+
+        <!-- common js file -->
+        <script src="{% static 'js/index/index_common.js' %}"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js" integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <!-- Bootstrap5 JS CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    </body>
+</html>

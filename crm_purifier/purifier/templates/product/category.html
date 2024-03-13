@@ -1,0 +1,155 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>Product Category</title>
+    <link href="{% static 'css/product/category.css' %}" rel="stylesheet" type="text/css">
+{% endblock head %}
+
+{% block content %}
+
+<div class="d-grid">
+    <div class="d-flex justify-content-between">
+        <span class="category_heading">Product Category</span>
+        
+        <div>
+            <a href="{% url "purifier:view_products" %}" class="btn btn-sm btn-secondary">View Products</a>
+        </div>
+
+    </div>
+
+    <hr class="mt-1 mb-2">
+
+    <div class="">
+        {% if categories_exists %}
+        <div class="row row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+
+            {% for category in categories  %}
+
+                <div class="col-12">
+                    
+                        <a href="" class="category-products anchor_tag" data-bs-toggle="modal" data-bs-target="#categoryProductsModal" data-bs-categoryId="{{category.id}}">
+                            <div class="category-custom-card">
+
+                                {% if category.image %}
+                                    <img src="{{category.image.url}}" class="category-custom-card-img" alt="Profile not loading...">
+                                    {% else %}
+                                    <img src="{% static 'images/empty_img.jpg' %}" class="category-custom-card-img" alt="Profile not loading...">
+                                {% endif %}
+
+                                <div class="category-custom-card-body text-center">
+
+                                    <p class="category-custom-card-title">{{category.name}}</p>
+
+                                    <div class="d-grid edit-delete-btns">
+
+                                        {% if category.image %}
+                                            <a href="" class="update-category-btn" data-bs-toggle="modal" data-bs-target="#updateCategoryModal" data-bs-category="{{category.id}}" data-bs-categoryImage="{{category.image.url}}" data-bs-categoryname="{{category.name}}"><i class="bi bi-pencil-square category_edit"></i></a>
+                                        {% else %}
+                                            <a href="" class="update-category-btn" data-bs-toggle="modal" data-bs-target="#updateCategoryModal" data-bs-category="{{category.id}}" data-bs-categoryname="{{category.name}}"><i class="bi bi-pencil-square category_edit"></i></a>
+                                        {% endif %}
+
+                                        <a href="" class="delete-category-btn" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" data-bs-category="{{category.id}}" data-bs-categoryName="{{category.name}}"><i class="bi bi-trash category_delete"></i></a>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% comment %} Update Category modal {% endcomment %}
+        <div class="modal fade" id="updateCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateCategoryModalTitle" aria-hidden="true">
+            <form method="post" id="categoryUpdateForm" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateCategoryModalTitle">Create Category</h5>
+                            <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            
+                            <div class="col-12 d-flex justify-content-center">
+
+                                <img id="update-image-preview-category" src="" alt="Image Preview" class="mt-2" style="width: 150px; height: 150px; display: none;">
+
+                                <img id="view-exist-image-category" src="" alt="Image Preview" class="mt-2" style="width: 150px; height: 150px;">
+                                
+                                <img src="{% static 'images/empty_img.jpg' %}" id="updateCategoryDefaultImage" alt="Image not loading..." class="mt-2" style="width: 150px; height: 150px;">  
+                                    
+                                <label for="formCategoryImage" class="form-label ms-2 anchor_tag">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </label>
+                                {{ category_form.image }}
+        
+                            </div>
+
+                            <label for="formCategoryName" class="form-label mt-3">Product Name</label>
+                            {{ category_form.name }}
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="updateCategoryBtn" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% comment %} modal ends {% endcomment %}
+
+
+        {% comment %} Delete Category modal {% endcomment %}
+        <div class="modal fade" id="deleteCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteCategoryModalTitle" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteCategoryModalTitle">Are you sure?</h5>
+                        <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="deleteCategoryModalBody">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <a href="" id="confirmCategoryDelete" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% comment %} modal ends {% endcomment %}
+
+
+        {% comment %} Category Products modal {% endcomment %}
+        <div class="modal fade" id="categoryProductsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="categoryProductsModalTitle" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="categoryProductsModalTitle"></h5>
+                        <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="categoryProductsModalBody">
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% comment %} modal ends {% endcomment %}
+
+
+        {% else %}
+        <div class="d-flex justify-content-center mt-2">
+            <span>No added categories. <a href="" data-bs-toggle="modal" data-bs-target="#createCategoryModal">Add</a> a new category</span>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script src="{% static 'js/product/category.js' %}"></script>
+
+{% endblock content %}

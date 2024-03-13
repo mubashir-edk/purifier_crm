@@ -1,0 +1,131 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>{{service_work.service_work_code}}</title>
+{% endblock head %}
+
+{% block content %}
+
+    <input type="hidden" id="serviceWorkId" value="{{service_work.id}}">
+
+    <form id="serviceworkUpdateForm" method="POST" action="{% url "purifier:each_service_work" service_work.id  %}">
+    {% csrf_token %}
+        
+        <div class="d-flex justify-content-between">
+            <a href="{% url "purifier:view_serviceworks" %}" class="btn btn-sm btn-secondary">&lt;Back</a>
+
+            <div>
+
+                {% if service_work.status == 'pending' %}
+                    <button id="serviceworkChangeStatus" class="btn btn-sm btn-warning">Working</button>
+                {% elif service_work.status == 'working' %}
+                    <button href="" id="serviceworkChangeStatus" class="btn btn-sm btn-success">Work Done</button>
+                {% else %}
+                    <button href="" id="serviceworkChangeStatus" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#returnToPendingModal">Sent to Pending</button>
+                {% endif %}
+
+                {% if service_work.status != 'completed' %}
+                    <a href="" id="serviceworkEditBtn" class="btn btn-sm btn-dark">Edit</a>
+                {% endif %}
+                <a href="" id="serviceworkDeleteBtn" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteServiceWorkModal">Delete</a>
+                <button type="submit" id="serviceworkSaveBtn" class="btn btn-primary">Save</button>
+                
+            </div>
+
+            {% comment %} Delete ServiceWork modal {% endcomment %}
+            <div class="modal fade" id="deleteServiceWorkModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteServiceWorkModalTitle" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteServiceWorkModalTitle">Are you sure?</h5>
+                            <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="deleteServicerModalBody">
+                            You want to delete <b>{{ service_work }}</b>.
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url "purifier:delete_service_work" service_work.id %}" id="confirmServicerDelete" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% comment %} modal ends {% endcomment %}
+
+            {% comment %} Return to pending state modal {% endcomment %}
+            <div class="modal fade" id="returnToPendingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="returnToPendingModalTitle" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="returnToPendingModalTitle">Are you sure?</h5>
+                            <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="returnToPendingModalBody">
+                            You want to go back to <b>Pending</b> state.
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url "purifier:servicework_change_status" service_work.id %}" id="confirmPendingStatus" class="btn btn-danger">Confirm</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% comment %} modal ends {% endcomment %}
+
+        </div>
+
+        <hr class="mt-1 mb-0">
+
+        <div class="d-flex justify-content-between">
+            <div>
+                <span class="page_heading">{{service_work.service_work_code}}<span>
+            </div>
+
+            <div class="d-flex align-items-center">
+                <span style="font-weight: 500;">Status:</span>
+                <div class="ms-1 status-of-work">
+                    {% if service_work.status == 'pending' %}
+                        <span class="badge rounded-pill bg-secondary" style="font-size: 14px;">{{ service_work.get_status_display }}</span>
+                    {% elif service_work.status == 'working' %}
+                        <span class="badge rounded-pill bg-warning" style="font-size: 14px;">{{ service_work.get_status_display }}</span>
+                    {% else %}
+                        <span class="badge rounded-pill bg-success" style="font-size: 14px;">{{ service_work.get_status_display }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="m-0">
+
+            <label for="formServiceWorkCustomer" class="form-label mt-3">Customer</label>
+            {{ service_work_form.customer_code }}
+
+            <label for="formServiceWorkProduct" id="serviceWorkProductLabel" class="form-label mt-3">Product</label>
+            {{ service_work_form.product }}
+
+            <label for="formServiceWorkService" id="serviceWorkServiceLabel" class="form-label mt-3">Service</label>
+            <div id="productServiceDiv">
+                {{ service_work_form.service_name }}
+            </div>
+            <div id="servicesView">
+                {% for service in service_work.service_name.all  %}
+                <input type="text" id="eachProductService" class="form-control mb-1" value="{{service}}" readonly>
+                {% endfor %}
+            </div>
+
+            <label for="formServiceWorkDate" class="form-label mt-3">Service Date</label>
+            {{ service_work_form.service_date }}
+
+            <label for="formServiceWorkComment" class="form-label mt-3">Comments</label>
+            {{ service_work_form.comment_section }}
+
+            <label for="formServiceWorkRemark" class="form-label mt-3">Remarks</label>
+            {{ service_work_form.remark_section }}
+
+        </div>
+
+    </form>
+
+
+<script src="{% static 'js/servicework/each_servicework.js' %}"></script>
+
+{% endblock content %}

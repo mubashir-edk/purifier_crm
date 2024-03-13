@@ -1,0 +1,128 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>View ServiceWorks</title>
+{% endblock head %}
+
+{% block content %}
+
+<div class="d-grid">
+    <div class="d-flex justify-content-between">
+        <span class="page_heading">Service Works</span>
+        <a href="" id="createServiceWorkBtn" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createServiceWorkModal">Create</a>
+    </div>
+
+    {% comment %} Create Service modal {% endcomment %}
+    <form id="serviceWorkFormG" action="{% url "purifier:create_servicework" %}" method="post">
+        {% csrf_token %}
+        <div class="modal fade" id="createServiceWorkModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createServiceWorkModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createServiceWorkModalTitle">Add Service for Customer</h5>
+                        <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <label for="formServiceWorkCustomer" class="form-label mt-3">Customer</label>
+                        {{ service_work_form.customer_code }}
+
+                        <label for="formServiceWorkProduct" id="serviceWorkProductLabel" class="form-label mt-3">Product</label>
+                        {{ service_work_form.product }}
+
+                        <label for="formServiceWorkService" id="serviceWorkServiceLabel" class="form-label mt-3">Service</label>
+                        {{ service_work_form.service_name }}
+
+                        <label for="formServiceWorkDate" class="form-label mt-3">Service Date</label>
+                        {{ service_work_form.service_date }}
+
+                        <label for="formServiceWorkComment" class="form-label mt-3">Comments</label>
+                        {{ service_work_form.comment_section }}
+
+                        <label for="formServiceWorkRemark" class="form-label mt-3">Remarks</label>
+                        {{ service_work_form.remark_section }}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr class="mt-1">
+
+    <div class="mt-1 border-danger border-5">
+        {% if service_works_exists %}
+        <div class="table-responsive">
+            <table id="serviceworkTable" class="table table-bordered align-middle">
+            
+                <thead class="text-white">
+                    <tr>
+                        <th></th>
+                        <th>Code</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Service</th>
+                        <th>Service Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white">
+
+                    {% for service_work in service_works %}
+
+                        <tr>
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td><a href='{% url "purifier:each_service_work" service_work.id %}' class="anchor_tag">{{ service_work.service_work_code }}</a></td>
+                            <td><a href='{% url "purifier:each_service_work" service_work.id %}' class="anchor_tag d-flex align-items-center">
+                                {% if service_work.customer_code.profile %}
+                                    <img src="{{service_work.customer_code.profile.url}}" class="me-1" alt="Profile not loading..." style="width: 25px; height: 25px; border-radius: 50%;">
+                                {% else %}
+                                    <img src="{% static 'images/default.png' %}" class="me-1" alt="Profile not loading..." style="width: 25px; height: 25px; border-radius: 50%;">
+                                {% endif %}
+                                {{ service_work.customer_code }}
+                            </a></td>
+                            <td><a href='{% url "purifier:each_service_work" service_work.id %}' class="anchor_tag">{{ service_work.product }}</a></td>
+                            <td><a href='{% url "purifier:each_service_work" service_work.id %}' class="anchor_tag">
+
+                                {% for service in service_work.service_name.all  %}
+                                    {{ service }},
+                                {% endfor %}
+
+                            </a></td>
+                            <td><a href='{% url "purifier:each_service_work" service_work.id %}' class="anchor_tag">{{ service_work.service_date }}</a></td>
+                            <td class="text-center"><a href='{% url "purifier:each_service_work" service_work.id %}' class="anchor_tag">
+
+                                {% if service_work.status == 'pending' %}
+                                    <span class="badge rounded-pill bg-secondary">{{ service_work.get_status_display }}</span>
+                                {% elif service_work.status == 'working' %}
+                                    <span class="badge rounded-pill bg-warning">{{ service_work.get_status_display }}</span>
+                                {% else %}
+                                    <span class="badge rounded-pill bg-success">{{ service_work.get_status_display }}</span>
+                                {% endif %}
+
+                            </a></td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-center">
+            <span>No service works added. <a href="" data-bs-toggle="modal" data-bs-target="#createServiceWorkModal">Create</a> a new service work.</span>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script src="{% static 'js/servicework/view_serviceworks.js' %}"></script>
+
+{% endblock content %}

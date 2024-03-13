@@ -1,0 +1,199 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>{{ customer.customer_code }}</title>
+    <link href="{% static 'css/customer/each_customer.css' %}" rel="stylesheet" type="text/css">
+{% endblock head %}
+
+{% block content %}
+
+    <div>
+
+        <div class="d-flex justify-content-between">
+            <a href="{% url "purifier:view_customers" %}" class="btn btn-sm btn-secondary">&lt;Back</a>
+
+            <div>
+                <a href="{% url "purifier:update_customer" customer.id %}" class="btn btn-sm btn-dark">Edit</a>
+                <a href="" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCustomerModal">Delete</a>
+            </div>
+
+            {% comment %} Delete customer confirmation modal {% endcomment %}
+            <div class="modal fade" id="deleteCustomerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteCustomerModalTitle" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteCustomerModalTitle">Are you sure?<br></h5>
+                            <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                           You want to delete customer <b>{{ customer.name }} ({{ customer.customer_code}})</b>.
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url "purifier:delete_customer" customer.id %}" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% comment %} modal ends {% endcomment %}
+
+        </div>
+
+        <hr class="mt-1 mb-0">
+
+        <div class="d-grid">
+
+            <div>
+                <span class="page_heading">{{customer.customer_code}}<span>
+            </div>
+
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+
+                    {% if customer.profile %}
+                        <img src="{{ customer.profile.url }}" alt="Profile not loading..." style="width: 150px; height: 150px; border-radius: 50%;">
+                    {% else %}
+                        <img src="{% static 'images/default.png' %}" alt="Image not loading..." style="width: 150px; height: 150px; border-radius: 50%;">
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between d-grid justify-content-center">
+
+                <div class="col-12">
+                    <label for="customerName" class="form-label mt-3">Name</label>
+                    <input type="text" class="form-control" id="customerName" value="{{ customer.name }}" readonly/>
+                </div>
+                <div class="col">
+                    <label for="customerMobile" class="form-label mt-3">Mobile</label>
+                    <input type="text" class="form-control" id="customerMobile" value="{{ customer.mobile }}" readonly/>
+                </div>
+
+            </div>
+
+            <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between d-grid justify-content-center">
+
+                <div class="col-12">
+                    <label for="customerWhatsppNumber" class="form-label mt-3">Whatsapp</label>
+                    <input type="text" class="form-control" id="customerWhatsappNumber" value="{{ customer.whatsapp_number }}" readonly/>
+                </div>
+                <div class="col">
+                    <label for="customerAddress" class="form-label mt-3">Address</label>
+                    <input type="text" class="form-control" id="customerAddress" value="{{ customer.address }}" readonly/>
+                </div>
+
+            </div>
+
+            <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between d-grid justify-content-center">
+
+                <div class="col-12">
+                    <label for="customerLocation" class="form-label mt-3">Location</label>
+                    <input type="text" class="form-control" id="customerLocation" value="{{ customer.location }}" readonly/>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-12">
+
+                    <label for="customerInstalledProduct" class="form-label mt-3">Installed Products</label>
+
+                    {% if customer.installed_product.all %}
+                        <div class="row row-cols-md-2 row-cols-lg-3">
+
+                            {% for product in customer.installed_product.all  %}
+  
+                                <div class="col">
+                                    
+                                        <div class="custom-card">
+
+                                            {% if product.image %}
+                                                <img src="{{product.image.url}}" class="custom-card-img" alt="Profile not loading...">
+                                                {% else %}
+                                                <img src="{% static 'images/empty_img.jpg' %}" class="custom-card-img" alt="Profile not loading...">
+                                            {% endif %}
+
+                                            <div class="custom-card-body">
+
+                                                <p class="custom-card-title">{{product.name}}</p>
+
+                                                <p class="custom-card-text">(Serial_No: {{ product.product_serial }})</p>
+
+                                            </div>
+                                        </div>
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                        <div class="mb-3">
+                            <a class="product-details" data-bs-product="{{product.id}}" data-bs-toggle="modal" data-bs-target="#productDetailsModal">See all product details</a>
+
+                            {% comment %} Product Details modal {% endcomment %}
+                            <div class="modal fade" id="productDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productDetailsModalTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="productDetailsModalTitle">Product Details</h5>
+                                            <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="table-responsive">
+
+                                                <table class="table table-bordered align-middle">
+
+                                                    <thead class="text-white">
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Product_Serial</th>
+                                                            <th>Product</th>
+                                                            <th>Category</th>
+                                                            <th>Services</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody class="table-light">
+                                                        {% for product in customer.installed_product.all %}
+
+                                                            <tr>
+                                                                <td class="text-center">{{forloop.counter}}</td>
+                                                                <td>{{product.product_serial}}</td>
+                                                                <td>{{product.name}}</td>
+                                                                <td>{{product.category}}</td>
+                                                                
+                                                                <td>{% for service in product.services.all  %}
+                                                                    {{service}},
+                                                                {% endfor %}</td>
+                                                            </tr>
+
+                                                        {% endfor %}
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>                                                 
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% comment %} modal ends {% endcomment %}
+                        </div>                                
+                    {% else %}
+
+                        <span>(No installed products.)</span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,131 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>View Services</title>
+{% endblock head %}
+
+{% block content %}
+
+<div class="d-grid">
+    <div class="d-flex justify-content-between">
+        <span class="page_heading">Services</span>
+        <a href="" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createServiceModal">Create</a>
+    </div>
+
+    {% comment %} Create Service modal {% endcomment %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="modal fade" id="createServiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createServiceModalTitle" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createServiceModalTitle">Create Service</h5>
+                        <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="formServiceName" class="form-label mt-3">Service Name</label>
+                        {{ service_form.name }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% comment %} modal ends {% endcomment %}
+
+    {% comment %} Update Service modal {% endcomment %}
+    <form action="" id="serviceUpdateForm" method="post">
+        {% csrf_token %}
+        <div class="modal fade" id="updateServiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateServiceModalTitle" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateServiceModalTitle">Rename Service</h5>
+                        <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="formServiceName" class="form-label mt-3">Service Name</label>
+                        {{ service_form.name }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% comment %} modal ends {% endcomment %}
+
+    <hr class="mt-1">
+
+    <div class="mt-1">
+        {% if services_exists %}
+        <div class="table-responsive">
+            <table id="servicesTable" class="table table-bordered align-middle">
+            
+                <thead class="text-white">
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white">
+
+                    {% for service in services %}
+
+                        <tr>
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td class="d-flex justify-content-between">{{ service.name }}
+
+                                <div>
+                                    <a href="" class="anchor_tag update-service-btn" id="updateServiceBtn" data-bs-serviceId="{{service.id}}" data-bs-serviceName="{{service.name}}" data-bs-toggle="modal" data-bs-target="#updateServiceModal"><i class="bi bi-pencil-square"></i></a>
+
+                                    <a href="" class="anchor_tag delete-service-btn" data-bs-serviceId="{{service.id}}" data-bs-serviceName="{{service.name}}" data-bs-toggle="modal" data-bs-target="#deleteServiceModal"><i class="bi bi-trash ms-2"></i></a>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    {% comment %} Delete Service modal {% endcomment %}
+                    <div class="modal fade" id="deleteServiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteServiceModalTitle" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteServiceModalTitle">Are you sure?</h5>
+                                    <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="deleteServiceModalBody">
+                                    You want to delete <b>{{ service.name }}</b> from services list.
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="" id="confirmServiceDelete" class="btn btn-danger">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} modal ends {% endcomment %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+        {% else %}
+        <div class="d-flex justify-content-center">
+            <span>No services added. <a href="" data-bs-toggle="modal" data-bs-target="#createServiceModal">Create</a> a new service.</span>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script src="{% static 'js/service/view_services.js' %}"></script>
+
+{% endblock content %}

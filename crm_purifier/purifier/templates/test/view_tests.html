@@ -1,0 +1,98 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>View Tests</title>
+    <link href="{% static 'css/test/view_tests.css' %}" rel="stylesheet" type="text/css">
+{% endblock head %}
+
+{% block content %}
+
+<div class="d-grid">
+    <div class="d-flex justify-content-between">
+        <span class="page_heading">Tests</span>
+        <a href="{% url "purifier:create_test" %}" class="btn btn-sm btn-primary">Add</a>
+    </div>
+
+    <hr class="mt-1">
+
+    <div class="mt-1">
+        {% if tests_exists %}
+        <div class="table-responsive">
+            <table id="testTable" class="table table-bordered align-middle">
+            
+                <thead class="text-white">
+                    <tr>
+                        <th></th>
+                        <th>Test</th>
+                        <th>Customer</th>
+                        <th>PH</th>
+                        <th>TDS</th>
+                        <th>Iron</th>
+                        <th>Hardness</th>
+                        <th>Turbuet</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white">
+
+                    {% for test in tests %}
+
+                        <tr>
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td>{{ test.test_name }}</td>
+                            <td class="d-flex align-items-center">
+                                {% if test.customer_code.profile %}
+                                    <img src="{{test.customer_code.profile.url}}" class="me-1" alt="Profile not loading..." style="width: 25px; height: 25px; border-radius: 50%;">
+                                {% else %}
+                                    <img src="{% static 'images/default.png' %}" class="me-1" alt="Profile not loading..." style="width: 25px; height: 25px; border-radius: 50%;">
+                                {% endif %}
+                                {{ test.customer_code }}
+                            </td>
+                            <td>{{ test.ph_value }}</td>
+                            <td>{{ test.tds_value }}</td>
+                            <td>{{ test.iron_value }}</td>
+                            <td>{{ test.hardness_value }}</td>
+                            <td>{{ test.turbuet_value }}</td>
+                            <td class="text-center"><a href="" class="delete-test-btn" data-bs-toggle="modal" data-bs-target="#deleteTestModal" data-bs-test="{{test.id}}"><i class="bi bi-trash"></i></a></td>
+                        </tr>
+
+                    {% endfor %}
+
+
+                    {% comment %} Delete Test modal {% endcomment %}
+                    <div class="modal fade" id="deleteTestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteTestModalTitle" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteTestModalTitle">Are you sure?</h5>
+                                    <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="deleteTestModalBody">
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="" id="confirmTestDelete" class="btn btn-danger">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} modal ends {% endcomment %}
+
+                </tbody>
+
+            </table>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-center">
+            <span>No Tests to view</span>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script src="{% static 'js/test/view_tests.js' %}"></script>
+
+{% endblock content %}

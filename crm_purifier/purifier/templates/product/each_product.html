@@ -1,0 +1,108 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>{{product.name}}</title>
+    {% comment %} <link href="{% static 'css/customer/each_customer.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
+{% endblock head %}
+
+{% block content %}
+    <div>
+
+        <form method="post" action="{% url "purifier:each_product" product.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div class="d-flex justify-content-between">
+                <a href="{% url "purifier:view_products" %}" class="btn btn-sm btn-secondary">&lt;Back</a>
+
+                <div>
+                    <label for="openProductEdit" id="openProductEditLabel" class="btn btn-sm btn-dark">Edit</label>
+                    <input type="checkbox" id="openProductEdit" class="d-none">
+                    <button type="submit" id="productSaveBtn" class="btn btn-sm btn-primary">Save</button>
+                    <a href="" id="productDeleteBtn" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal">Delete</a>
+                </div>
+
+            </div>
+
+            <hr class="mt-1">
+
+            <div class="d-grid">
+
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center">
+
+                        <img id="image-preview" src="" alt="Image Preview" style="width: 250px; height: 250px; border-radius: 4px; display: none;">
+
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="Profile not loading..." style="width: 250px; height: 250px; border-radius: 4px;">
+                        {% else %}
+                            <img src="{% static 'images/empty_img.jpg' %}" id="productDefaultImage" alt="Image not loading..." style="width: 250px; height: 250px; border-radius: 4px">  
+                        {% endif %}
+                            
+                        <label for="formProductImage" id="imageSelectIcon" class="form-label ms-2">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </label>
+                        {{ product_form.image }}
+
+                    </div>
+                </div>
+
+                <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between justify-content-center">
+
+                    <div class="col-12 col-md">
+                        <label for="formProductName" class="form-label mt-3">Name</label>
+                        {{ product_form.name }}
+                    </div>
+                    <div class="col-12 col-md">
+                        <label for="formProductSerial" class="form-label mt-3">Serial</label>
+                        {{ product_form.product_serial }}
+                    </div>
+
+                </div>
+
+                <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between justify-content-center">
+
+                    <div class="col-12 col-md">
+                        <label for="formProductCategory" class="form-label mt-3">Category</label>
+                        {{ product_form.category }}
+                        <input type="text" class="form-control" id="categoryReadonly" value="{{ product.category }}" readonly>
+                    </div>
+                    <div class="col-12 col-md">
+                        <label for="formProductServices" class="form-label mt-3">Services</label>
+                        {{ product_form.services }}
+                        <div id="servicesView">
+                            {% for service in product.services.all  %}
+                                <input type="text" class="form-control mb-1" value="{{service}}" readonly>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    {% comment %} Delete product confirmation modal {% endcomment %}
+    <div class="modal fade" id="deleteProductModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteProductModalTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProductModalTitle">Are you sure?</h5>
+                    <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    You want to delete the product:<br> <b>{{ product.name }}({{ product.product_serial}})</b>.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="{% url "purifier:delete_product" product.id %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} modal ends {% endcomment %}
+
+
+    <script src="{% static 'js/product/each_product.js' %}"></script>
+
+{% endblock content %}

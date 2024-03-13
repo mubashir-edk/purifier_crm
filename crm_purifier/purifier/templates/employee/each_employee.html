@@ -1,0 +1,98 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>{{ employee.employee_code }}</title>
+{% endblock head %}
+
+{% block content %}
+
+    <div>
+
+        <div class="d-flex justify-content-between">
+            <a href="{% url "purifier:view_employees" %}" class="btn btn-sm btn-secondary">&lt;Back</a>
+
+            <div>
+                <a href="{% url "purifier:update_employee" employee.id %}" class="btn btn-sm btn-dark">Edit</a>
+                <a href="" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">Delete</a>
+            </div>
+
+            {% comment %} Delete employee confirmation modal {% endcomment %}
+            <div class="modal fade" id="deleteEmployeeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteEmployeeModalTitle" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteEmployeeModalTitle">Are you sure?</h5>
+                            <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            You want to delete employee <b>{{ employee.name }} ({{ employee.employee_code}})</b>.
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url "purifier:delete_employee" employee.id %}" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% comment %} modal ends {% endcomment %}
+
+        </div>
+
+        <hr class="mt-1 mb-0">
+
+        <div class="d-grid">
+
+            <div>
+                <span class="page_heading">{{employee.employee_code}}<span>
+            </div>
+
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+
+                    {% if employee.profile %}
+                        <img src="{{ employee.profile.url }}" alt="Profile not loading..." style="width: 150px; height: 150px; border-radius: 50%;">
+                    {% else %}
+                        <img src="{% static 'images/default.png' %}" alt="Image not loading..." style="width: 150px; height: 150px; border-radius: 50%;">
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <div class="row d-lg-flex justify-content-lg-between d-grid justify-content-center">
+                <div class="col-lg-6 col-12">
+                    <label for="employeeName" class="form-label mt-3">Name</label>
+                    <input type="text" class="form-control" id="employeeName" value="{{ employee.name }}" readonly/>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <label for="employeeEmail" class="form-label mt-3">Email</label>
+                    <input type="text" class="form-control" id="employeeEmail" value="{{ employee.email }}" readonly/>
+                </div>
+            </div>
+
+            <div class="row d-lg-flex justify-content-lg-between d-grid justify-content-center">
+                <div class="col-lg-6 col-12">
+                    <label for="employeeMobile" class="form-label mt-3">Mobile</label>
+                    <input type="text" class="form-control" id="employeeMobile" value="{{ employee.mobile }}" readonly/>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <label for="employeeAddress" class="form-label mt-3">Address</label>
+                    <textarea id="employeeAddress" class="form-control" readonly>{{ employee.address }}</textarea>
+                </div>
+            </div>
+
+            
+            {% if employee.initial_password %}
+                
+            <div class="row d-flex justify-content-start">
+                <div class="col-lg-6 col-12">
+                    <label for="employeeInitialPassword" class="form-label mt-3">Password to share</label>
+                    <input type="text" class="form-control" id="employeeInitialPassword" value="{{ employee.initial_password }}" readonly/>
+                </div>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock content %}
