@@ -51,9 +51,8 @@
                         {{ customer_form.name }}
                     </div>
                     <div class="col-md-6 col-12">
-                        <label for="formCustomerMobile" class="form-label mt-3">Mobile</label>
-                        {{ customer_form.mobile }}
-                        <p>(Note: Include country code with '+', otherwise it will effect the auto sms system.)</p>
+                        <label for="formCustomerEmail" class="form-label mt-3">Email</label>
+                        {{ customer_form.email }}
                     </div>
 
                 </div>
@@ -61,22 +60,22 @@
                 <div class="row d-md-flex justify-content-md-between d-grid justify-content-center">
 
                     <div class="col-md-6 col-12">
-                        <label for="formCustomerWhatsappNumber" class="form-label mt-3">Whatsapp</label>
-                        {{ customer_form.whatsapp_number }}
+                        <label for="formCustomerMobile" class="form-label mt-3">Mobile</label>
+                        {{ customer_form.mobile }}
                     </div>
                     <div class="col-md-6 col-12">
-                        <label for="formCustomerAddress" class="form-label mt-3">Address</label>
-                        {{ customer_form.address }}
+                        <label for="formCustomerWhatsappNumber" class="form-label mt-3">Whatsapp</label>
+                        {{ customer_form.whatsapp_number }}
                     </div>
 
                 </div>
 
                 <div class="row d-md-flex justify-content-md-start d-grid justify-content-center">
 
-                    {% comment %} <div class="col-lg-6 col-12">
-                        <label for="formCustomerLocation" class="form-label mt-3">Location</label>
-                            {{ customer_form.location }}
-                    </div> {% endcomment %}
+                    <div class="col-lg-6 col-12">
+                        <label for="formCustomerAddress" class="form-label mt-3">Address</label>
+                            {{ customer_form.address }}
+                    </div>
 
                     <div class="col-lg-6 col-12">
                         <label for="formCustomerInstalledProduct" class="form-label mt-3">Installed Products</label>

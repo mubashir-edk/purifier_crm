@@ -48,6 +48,10 @@ class CustomerForm(forms.ModelForm):
                 'class': 'form-control', 
                 'id': 'formCustomerName', 
             }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control', 
+                'id': 'formCustomerEmail', 
+            }),
             'mobile': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'id': 'formCustomerMobile',

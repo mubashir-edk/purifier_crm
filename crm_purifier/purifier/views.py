@@ -112,8 +112,6 @@ def updateEmployee(request, id):
 def deleteEmployee(request, id):
     
     employee = get_object_or_404(Employee, pk=id)
-    employee_user = get_object_or_404(User, email=employee.email)
-    employee_user.delete()
     employee.delete()
 
     return redirect('purifier:view_employees')
@@ -164,8 +162,6 @@ def createCustomer(request):
             
             installed_products = request.POST.getlist('installed_product')
             customer.installed_product.set(installed_products)
-            
-            post_save.send(sender=Customer, instance=customer, created=True)
             
             return redirect('purifier:view_customers')
         
