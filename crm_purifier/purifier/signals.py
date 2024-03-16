@@ -57,32 +57,33 @@ def create_user(sender, instance, created, **kwargs):
         
         random_password = generate_random_password()  # Generate a random password
         instance.initial_password = random_password
+        print(instance.initial_password)
         instance.save()
         CustomUser.objects.create_customer(username=username, email=email, password=random_password)
         print(f'username: {username} ----- password: {random_password} ----- password: {email} -----')
 
 
-@receiver(post_save, sender=CustomUser)
-def handle_user_password_update(sender, instance, created, **kwargs):
+# @receiver(post_save, sender=CustomUser)
+# def handle_user_password_update(sender, instance, created, **kwargs):
 
-    try:
-        employee = Employee.objects.get(email=instance.email)
-        customer = Customer.objects.get(email=instance.email)
-    except Employee.DoesNotExist or Customer.DoesNotExist:
-        employee = None
-        customer = None
+#     try:
+#         employee = Employee.objects.get(email=instance.email)
+#         customer = Customer.objects.get(email=instance.email)
+#     except Employee.DoesNotExist or Customer.DoesNotExist:
+#         employee = None
+#         customer = None
     
-    if employee:
-        if not created and instance.has_usable_password():
-            if instance.password:
-                employee.initial_password = None
-                employee.save()
+#     if employee:
+#         if not created and instance.has_usable_password():
+#             if instance.password:
+#                 employee.initial_password = None
+#                 employee.save()
     
-    if customer:
-        if not created and instance.has_usable_password():
-            if instance.password:
-                customer.initial_password = None
-                customer.save()
+#     if customer:
+#         if not created and instance.has_usable_password():
+#             if instance.password:
+#                 customer.initial_password = None
+#                 customer.save()
         
 
 @receiver(m2m_changed, sender=Customer.installed_product.through)

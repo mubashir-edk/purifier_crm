@@ -92,6 +92,15 @@
                     <input type="text" class="form-control" id="customerLocation" value="{{ customer.location }}" readonly/>
                 </div>
 
+                {% if customer.initial_password %}
+
+                    <div class="col">
+                        <label for="customerInitialPassword" class="form-label mt-3">Password to share</label>
+                        <input type="text" class="form-control" id="customerInitialPassword" value="{{ customer.initial_password }}" readonly/>
+                    </div>
+
+                {% endif %}
+
             </div>
 
             <div class="row">

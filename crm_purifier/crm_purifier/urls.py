@@ -23,6 +23,7 @@ from django.contrib.auth import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include(urls)),
+    path('', include('user_management.urls')),
     path('', include('purifier.urls')),
     path('api/', include('api.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

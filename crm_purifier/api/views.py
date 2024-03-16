@@ -1,6 +1,7 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from user_management.permissions import CustomIsAuthenticated
 
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -17,22 +18,25 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from purifier.models import Employee, Customer, Test, ServiceWork
+from user_management.models import CustomUser
+from user_management.backends import CustomUserBackend
 from .serializers import EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer
 
 
-class EmployeeLoginAPIView(APIView):
+class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
+    
     def post(self, request):
         username_or_email = request.data.get('username')
         password = request.data.get('password')
-
-        # check if username used for login
+        
         user = authenticate(username=username_or_email, password=password)
+        # user = CustomUserBackend().authenticate(request, username=username_or_email, password=password)
         
         if not user:
-            # Check if email is used for login
             try:
-                user = User.objects.get(email=username_or_email)
-                user = authenticate(username=user.username, password=password)
+                user = authenticate(email=username_or_email, password=password)
+                # user = CustomUserBackend().authenticate(request, email=username_or_email, password=password)
             except User.DoesNotExist:
                 pass
 
@@ -48,11 +52,12 @@ class EmployeeLoginAPIView(APIView):
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         
 class EmployeeProfileAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [CustomIsAuthenticated]
 
     def get_object(self):
+        
         user = self.request.user
-        employee = Employee.objects.get(employee_code=user.username)
+        employee = Employee.objects.filter(employee_code=user.username).first()
         return employee
     
     def get(self, request):

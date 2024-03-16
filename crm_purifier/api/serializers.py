@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from purifier.models import Employee, Customer, Test, ServiceWork
+from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,4 +20,9 @@ class ServiceWorkSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceWork
         fields = '__all__'
+
+class CustomerProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerProduct
+        exclude = ['initial_password',]
 

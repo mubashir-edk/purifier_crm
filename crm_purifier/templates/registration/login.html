@@ -2,17 +2,17 @@
 
 {% block content %}
 
-    <form method="post" action="">
+    <form method="post" action="{% url 'user_management:admin_login' %}">
         {% csrf_token %}
         <div class="p-3 pb-4 login-content">
             <span class="login-text d-flex justify-content-center">Sign In</span>
             <div class="mt-4">
-                <label for="id_username" class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" id="id_username" placeholder="username">
+                <label for="login_username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" id="login_username" placeholder="username or email">
             </div>
             <div class="mt-4 password-container">
-                <label for="id_password" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" id="id_password" placeholder="password">
+                <label for="login_password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="login_password" placeholder="password">
                 <i class="bi bi-eye-fill toggle-password-icon"></i>
             </div>
 

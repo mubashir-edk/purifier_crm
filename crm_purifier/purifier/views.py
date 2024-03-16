@@ -210,8 +210,6 @@ def updateCustomer(request , id):
             installed_products = request.POST.getlist('installed_product')
             customer.installed_product.set(installed_products)
             
-            post_save.send(sender=Customer, instance=customer, created=False)
-            
             return redirect(reverse('purifier:each_customer', kwargs={'id': customer.id}))
         
     context = {'customer_form': customer_form, 'customer': customer}
