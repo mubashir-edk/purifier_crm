@@ -47,6 +47,7 @@ def create_user(sender, instance, created, **kwargs):
         CustomUser.objects.create_employee(username=username, email=email, password=random_password)
         print(f'username: {username} ----- password: {random_password} ----- password: {email} -----')
 
+
 @receiver(post_save, sender=Customer)
 def create_user(sender, instance, created, **kwargs):
     print("CUSTOMER POSTED")

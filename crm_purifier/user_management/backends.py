@@ -13,7 +13,7 @@ class CustomUserBackend(BaseBackend):
             return None  # Neither email nor username provided
 
         # if user and user.check_password(password):
-        if user:
+        if user and user.check_password(password):
             print(f'the data is here already {user}')
             return user  # Return the user object if authentication is successful
         return None  # Return None if authentication fails
