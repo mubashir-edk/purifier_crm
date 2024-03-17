@@ -55,71 +55,69 @@
 </div>
 
 
-    <script>
-        $(document).ready(function(){
-
-            function togglePasswordVisibility(toggleElement, passwordInput) {
-                let holdTimer;
-            
-                toggleElement.addEventListener('mousedown', function () {
-                    holdTimer = setTimeout(function () {
-                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                        passwordInput.setAttribute('type', type);
-                    }, 100); // Shorter delay for faster response
-                });
-            
-                toggleElement.addEventListener('mouseup', function () {
-                    clearTimeout(holdTimer);
-                    passwordInput.setAttribute('type', 'password');
-                });
-            }
+<script>
     
-            const togglePassword = document.querySelector('.toggle-password-icon');
-            const passwordInput = document.querySelector('#login_password');
-    
-            togglePasswordVisibility(togglePassword, passwordInput);
+    $(document).ready(function(){
 
-            $(".username-empty").hide();
-            $(".password-empty").hide();
-            $("#errorMessage").show();
+        function togglePasswordVisibility(toggleElement, passwordInput) {
+            let holdTimer;
+        
+            toggleElement.addEventListener('mousedown', function () {
+                holdTimer = setTimeout(function () {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                }, 100); // Shorter delay for faster response
+            });
+        
+            toggleElement.addEventListener('mouseup', function () {
+                clearTimeout(holdTimer);
+                passwordInput.setAttribute('type', 'password');
+            });
+        }
 
-            $("#errorMessage svg").click(function(event){
-                {% comment %} event.preventDefault(); {% endcomment %}
+        const togglePassword = document.querySelector('.toggle-password-icon');
+        const passwordInput = document.querySelector('#login_password');
 
+        togglePasswordVisibility(togglePassword, passwordInput);
+
+        $(".username-empty").hide();
+        $(".password-empty").hide();
+        $("#errorMessage").show();
+
+        $("#errorMessage svg").click(function(event){
+            {% comment %} event.preventDefault(); {% endcomment %}
+
+            $("#errorMessage").hide();
+
+        });
+        
+        $("#submit_btn").click(function(event){
+            var username= $("#login_username").val();
+            var password= $("#login_password").val();
+            
+            if (username == '' && password == '') {
+                event.preventDefault();
+                $(".username-empty").show();
+                $(".password-empty").show();
                 $("#errorMessage").hide();
-
-            });
-            
-            $("#submit_btn").click(function(event){
-                var username= $("#login_username").val();
-                var password= $("#login_password").val();
-                
-                if (username == '' && password == '') {
-                    event.preventDefault();
-                    $(".username-empty").show();
-                    $(".password-empty").show();
-                    $("#errorMessage").hide();
-                } else if (password == '') {
-                    event.preventDefault();
-                    $(".username-empty").hide();
-                    $(".password-empty").show();
-                    $("#errorMessage").hide();
-                } else if (username == '') {
-                    event.preventDefault();
-                    $(".password-empty").hide();
-                    $(".username-empty").show();
-                    $("#errorMessage").hide();
-                } else{
-                    return true;
-                }
-
-            });
+            } else if (password == '') {
+                event.preventDefault();
+                $(".username-empty").hide();
+                $(".password-empty").show();
+                $("#errorMessage").hide();
+            } else if (username == '') {
+                event.preventDefault();
+                $(".password-empty").hide();
+                $(".username-empty").show();
+                $("#errorMessage").hide();
+            } else{
+                return true;
+            }
 
         });
 
+    });
 
-
-
-    </script>
+</script>
 
 {% endblock content %}
