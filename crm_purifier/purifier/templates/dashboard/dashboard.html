@@ -2,138 +2,134 @@
 {% load static %}
 
 {% block head %}
-    <title>Reports</title>
-    <link href="{% static 'css/dashboard/dashboard.css' %}" rel="stylesheet" type="text/css">
+    <title>Dashboard</title>
+    {% comment %} <link href="{% static 'css/dashboard/dashboard.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
 
 {% endblock head %}
 
 {% block content %}
 
-    <div class="d-flex justify-content-between">
-        <span class="page_heading">Reports</span>
+    <div class="flex justify-start">
+        <span class="text-2xl font-bold">Dashboard</span>
     </div>
 
-    <hr class="mt-1">
+    <hr class="border dark:border-gray-800">
 
-    <div class="p-3 m-0">
+    <div class="grid gap-4 mt-3">
 
-        <div id="dashboardCounts" class="row d-flex justify-content-between gap-4">
+        <div id="dashboardCounts" class="grid lg:grid-cols-6 md:grid-cols-3 gap-4">
 
-            <div class="col d-grid customers-count">
-                <span class="report-count" data-bs-value="{{ customers_count }}"><i class="fa-solid fa-user-group"></i>{{customers_count}}</span>
-                <span class="report-count-heading">Customers</span>
+            <div class="flex flex-col bg-white rounded-lg items-center p-6 customers-count">
+                <span class="report-count dark:text-gray-800 text-3xl font-bold" data-bs-value="{{ customers_count }}"><i class="fa-solid fa-user-group me-1"></i>{{customers_count}}</span>
+                <span class="report-count-heading text-lg mt-1 font-bold">Customers</span>
             </div>
     
-            <div class="col d-grid employees-count">
-                <span class="report-count" data-bs-value="{{ employees_count }}"><i class="fa-solid fa-people-group"></i>{{employees_count}}</span>
-                <span class="report-count-heading">Employees</span>
+            <div class="flex flex-col bg-white rounded-lg items-center p-6 employees-count">
+                <span class="report-count dark:text-gray-800 text-3xl font-bold" data-bs-value="{{ employees_count }}"><i class="fa-solid fa-people-group me-1"></i>{{employees_count}}</span>
+                <span class="report-count-heading text-lg mt-1 font-bold">Employees</span>
             </div>
     
-            <div class="col d-grid products-count">
-                <span class="report-count" data-bs-value="{{ products_count }}"><i class="fa-solid fa-cart-shopping"></i>{{products_count}}</span>
-                <span class="report-count-heading">Products</span>
+            <div class="flex flex-col bg-white rounded-lg items-center p-6 products-count">
+                <span class="report-count dark:text-gray-800 text-3xl font-bold" data-bs-value="{{ products_count }}"><i class="fa-solid fa-cart-shopping me-1"></i>{{products_count}}</span>
+                <span class="report-count-heading text-lg mt-1 font-bold">Products</span>
             </div>
     
-            <div class="col d-grid today-servicework-count">
-                <span class="report-count text-warning" data-bs-value="{{ today_servicework_count }}"><i class="fa-solid fa-calendar-day"></i>{{servicework_today_count}}</span>
-                <span class="report-count-heading">Today Works</span>
+            <div class="flex flex-col bg-white rounded-lg items-center p-6 today-servicework-count">
+                <span class="report-count dark:text-gray-800 text-3xl font-bold" data-bs-value="{{ today_servicework_count }}"><i class="fa-solid fa-calendar-day fa-beat-fade me-1"></i></i>{{servicework_today_count}}</span>
+                <span class="report-count-heading text-lg mt-1 font-bold">Today Works</span>
             </div>
     
-            <div class="col d-grid upcoming-servicework-count">
-                <span class="report-count text-secondary" data-bs-value="{{ upcoming_count }}"><i class="fa-regular fa-circle-up"></i>{{upcoming_count}}</span>
-                <span class="report-count-heading">Upcoming Works</span>
+            <div class="flex flex-col bg-white rounded-lg items-center p-6 upcoming-servicework-count">
+                <span class="report-count dark:text-gray-800 text-3xl font-bold" data-bs-value="{{ upcoming_count }}"><i class="fa-regular fa-circle-up me-1"></i>{{upcoming_count}}</span>
+                <span class="report-count-heading text-lg mt-1 font-bold">Upcoming Works</span>
             </div>
     
-            <div class="col d-grid completed-servicework-count">
-                <span class="report-count text-success"data-bs-value="{{ completed_count }}"><i class="fa-solid fa-square-check"></i>{{completed_count}}</span>
-                <span class="report-count-heading">Completed Works</span>
+            <div class="flex flex-col bg-white rounded-lg items-center p-6 completed-servicework-count">
+                <span class="report-count dark:text-gray-800 text-3xl font-bold"data-bs-value="{{ completed_count }}"><i class="fa-solid fa-square-check me-1"></i>{{completed_count}}</span>
+                <span class="report-count-heading text-lg mt-1 font-bold">Completed Works</span>
             </div>
         
         </div>
         
 
-        <div class="row gap-3">
+        <div class="flex gap-4 h-96">
 
-            <div id="dashboardGraph" class="col d-grid dashboard-graph mt-4">
+            <div id="dashboardGraph" class="bg-white basis-1/2 p-3 rounded-lg">
                 <span class="summaryGraphHeader text-center">Total Summary</span>
                 <div id="summaryGraph"></div>
             </div>
 
-
-            {% comment %} <div class="col gap-3 report-tables mt-4 d-md-flex"> {% endcomment %}
-
-                <div class="report-upcoming col-12 col-lg mt-4">
-                    {% if servicework_upcoming_exists %}
-                    <div class="d-flex justify-content-between">
-                        {% comment %} <label class="report-upcoming-label">Upcoming Services</label> {% endcomment %}
-                    </div>
-                        <div class="table-responsive">
-                            <table id="serviceNotDoneTable" class="table align-middle">
-                            
-                                <thead class="text-white align-middle">
-                                    <tr>
-                                        <th>Upcoming Services</th>
-                                        <th class="text-end"><input type="text" id="searchInputUpcoming" class="form-control form-control-sm" placeholder="Search..."></th>
-                                    </tr>
-                                </thead>
-
-                                <tbody class="bg-white">
-
-                                    {% for upcoming in servicework_upcoming %}
-
-                                        <tr>
-                                            <td colspan='2'><a href="" class="anchor_tag">{{ upcoming }}</a></td>
-                                        </tr>
-
-                                    {% endfor %}
-                
-                                </tbody>
-
-                            </table>
-                        </div>
-                    {% else %}
-                        <div class="d-flex justify-content-center">
-                            <span>No upcoming service works.</span>
-                        </div>
-                    {% endif %}
+            <div class="report-upcoming bg-white basis-1/4 p-3 rounded-lg">
+                {% if not servicework_upcoming_exists %}
+                <div class="d-flex justify-content-between">
+                    {% comment %} <label class="report-upcoming-label">Upcoming Services</label> {% endcomment %}
                 </div>
+                    <div class="table-responsive">
+                        <table id="serviceNotDoneTable" class="table align-middle">
+                        
+                            <thead class="text-white align-middle">
+                                <tr>
+                                    <th>Upcoming Services</th>
+                                    <th class="text-end"><input type="text" id="searchInputUpcoming" class="form-control form-control-sm" placeholder="Search..."></th>
+                                </tr>
+                            </thead>
 
-                <div class="report-today col-12 col-md mt-4">
-                    {% if servicework_today_exists %}
-                    <div class="d-flex justify-content-between">
-                        {% comment %} <label class="report-completed-label">Completed Services</label> {% endcomment %}
-                    </div>
-                        <div class="table-responsive">
-                            <table id="serviceTodayTable" class="table align-middle">
-                                <thead class="text-white align-middle">
+                            <tbody class="bg-white">
+
+                                {% for upcoming in servicework_upcoming %}
+
                                     <tr>
-                                        <th>Today Services</th>
-                                        <th class="text-end"><input type="text" id="searchInputToday" class="form-control form-control-sm" placeholder="Search..."></th>
+                                        <td colspan='2'><a href="" class="anchor_tag">{{ upcoming }}</a></td>
                                     </tr>
-                                </thead>
 
-                                <tbody class="bg-white">
+                                {% endfor %}
+            
+                            </tbody>
 
-                                    {% for today_work in servicework_today %}
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="flex justify-center">
+                        <span>No upcoming service works.</span>
+                    </div>
+                {% endif %}
+            </div>
 
-                                        <tr>
-                                            <td colspan='2'><a href="" class="anchor_tag">{{ today_work }}</a></td>
-                                        </tr>
-
-                                    {% endfor %}
-                
-                                </tbody>
-
-                            </table>
-                        </div>
-                    {% else %}
-                        <div class="d-flex justify-content-center">
-                            <span>No service works for today.</span>
-                        </div>
-                    {% endif %}
+            <div class="bg-white report-today basis-1/4 p-3 rounded-lg">
+                {% if servicework_today_exists %}
+                <div class="d-flex justify-content-between">
+                    {% comment %} <label class="report-completed-label">Completed Services</label> {% endcomment %}
                 </div>
+                    <div class="table-responsive">
+                        <table id="serviceTodayTable" class="table align-middle">
+                            <thead class="text-white align-middle">
+                                <tr>
+                                    <th>Today Services</th>
+                                    <th class="text-end"><input type="text" id="searchInputToday" class="form-control form-control-sm" placeholder="Search..."></th>
+                                </tr>
+                            </thead>
 
-            {% comment %} </div> {% endcomment %}
+                            <tbody class="bg-white">
+
+                                {% for today_work in servicework_today %}
+
+                                    <tr>
+                                        <td colspan='2'><a href="" class="anchor_tag">{{ today_work }}</a></td>
+                                    </tr>
+
+                                {% endfor %}
+            
+                            </tbody>
+
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="flex justify-center">
+                        <span>No service works for today.</span>
+                    </div>
+                {% endif %}
+            </div>
+
         </div>
     </div>
 
@@ -142,30 +138,30 @@
     <script>
         
 
-            document.addEventListener('DOMContentLoaded', function () {
-                var options = {
-                    series: [{{pending_count}}, {{completed_count}}],
-                    labels: ['Pending', 'Completed'],
-                    chart: {
-                        type: 'donut',
-                        width: '100%',
-                        height: '100%'
-                    },
-                    plotOptions: {
-                        pie: {
-                            donut: {
-                                size: '50%'
-                            }
+        document.addEventListener('DOMContentLoaded', function () {
+            var options = {
+                series: [{{pending_count}}, {{completed_count}}],
+                labels: ['Pending', 'Completed'],
+                chart: {
+                    type: 'donut',
+                    width: '100%',
+                    height: '100%'
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '50%'
                         }
-                    },
-                    legend: {
-                        position: 'bottom' // Placing legend at the bottom
-                    },
-                };
-        
-                var chart = new ApexCharts(document.querySelector("#summaryGraph"), options);
-                chart.render();
-            });
+                    }
+                },
+                legend: {
+                    position: 'bottom' // Placing legend at the bottom
+                },
+            };
+    
+            var chart = new ApexCharts(document.querySelector("#summaryGraph"), options);
+            chart.render();
+        });
 
         $(document).ready(function() {
 

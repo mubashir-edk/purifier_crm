@@ -9,7 +9,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = '__all__'
+        exclude = ['initial_password',]
 
 class TestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,5 +24,5 @@ class ServiceWorkSerializer(serializers.ModelSerializer):
 class CustomerProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerProduct
-        exclude = ['initial_password',]
+        fields = '__all__'
 

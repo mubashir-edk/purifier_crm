@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from user_management.permissions import CustomIsAuthenticated
+from user_management.permissions import CustomIsAuthenticated, EmployeeIsAuthenticated, CustomerIsAuthenticated
 
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -17,10 +17,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from purifier.models import Employee, Customer, Test, ServiceWork
+from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct
 from user_management.models import CustomUser
 from user_management.backends import CustomUserBackend
-from .serializers import EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer
+from .serializers import EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer, CustomerProductSerializer
 
 
 class LoginAPIView(APIView):
@@ -51,22 +51,8 @@ class LoginAPIView(APIView):
             # Authentication failed
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         
-class EmployeeProfileAPIView(APIView):
-    permission_classes = [CustomIsAuthenticated]
-
-    def get_object(self):
-        
-        user = self.request.user
-        employee = Employee.objects.filter(employee_code=user.username).first()
-        return employee
-    
-    def get(self, request):
-        employee = self.get_object()
-        serializer = EmployeeSerializer(employee)
-        return Response(serializer.data)
-        
 class PasswordChangeAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [CustomIsAuthenticated]
 
     def post(self, request):
         user = request.user
@@ -119,7 +105,6 @@ class PasswordResetRequestAPIView(APIView):
         # Always respond with success to prevent email enumeration
         return Response({'detail': 'Password reset link sent to your email.'}, status=status.HTTP_200_OK)
 
-
 class PasswordResetAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -144,9 +129,26 @@ class PasswordResetAPIView(APIView):
                 return Response({'detail': 'Password reset successful.'}, status=status.HTTP_200_OK)
         
         raise NotFound('Invalid reset link')
+    
+    
+# For Employee    
+class EmployeeProfileAPIView(APIView):
+    permission_classes = [EmployeeIsAuthenticated]
 
+    def get_object(self):
+        
+        user = self.request.user
+        employee = Employee.objects.filter(employee_code=user.username).first()
+        return employee
+    
+    def get(self, request):
+        employee = self.get_object()
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data)
+
+# For Employee
 class CustomerAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [EmployeeIsAuthenticated]
 
     def generate_customer_code(self):
         # Generating Customer Code
@@ -201,8 +203,9 @@ class CustomerAPIView(APIView):
         customer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# For Employee
 class TestAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [EmployeeIsAuthenticated]
 
     def post(self, request):
         serializer = TestSerializer(data=request.data)
@@ -229,8 +232,9 @@ class TestAPIView(APIView):
         test.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# For Employee
 class ServiceWorkAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [EmployeeIsAuthenticated]
 
     def generate_servicework_code(self):
         # Generating Service Work Code
@@ -284,3 +288,42 @@ class ServiceWorkAPIView(APIView):
         servicework = get_object_or_404(ServiceWork, pk=id)
         servicework.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+# For Customer  
+class CustomerProfileAPIView(APIView):
+    permission_classes = [CustomerIsAuthenticated]
+
+    def get_object(self):
+        user = self.request.user
+        customer = Customer.objects.filter(customer_code=user.username).first()
+        return customer
+    
+    def get(self, request):
+        customer = self.get_object()
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data)
+    
+# For Customer
+class CustomerServiceWorkAPIView(APIView):
+    permission_classes = [CustomerIsAuthenticated]
+
+    def get(self, request):
+        serviceworks = ServiceWork.objects.all()
+        serializer = ServiceWorkSerializer(serviceworks, many=True)
+        return Response(serializer.data)
+    
+# For Customer
+class CustomerProductsAPIView(APIView):
+    permission_classes = [CustomerIsAuthenticated]
+    
+    def get_object(self):
+        user = self.request.user
+        customer_products =  CustomerProduct.objects.filter(customer_code__customer_code=user)
+        print(customer_products)
+        return customer_products
+    
+    def get(self, request):
+        customer_products = self.get_object()
+        serializer = CustomerProductSerializer(customer_products, many=True)
+        return Response(serializer.data)
