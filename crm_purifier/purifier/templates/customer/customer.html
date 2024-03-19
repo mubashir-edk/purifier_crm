@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head %}
-    <title>Customers</title>
+    <title>Create Customer</title>
 {% endblock head %}
 
 {% block content %}
@@ -12,80 +12,60 @@
         <form method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <div class="d-flex justify-content-between">
+            <div class="flex justify-between items-center">
                 {% if customer %}
-                    <a href="{% url "purifier:each_customer" customer.id %}" class="btn btn-sm btn-secondary">&lt;Back</a>
+                    <a href="{% url "purifier:each_customer" customer.id %}" class="text-2xl font-bold rounded text-black"><i class="fa-solid fa-circle-left"></i></a>
                 {% else %}
-                    <a href="{% url "purifier:view_customers" %}" class="btn btn-sm btn-secondary">&lt;Back</a>
+                    <a href="{% url "purifier:view_customers" %}" class="text-2xl font-bold rounded text-black"><i class="fa-solid fa-circle-left"></i></a>
                 {% endif %}
-                <input type="submit" id="submit" class="btn btn-sm btn-primary" value="Save" />
+                    <input type="submit" id="submit" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white" value="Save"/>
             </div>
 
-            <hr class="mt-1">
+            <hr class="border dark:border-gray-800">
 
-            <div class="d-grid">
+            <div class="flex justify-center mt-3">
 
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-center">
+                <img id="image-preview" src="" alt="Image Preview" class="h-48 w-48 border border-gray-400 rounded-full" style="display: none;">
 
-                        <img id="image-preview" src="" alt="Image Preview" style="width: 150px; height: 150px; border-radius: 50%; display: none;">
-
-                        {% if customer.profile %}
-                            <img src="{{ customer.profile.url }}" alt="Profile not loading..." style="width: 150px; height: 150px; border-radius: 50%;">
-                        {% else %}
-                            <img src="{% static 'images/default.png' %}" id="customerDefaultProfile" alt="Image not loading..." style="width: 150px; height: 150px; border-radius: 50%;">  
-                        {% endif %}
-                            
-                        <label for="formCustomerProfile" class="form-label">
-                            <i class="fa-solid fa-pen-to-square anchor_tag"></i>
-                        </label>
-                        {{ customer_form.profile }}
-
-                    </div>
-                </div>
-
-                <div class="row d-md-flex justify-content-md-between d-grid justify-content-center">
-
-                    <div class="col-md-6 col-12">
-                        <label for="formEmployeeName" class="form-label mt-3">Name</label>
-                        {{ customer_form.name }}
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <label for="formCustomerEmail" class="form-label mt-3">Email</label>
-                        {{ customer_form.email }}
-                    </div>
-
-                </div>
-
-                <div class="row d-md-flex justify-content-md-between d-grid justify-content-center">
-
-                    <div class="col-md-6 col-12">
-                        <label for="formCustomerMobile" class="form-label mt-3">Mobile</label>
-                        {{ customer_form.mobile }}
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <label for="formCustomerWhatsappNumber" class="form-label mt-3">Whatsapp</label>
-                        {{ customer_form.whatsapp_number }}
-                    </div>
-
-                </div>
-
-                <div class="row d-md-flex justify-content-md-start d-grid justify-content-center">
-
-                    <div class="col-lg-6 col-12">
-                        <label for="formCustomerAddress" class="form-label mt-3">Address</label>
-                            {{ customer_form.address }}
-                    </div>
-
-                    <div class="col-lg-6 col-12">
-                        <label for="formCustomerInstalledProduct" class="form-label mt-3">Installed Products</label>
-                            {{ customer_form.installed_product }}
-                    </div>
-
-                </div>
+                {% if customer.profile %}
+                    <img src="{{ customer.profile.url }}" alt="Profile not loading..." class="default-image h-48 w-48 border border-gray-400 rounded-full">
+                {% else %}
+                    <img src="{% static 'images/default.png' %}" id="customerDefaultProfile" alt="Image not loading..." class="default-image h-48 w-48 border border-gray-400 rounded-full">  
+                {% endif %}
+                    
+                <label for="formCustomerProfile" class="block text-sm font-bold text-black">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </label>
+                {{ customer_form.profile }}
 
             </div>
 
+            <div class="grid gap-6 mb-6 md:grid-cols-2 mt-3">
+                <div>
+                    <label for="formCustomerName" class="block mb-2 text-sm font-bold text-black">Name</label>
+                    {{ customer_form.name }}
+                </div>
+                <div>
+                    <label for="formCustomerEmail" class="block mb-2 text-sm font-bold text-black">Email</label>
+                    {{ customer_form.email }}
+                </div>
+                <div>
+                    <label for="formCustomerMobile" class="block mb-2 text-sm font-bold text-black">Mobile</label>
+                    {{ customer_form.mobile }}
+                </div>  
+                <div>
+                    <label for="formCustomerWhatsappNumber" class="block mb-2 text-sm font-bold text-black">Whatsapp</label>
+                    {{ customer_form.whatsapp_number }}
+                </div>
+                <div>
+                    <label for="formCustomerAddress" class="block mb-2 text-sm font-bold text-black">Address</label>
+                    {{ customer_form.address }}
+                </div>
+                <div>
+                    <label for="formCustomerInstalledProduct" class="block mb-2 text-sm font-bold text-black">Installed Products</label>
+                    {{ customer_form.installed_product }}
+                </div>
+            </div>
         </form>
     </div>
 

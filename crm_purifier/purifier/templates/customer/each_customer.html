@@ -3,206 +3,134 @@
 
 {% block head %}
     <title>{{ customer.customer_code }}</title>
-    <link href="{% static 'css/customer/each_customer.css' %}" rel="stylesheet" type="text/css">
 {% endblock head %}
 
 {% block content %}
 
     <div>
 
-        <div class="d-flex justify-content-between">
-            <a href="{% url "purifier:view_customers" %}" class="btn btn-sm btn-secondary">&lt;Back</a>
-
+        <div class="flex justify-between">
+            
             <div>
-                <a href="{% url "purifier:update_customer" customer.id %}" class="btn btn-sm btn-dark">Edit</a>
-                <a href="" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCustomerModal">Delete</a>
+                <a href="{% url "purifier:view_customers" %}" class="text-2xl font-bold rounded text-black"><i class="fa-solid fa-circle-left"></i></a>
             </div>
 
-            {% comment %} Delete customer confirmation modal {% endcomment %}
-            <div class="modal fade" id="deleteCustomerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteCustomerModalTitle" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="deleteCustomerModalTitle">Are you sure?<br></h5>
-                            <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                           You want to delete customer <b>{{ customer.name }} ({{ customer.customer_code}})</b>.
-                        </div>
-                        <div class="modal-footer">
-                            <a href="{% url "purifier:delete_customer" customer.id %}" class="btn btn-danger">Delete</a>
+            <div class="flex gap-x-1">
+                <a href="{% url "purifier:update_customer" customer.id %}" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white">Edit</a>
+                <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="block bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white" type="button">Delete</button>
+            </div>
+    
+            <!-- Delete confirm modal -->
+            <div id="popup-modal" data-modal-backdrop="static" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative p-4 w-full max-w-md max-h-full">
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <div class="p-4 md:p-5 text-center">
+                            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                            </svg>
+                            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this customer <b>{{customer}}</b>? This customer user access will loss and can't retrieve it later.</h3>
+                            <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                <a href="{% url "purifier:delete_customer" customer.id %}">Yes, I'm sure</a>
+                            </button>
+                            <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
-            {% comment %} modal ends {% endcomment %}
 
         </div>
 
-        <hr class="mt-1 mb-0">
+        <hr class="border dark:border-gray-800">
 
-        <div class="d-grid">
+        <div>
+            <span class="text-2xl font-bold flex self-end">{{customer.customer_code}}<span>
+        </div>
+
+        <div class="flex justify-center mt-3">
+
+            {% if customer.profile %}
+                <img src="{{ customer.profile.url }}" alt="Profile not loading..." class="default-image h-48 w-48 border border-gray-400 rounded-full">
+            {% else %}
+                <img src="{% static 'images/default.png' %}" id="customerDefaultProfile" alt="Image not loading..." class="default-image h-48 w-48 border border-gray-400 rounded-full">  
+            {% endif %}
+
+        </div>
+
+        <div class="grid gap-6 mb-6 md:grid-cols-2 mt-3">
+            <div>
+                <label for="customerName" class="block mb-2 text-sm font-bold text-black">Name</label>
+                <input type="text" class="bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5" id="customerName" value="{{ customer.name }}" readonly/>
+            </div>
 
             <div>
-                <span class="page_heading">{{customer.customer_code}}<span>
+                <label for="customerEmail" class="block mb-2 text-sm font-bold text-black">Email</label>
+                <input type="text" class="bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5" id="customerEmail" value="{{ customer.email }}" readonly/>
             </div>
 
-            <div class="row">
-                <div class="col-12 d-flex justify-content-center">
-
-                    {% if customer.profile %}
-                        <img src="{{ customer.profile.url }}" alt="Profile not loading..." style="width: 150px; height: 150px; border-radius: 50%;">
-                    {% else %}
-                        <img src="{% static 'images/default.png' %}" alt="Image not loading..." style="width: 150px; height: 150px; border-radius: 50%;">
-                    {% endif %}
-
-                </div>
+            <div>
+                <label for="customerMobile" class="block mb-2 text-sm font-bold text-black">Mobile</label>
+                <input type="text" class="bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5" id="customerMobile" value="{{ customer.mobile }}" readonly/>
             </div>
 
-            <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between d-grid justify-content-center">
-
-                <div class="col-12">
-                    <label for="customerName" class="form-label mt-3">Name</label>
-                    <input type="text" class="form-control" id="customerName" value="{{ customer.name }}" readonly/>
-                </div>
-                <div class="col">
-                    <label for="customerMobile" class="form-label mt-3">Mobile</label>
-                    <input type="text" class="form-control" id="customerMobile" value="{{ customer.mobile }}" readonly/>
-                </div>
-
+            <div>
+                <label for="customerWhatsppNumber" class="block mb-2 text-sm font-bold text-black">Whatsapp</label>
+                <input type="text" class="bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5" id="customerWhatsappNumber" value="{{ customer.whatsapp_number }}" readonly/>
+            </div>
+            <div>
+                <label for="customerAddress" class="block mb-2 text-sm font-bold text-black">Address</label>
+                <input type="text" class="bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5" id="customerAddress" value="{{ customer.address }}" readonly/>
+            </div>
+            <div>
+                <label for="customerLocation" class="block mb-2 text-sm font-bold text-black">Location</label>
+                <input type="text" class="bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5" id="customerLocation" value="{{ customer.location }}" readonly/>
             </div>
 
-            <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between d-grid justify-content-center">
-
-                <div class="col-12">
-                    <label for="customerWhatsppNumber" class="form-label mt-3">Whatsapp</label>
-                    <input type="text" class="form-control" id="customerWhatsappNumber" value="{{ customer.whatsapp_number }}" readonly/>
-                </div>
-                <div class="col">
-                    <label for="customerAddress" class="form-label mt-3">Address</label>
-                    <input type="text" class="form-control" id="customerAddress" value="{{ customer.address }}" readonly/>
-                </div>
-
-            </div>
-
-            <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between d-grid justify-content-center">
-
-                <div class="col-12">
-                    <label for="customerLocation" class="form-label mt-3">Location</label>
-                    <input type="text" class="form-control" id="customerLocation" value="{{ customer.location }}" readonly/>
-                </div>
-
-                {% if customer.initial_password %}
-
-                    <div class="col">
-                        <label for="customerInitialPassword" class="form-label mt-3">Password to share</label>
-                        <input type="text" class="form-control" id="customerInitialPassword" value="{{ customer.initial_password }}" readonly/>
+            {% if customer.initial_password %}
+            <div>
+                <label for="customerInitialPassword" class="block mb-2 text-sm font-bold text-black">Password to share</label>
+                <div class="relative">
+                    <input type="password" class="bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5 pr-10" id="customerInitialPassword" value="{{ customer.initial_password }}" readonly/>
+                    <div id class="absolute inset-y-0 right-0 flex items-center pr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="toggle-password-icon cursor-pointer w-5 h-5">
+                            <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                            <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd" />
+                          </svg>                          
                     </div>
-
-                {% endif %}
-
-            </div>
-
-            <div class="row">
-
-                <div class="col-12">
-
-                    <label for="customerInstalledProduct" class="form-label mt-3">Installed Products</label>
-
-                    {% if customer.installed_product.all %}
-                        <div class="row row-cols-md-2 row-cols-lg-3">
-
-                            {% for product in customer.installed_product.all  %}
-  
-                                <div class="col">
-                                    
-                                        <div class="custom-card">
-
-                                            {% if product.image %}
-                                                <img src="{{product.image.url}}" class="custom-card-img" alt="Profile not loading...">
-                                                {% else %}
-                                                <img src="{% static 'images/empty_img.jpg' %}" class="custom-card-img" alt="Profile not loading...">
-                                            {% endif %}
-
-                                            <div class="custom-card-body">
-
-                                                <p class="custom-card-title">{{product.name}}</p>
-
-                                                <p class="custom-card-text">(Serial_No: {{ product.product_serial }})</p>
-
-                                            </div>
-                                        </div>
-                                </div>
-
-                            {% endfor %}
-
-                        </div>
-
-                        <div class="mb-3">
-                            <a class="product-details" data-bs-product="{{product.id}}" data-bs-toggle="modal" data-bs-target="#productDetailsModal">See all product details</a>
-
-                            {% comment %} Product Details modal {% endcomment %}
-                            <div class="modal fade" id="productDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="productDetailsModalTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-xl">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="productDetailsModalTitle">Product Details</h5>
-                                            <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-
-                                            <div class="table-responsive">
-
-                                                <table class="table table-bordered align-middle">
-
-                                                    <thead class="text-white">
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>Product_Serial</th>
-                                                            <th>Product</th>
-                                                            <th>Category</th>
-                                                            <th>Services</th>
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody class="table-light">
-                                                        {% for product in customer.installed_product.all %}
-
-                                                            <tr>
-                                                                <td class="text-center">{{forloop.counter}}</td>
-                                                                <td>{{product.product_serial}}</td>
-                                                                <td>{{product.name}}</td>
-                                                                <td>{{product.category}}</td>
-                                                                
-                                                                <td>{% for service in product.services.all  %}
-                                                                    {{service}},
-                                                                {% endfor %}</td>
-                                                            </tr>
-
-                                                        {% endfor %}
-                                                    </tbody>
-
-                                                </table>
-
-                                            </div>                                                 
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% comment %} modal ends {% endcomment %}
-                        </div>                                
-                    {% else %}
-
-                        <span>(No installed products.)</span>
-
-                    {% endif %}
-
                 </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="customerInstalledProduct" class="block mb-1 text-sm font-bold text-black">Installed Products</label>
+            {% if customer.installed_product.all %}
+            <div class="grid gap-4 md:grid-cols-3 mt-3">
+                
+                {% for customer_product in customer_products  %}
+                <div>
+                    <a href="#" class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                        {% if customer_product.product.image %}
+                            <img src="{{customer_product.product.image.url}}" class="object-fit rounded-t-lg h-32 w-32 md:rounded-none md:rounded-s-lg" alt="">
+                            {% else %}
+                            <img src="{% static 'images/empty_img.jpg' %}" class="object-fit rounded-t-lg h-32 w-32 md:rounded-none md:rounded-s-lg" alt="">
+                        {% endif %}
+                        <div class="flex flex-col justify-between p-2 leading-normal">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white w-72 truncate">{{customer_product.product}}</h5>
+                            <p class="mb-2 font-normal text-gray-700 dark:text-gray-400 w-72 truncate">(Serial_No: {{ customer_product.product.product_serial }})</p>
+                            <p class="mb-2 font-normal text-gray-700 dark:text-gray-400 w-72 truncate">(Purchased_on: {{ customer_product.created_on }})</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
 
             </div>
-
+            {% else %}
+                <span>(No installed products.)</span>
+            {% endif %}
         </div>
+
     </div>
+
+    <script src="{% static 'js/customer/each_customer.js' %}"></script>
 
 {% endblock content %}

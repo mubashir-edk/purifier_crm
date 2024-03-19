@@ -7,65 +7,61 @@
 
 {% block content %}
 
-    <div class="d-grid">
-        <div class="d-flex justify-content-between">
-            <span class="page_heading">Employees</span>
-            <a href="{% url 'purifier:create_employee' %}" class="btn btn-sm btn-primary">Create</a>
-        </div>
+    <div class="flex justify-between">
+        <span class="text-2xl font-bold flex self-end">Employees</span>
+        <button class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white"><a href="{% url "purifier:create_employee" %}">Create</a></button>
+    </div>
 
-        <hr class="mt-1">
+    <hr class="border dark:border-gray-800">
 
-        <div class="mt-1">
-            {% if employees_exists %}
-            <div class="table-responsive">
-                <table id="employeesTable" class="table table-bordered align-middle">
-                
-                    <thead class="text-white">
-                        <tr>
-                            <th></th>
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Contant</th>
+    <div class="mt-3">
+        {% if employees_exists %}
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table id="employees_table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-center"></th>
+                        <th scope="col" class="px-6 py-3">Employee_code</th>
+                        <th scope="col" class="px-6 py-3">Name</th>
+                        <th scope="col" class="px-6 py-3">Email</th>
+                        <th scope="col" class="px-6 py-3">Contact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{{ forloop.counter }}</th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <a href="{% url "purifier:each_employee" employee.id %}">{{ employee.employee_code }}</a>
+                            </th>
+                            <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <a href="{% url "purifier:each_employee" employee.id %}">
+                                    {% if employee.profile %}
+                                        <img src="{{employee.profile.url}}" alt="Profile not loading..." class="h-7 w-7">
+                                    {% else %}
+                                        <img src="{% static 'images/default.png' %}" alt="Profile not loading..." class="h-7 w-7">
+                                    {% endif %}
+                                </a>
+                                <a href="{% url "purifier:each_employee" employee.id %}" class="ms-1">{{ employee.name }}</a>
+                            </th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <a href="{% url "purifier:each_employee" employee.id %}">{{ employee.email }}</a>
+                            </th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <a href="{% url "purifier:each_employee" employee.id %}">{{ employee.mobile }}</a>
+                            </th>
                         </tr>
-                    </thead>
+                    {% endfor %}
 
-                    <tbody class="bg-white">
+                </tbody>
 
-                        {% for employee in employees %}
-
-                            <tr>
-                                <td class="text-center"><a href="{% url "purifier:each_employee" employee.id %}" class="anchor_tag">{{ forloop.counter }}</a></td>
-                                <td>
-                                    <a href="{% url "purifier:each_employee" employee.id %}" class="anchor_tag">{{ employee.employee_code }}</a>
-                                </td>
-                                <td class="d-flex align-items-center">
-                                    <a href="{% url "purifier:each_employee" employee.id %}" class="anchor_tag">
-                                        {% if employee.profile %}
-                                        <img src="{{employee.profile.url}}" alt="Profile not loading..." style="width: 25px; height: 25px; border-radius: 50%;">
-                                        {% else %}
-                                        <img src="{% static 'images/default.png' %}" alt="Profile not loading..." style="width: 25px; height: 25px; border-radius: 50%;">
-                                        {% endif %}
-                                    </a>
-                                    <a href="{% url "purifier:each_employee" employee.id %}" class="anchor_tag ms-1">{{ employee.name }}</a>
-                                </td>
-                                <td><a href="{% url "purifier:each_employee" employee.id %}" class="anchor_tag">{{ employee.email }}</a></td>
-                                <td><a href="{% url "purifier:each_employee" employee.id %}" class="anchor_tag">{{ employee.mobile }}</a></td>
-                            </tr>
-
-                        {% endfor %}
-    
-                    </tbody>
-
-                </table>
-            </div>
-            {% else %}
-            <div class="d-flex justify-content-center">
-                <span>No employees added. <a href="{% url 'purifier:create_employee' %}">Create</a> a new employee.</span>
-            </div>
-            {% endif %}
+            </table>
         </div>
-
+        {% else %}
+        <div class="d-flex justify-content-center">
+            <span>No employees added. <a href="{% url 'purifier:create_employee' %}">Create</a> a new employee.</span>
+        </div>
+        {% endif %}
     </div>
 
     <script src="{% static 'js/employee/view_employees.js' %}"></script>

@@ -1,15 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from django.contrib.auth.models import User
 from .models import *
 from .forms import *
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from django.db.models.signals import post_save
-# from django.dispatch import receiver
-# from .signals import customer_product
 
 
 # Employee Functions --------------------------------------------------------------------------------------------------------------------------------
@@ -89,6 +85,7 @@ def updateEmployee(request, id):
     employee_form = EmployeeForm(instance=employee)
     
     employee_code_stored = employee.employee_code
+    employee_pass_stored = employee.initial_password
 
     if request.method == 'POST':
         
@@ -99,6 +96,7 @@ def updateEmployee(request, id):
             employee_save = employee_form.save(commit=False)
             
             employee_save.employee_code = employee_code_stored
+            employee_save.initial_password = employee_pass_stored
             
             employee_save.save()
             
@@ -184,7 +182,9 @@ def eachCustomer(request , id):
     
     customer = get_object_or_404(Customer, pk=id)
     
-    context = {'customer': customer}
+    customer_products = CustomerProduct.objects.filter(customer_code=customer).order_by('-created_on')
+    
+    context = {'customer': customer, 'customer_products': customer_products}
     
     return render(request, 'customer/each_customer.html', context)
 
@@ -196,6 +196,7 @@ def updateCustomer(request , id):
     customer_form = CustomerForm(instance=customer)
     
     customer_code_stored = customer.customer_code
+    customer_pass_stored = customer.initial_password
     
     if request.method == 'POST':
         
@@ -205,6 +206,7 @@ def updateCustomer(request , id):
             
             customer_save = customer_form.save(commit=False)
             customer_save.customer_code = customer_code_stored
+            customer_save.initial_password = customer_pass_stored
             customer_save.save() 
             
             installed_products = request.POST.getlist('installed_product')

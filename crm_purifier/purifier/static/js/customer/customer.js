@@ -1,6 +1,6 @@
 const imageInput = document.getElementById('formCustomerProfile');
 const imagePreview = document.getElementById('image-preview');
-const existingImage = document.querySelector('.col-12.d-flex.justify-content-center img:not(#image-preview)');
+const existingImage = document.querySelector('.default-image');
 
 imageInput.style.display = 'none';
 

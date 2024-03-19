@@ -52,80 +52,77 @@
         </div>
         
 
-        <div class="flex gap-4 h-96">
+        <div class="grid grid-cols-3 gap-4">
 
-            <div id="dashboardGraph" class="bg-white basis-1/2 p-3 rounded-lg">
-                <span class="summaryGraphHeader text-center">Total Summary</span>
+            <div id="dashboardGraph" class="bg-white p-3 rounded-lg text-center h-96">
+                <span class="summaryGraphHeader font-bold text-2xl">Summary</span>
                 <div id="summaryGraph"></div>
             </div>
 
-            <div class="report-upcoming bg-white basis-1/4 p-3 rounded-lg">
-                {% if not servicework_upcoming_exists %}
-                <div class="d-flex justify-content-between">
-                    {% comment %} <label class="report-upcoming-label">Upcoming Services</label> {% endcomment %}
-                </div>
-                    <div class="table-responsive">
-                        <table id="serviceNotDoneTable" class="table align-middle">
-                        
-                            <thead class="text-white align-middle">
+            <div class="report-upcoming bg-white p-3 rounded-lg h-96">
+                {% if servicework_upcoming_exists %}
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th>Upcoming Services</th>
-                                    <th class="text-end"><input type="text" id="searchInputUpcoming" class="form-control form-control-sm" placeholder="Search..."></th>
+                                    <th scope="col" class="px-6 py-3 text-center">
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        upcoming service Works
+                                    </th>
                                 </tr>
                             </thead>
-
-                            <tbody class="bg-white">
-
+                            <tbody>
                                 {% for upcoming in servicework_upcoming %}
-
-                                    <tr>
-                                        <td colspan='2'><a href="" class="anchor_tag">{{ upcoming }}</a></td>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                            {{ forloop.counter }}
+                                        </th>
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ upcoming }}
+                                        </th>
                                     </tr>
-
                                 {% endfor %}
-            
                             </tbody>
-
                         </table>
                     </div>
                 {% else %}
                     <div class="flex justify-center">
-                        <span>No upcoming service works.</span>
+                        <span class="font-bold text-2xl">No upcoming service works.</span>
                     </div>
                 {% endif %}
             </div>
 
-            <div class="bg-white report-today basis-1/4 p-3 rounded-lg">
+            <div class="bg-white report-today p-3 rounded-lg h-96 overflow-auto scroll-smooth scroll-m-0" style="scrollbar-width: thin;">
                 {% if servicework_today_exists %}
-                <div class="d-flex justify-content-between">
-                    {% comment %} <label class="report-completed-label">Completed Services</label> {% endcomment %}
-                </div>
-                    <div class="table-responsive">
-                        <table id="serviceTodayTable" class="table align-middle">
-                            <thead class="text-white align-middle">
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th>Today Services</th>
-                                    <th class="text-end"><input type="text" id="searchInputToday" class="form-control form-control-sm" placeholder="Search..."></th>
+                                    <th scope="col" class="px-6 py-3 text-center">
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Today service Works
+                                    </th>
                                 </tr>
                             </thead>
-
-                            <tbody class="bg-white">
-
+                            <tbody>
                                 {% for today_work in servicework_today %}
-
-                                    <tr>
-                                        <td colspan='2'><a href="" class="anchor_tag">{{ today_work }}</a></td>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                            {{ forloop.counter }}
+                                        </th>
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ today_work }}
+                                        </th>
                                     </tr>
-
                                 {% endfor %}
-            
                             </tbody>
-
                         </table>
                     </div>
                 {% else %}
                     <div class="flex justify-center">
-                        <span>No service works for today.</span>
+                        <span class="font-bold text-2xl">No service works for today.</span>
                     </div>
                 {% endif %}
             </div>
@@ -163,59 +160,60 @@
             chart.render();
         });
 
-        $(document).ready(function() {
-
-            $('#serviceNotDoneTable #searchInputUpcoming').on('keyup', function() {
-                var value = $(this).val().toLowerCase();
-                var found = false;
-                $('#serviceNotDoneTable tbody tr').each(function() {
-                    var text = $(this).text().toLowerCase();
-                    $(this).toggle(text.indexOf(value) > -1);
-                    if (text.indexOf(value) > -1) {
-                        found = true;
-                    }
-                });
-                if (!found) {
-                    $('#serviceNotDoneTable #noRecordsFound').remove();
-                    $('#serviceNotDoneTable tbody').append('<tr id="noRecordsFound"><td colspan="2" class="text-center">No matching records found</td></tr>');
-                } else {
-                    $('#serviceNotDoneTable #noRecordsFound').remove();
-                }
-            });
-
-            $('#serviceNotDoneTable').DataTable();
-            {% comment %} $('#serviceNotDoneTable').DataTable({
-                "searching": true, // Enable searching
-                "paging": false, // Disable pagination (optional)
-                "info": false // Disable table information display (optional)
-            }); {% endcomment %}
-
-            $('#serviceTodayTable #searchInputToday').on('keyup', function() {
-                var value = $(this).val().toLowerCase();
-                var found = false;
-                $('#serviceTodayTable tbody tr').each(function() {
-                    var text = $(this).text().toLowerCase();
-                    $(this).toggle(text.indexOf(value) > -1);
-                    if (text.indexOf(value) > -1) {
-                        found = true;
-                    }
-                });
-                if (!found) {
-                    $('#serviceTodayTable #noRecordsFound').remove();
-                    $('#serviceTodayTable tbody').append('<tr id="noRecordsFound"><td colspan="2" class="text-center">No matching records found</td></tr>');
-                } else {
-                    $('#serviceTodayTable #noRecordsFound').remove();
-                }
-            });
-
-            $('#serviceTodayTable').DataTable({
-                "searching": true, // Enable searching
-                "paging": false, // Disable pagination (optional)
-                "info": false // Disable table information display (optional)
-            });
-
-        });
     </script>
+
+    {% comment %} $(document).ready(function() {
+
+        $('#serviceNotDoneTable #searchInputUpcoming').on('keyup', function() {
+            var value = $(this).val().toLowerCase();
+            var found = false;
+            $('#serviceNotDoneTable tbody tr').each(function() {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(value) > -1);
+                if (text.indexOf(value) > -1) {
+                    found = true;
+                }
+            });
+            if (!found) {
+                $('#serviceNotDoneTable #noRecordsFound').remove();
+                $('#serviceNotDoneTable tbody').append('<tr id="noRecordsFound"><td colspan="2" class="text-center">No matching records found</td></tr>');
+            } else {
+                $('#serviceNotDoneTable #noRecordsFound').remove();
+            }
+        });
+
+        $('#serviceNotDoneTable').DataTable();
+        $('#serviceNotDoneTable').DataTable({
+            "searching": true, // Enable searching
+            "paging": false, // Disable pagination (optional)
+            "info": false // Disable table information display (optional)
+        });
+
+        $('#serviceTodayTable #searchInputToday').on('keyup', function() {
+            var value = $(this).val().toLowerCase();
+            var found = false;
+            $('#serviceTodayTable tbody tr').each(function() {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(value) > -1);
+                if (text.indexOf(value) > -1) {
+                    found = true;
+                }
+            });
+            if (!found) {
+                $('#serviceTodayTable #noRecordsFound').remove();
+                $('#serviceTodayTable tbody').append('<tr id="noRecordsFound"><td colspan="2" class="text-center">No matching records found</td></tr>');
+            } else {
+                $('#serviceTodayTable #noRecordsFound').remove();
+            }
+        });
+
+        $('#serviceTodayTable').DataTable({
+            "searching": true, // Enable searching
+            "paging": false, // Disable pagination (optional)
+            "info": false // Disable table information display (optional)
+        });
+
+    }); {% endcomment %}
     
     
 

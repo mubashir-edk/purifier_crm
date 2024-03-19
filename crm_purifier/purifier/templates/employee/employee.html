@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head %}
-    <title>Employee</title>
+    <title>Create Employee</title>
 {% endblock head %}
 
 {% block content %}
@@ -12,60 +12,51 @@
         <form method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <div class="d-flex justify-content-between">
+            <div class="flex justify-between items-center">
                 {% if employee %}
-                    <a href="{% url "purifier:each_employee" employee.id %}" class="btn btn-sm btn-secondary">&lt;Back</a>
+                <a href="{% url "purifier:each_employee" employee.id %}" class="text-2xl font-bold rounded text-black"><i class="fa-solid fa-circle-left"></i></a>
                 {% else %}
-                    <a href="{% url "purifier:view_employees" %}" class="btn btn-sm btn-secondary">&lt;Back</a>
+                <a href="{% url "purifier:view_employees" %}" class="text-2xl font-bold rounded text-black"><i class="fa-solid fa-circle-left"></i></a>
                 {% endif %}
-                <input type="submit" id="submit" class="btn btn-sm btn-primary" value="Save" />
+                <input type="submit" id="submit" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white" value="Save"/>
             </div>
 
-            <hr class="mt-1">
+            <hr class="border dark:border-gray-800">
 
-            <div class="d-grid">
+            <div class="flex justify-center mt-3">
 
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-center">
+                <img id="image-preview" src="" alt="Image Preview" class="h-48 w-48 border border-gray-400 rounded-full" style="display: none;">
 
-                        <img id="image-preview" src="" alt="Image Preview" style="width: 150px; height: 150px; border-radius: 50%; display: none;">
+                {% if employee.profile %}
+                    <img src="{{ employee.profile.url }}" alt="Profile not loading..." class="default-image h-48 w-48 border border-gray-400 rounded-full">
+                {% else %}
+                    <img src="{% static 'images/default.png' %}" id="employeeDefaultProfile" alt="Image not loading..." class="default-image h-48 w-48 border border-gray-400 rounded-full">  
+                {% endif %}
+                    
+                <label for="formEmployeeProfile" class="block text-sm font-bold text-black">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </label>
+                {{ employee_form.profile }}
 
-                        {% if employee.profile %}
-                            <img src="{{ employee.profile.url }}" alt="Profile not loading..." style="width: 150px; height: 150px; border-radius: 50%;">
-                        {% else %}
-                            <img src="{% static 'images/default.png' %}" id="employeeDefaultProfile" alt="Image not loading..." style="width: 150px; height: 150px; border-radius: 50%;">  
-                        {% endif %}
-                            
-                        <label for="formEmployeeProfile" class="form-label">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </label>
-                        {{ employee_form.profile }}
+            </div>
 
-                    </div>
+            <div class="grid gap-6 mb-6 md:grid-cols-2 mt-3">
+                <div>
+                    <label for="formCustomerEmail" class="block mb-2 text-sm font-bold text-black">Name</label>
+                    {{ employee_form.name }}
                 </div>
-
-                <div class="row d-lg-flex justify-content-lg-between d-grid justify-content-center">
-                    <div class="col-lg-6 col-12">
-                        <label for="formEmployeeName" class="form-label mt-3">Name</label>
-                        {{ employee_form.name }}
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <label for="formEmployeeEmail" class="form-label mt-3">Email</label>
-                        {{ employee_form.email }}
-                    </div>
+                <div>
+                    <label for="formCustomerMobile" class="block mb-2 text-sm font-bold text-black">Email</label>
+                    {{ employee_form.email }}
+                </div>  
+                <div>
+                    <label for="formCustomerWhatsappNumber" class="block mb-2 text-sm font-bold text-black">Mobile</label>
+                    {{ employee_form.mobile }}
                 </div>
-
-                <div class="row d-lg-flex justify-content-lg-between d-grid justify-content-center">
-                    <div class="col-lg-6 col-12">
-                        <label for="formEmployeeMobile" class="form-label mt-3">Mobile</label>
-                        {{ employee_form.mobile }}
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <label for="formEmployeeAddress" class="form-label mt-3">Address</label>
-                        {{ employee_form.address }}
-                    </div>
+                <div>
+                    <label for="formCustomerAddress" class="block mb-2 text-sm font-bold text-black">Address</label>
+                    {{ employee_form.address }}
                 </div>
-
             </div>
 
         </form>

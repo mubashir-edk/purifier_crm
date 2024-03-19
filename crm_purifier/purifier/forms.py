@@ -8,29 +8,33 @@ class EmployeeForm(forms.ModelForm):
         
         widgets = {
             'profile': forms.FileInput(attrs={
-                'class': 'form-control',
                 'id': 'formEmployeeProfile',
+                'class': '',
             }),
             'name': forms.TextInput(attrs={
-                'class': 'form-control', 
                 'id': 'formEmployeeName', 
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Employee Name',
             }),
             'email': forms.EmailInput(attrs={
-                'class': 'form-control', 
                 'id': 'formEmployeeEmail', 
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Email Address',
             }),
             'mobile': forms.TextInput(attrs={
-                'class': 'form-control', 
                 'id': 'formEmployeeMobile',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Mobile Number',
             }),
             'address': forms.Textarea(attrs={
-                'class': 'form-control', 
                 'id': 'formEmployeeAddress',
+                'class': 'block bg-white p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',
                 'rows': '4',
+                'placeholder': 'Address...',
             }),
             'initial_password': forms.TextInput(attrs={
-                'class': 'form-control', 
                 'id': 'employeeInitialPassword',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
             }),
         }
         
@@ -41,37 +45,42 @@ class CustomerForm(forms.ModelForm):
         
         widgets = {
             'profile': forms.FileInput(attrs={
-                'class': 'form-control',
                 'id': 'formCustomerProfile',
+                'class': '',
             }),
             'name': forms.TextInput(attrs={
-                'class': 'form-control', 
                 'id': 'formCustomerName', 
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Customer Name',
             }),
             'email': forms.EmailInput(attrs={
-                'class': 'form-control', 
                 'id': 'formCustomerEmail', 
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Email Address',
             }),
             'mobile': forms.TextInput(attrs={
-                'class': 'form-control', 
                 'id': 'formCustomerMobile',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Mobile Number',
             }),
             'address': forms.Textarea(attrs={
-                'class': 'form-control', 
                 'id': 'formCustomerAddress', 
+                'class': 'block bg-white p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',
                 'rows': '4',
+                'placeholder': 'Address...',
             }),
             'whatsapp_number': forms.TextInput(attrs={
-                'class': 'form-control', 
                 'id': 'formCustomerWhatsappNumber', 
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Whatsapp Number',
             }),
             'installed_product': forms.CheckboxSelectMultiple(attrs={
-                'class': 'form-checkbox', 
                 'id': 'formCustomerInstalledProduct', 
+                'class': 'w-4 h-4 text-black border-gray-300 rounded',
             }),
             'location': forms.TextInput(attrs={
-                'class': 'form-control', 
                 'id': 'formCustomerLocation', 
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
             }),
         }
         
@@ -126,8 +135,9 @@ class ServiceForm(forms.ModelForm):
         
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': 'form-control',
                 'id': 'formServiceName',
+                'class': 'block bg-white p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',
+                'placeholder': 'Service Name',
             }),
         }
         
