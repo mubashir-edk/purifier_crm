@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head %}
-    <title>Tests</title>
+    <title>Add Test</title>
 {% endblock head %}
 
 {% block content %}
@@ -12,65 +12,50 @@
         <form method="post" action="">
             {% csrf_token %}
 
-            <div class="d-flex justify-content-between">
-                <a href="{% url "purifier:view_tests" %}" class="btn btn-sm btn-secondary">&lt;Back</a>
-                <input type="submit" id="submit" class="btn btn-sm btn-primary" value="Save" />
+            <div class="flex justify-between items-center">
+                <a href="{% url "purifier:view_tests" %}" class="text-2xl font-bold rounded text-black"><i class="fa-solid fa-circle-left"></i></a>
+                <input type="submit" id="submit" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white" value="Save"/>
             </div>
 
-            <hr class="mt-1">
+            <hr class="border dark:border-gray-800">
 
-            <div class="d-grid">
+            <div class="grid gap-6 mb-6 md:grid-cols-2 mt-3">
 
-                <div class="row d-lg-flex justify-content-lg-between d-grid justify-content-center">
-
-                    <div class="col-lg-6 col-12">
-                        <label for="formTestName" class="form-label mt-3">Test Name</label>
-                        {{ test_form.test_name }}
-                    </div>
-
-                    <div class="col-lg-6 col-12">
-                        <label for="formTestCustomerCode" class="form-label mt-3">Customer</label>
-                        {{ test_form.customer_code }}
-                    </div>
-
+                <div>
+                    <label for="formTestName" class="block mb-2 text-sm font-bold text-black">Test Name</label>
+                    {{ test_form.test_name }}
                 </div>
 
-                <div class="row d-lg-flex justify-content-lg-between d-grid justify-content-center">
-
-                    <div class="col-lg-6 col-12">
-                        <label for="formTestPhValue" class="form-label mt-3">PH</label>
-                        {{ test_form.ph_value }}
-                    </div>
-
-                    <div class="col-lg-6 col-12">
-                        <label for="formTdsValue" class="form-label mt-3">TDS</label>
-                        {{ test_form.tds_value }}
-                    </div>
-
+                <div>
+                    <label for="formTestCustomerCode" class="block mb-2 text-sm font-bold text-black">Customer</label>
+                    {{ test_form.customer_code }}
                 </div>
 
-                <div class="row d-lg-flex justify-content-lg-between d-grid justify-content-center">
-
-                    <div class="col-lg-6 col-12">
-                        <label for="formIronValue" class="form-label mt-3">Iron</label>
-                        {{ test_form.iron_value }}
-                    </div>
-
-                    <div class="col-lg-6 col-12">
-                        <label for="formHardnessValue" class="form-label mt-3">Hardness</label>
-                        {{ test_form.hardness_value }}
-                    </div>
-
+                <div>
+                    <label for="formTestPhValue" class="block mb-2 text-sm font-bold text-black">PH</label>
+                    {{ test_form.ph_value }}
                 </div>
 
-                <div class="row d-lg-flex justify-content-lg-between d-grid justify-content-center">
-
-                    <div class="col-lg-6 col-12">
-                        <label for="formTubuetValue" class="form-label mt-3">Turbuet</label>
-                        {{ test_form.turbuet_value }}
-                    </div>
-
+                <div>
+                    <label for="formTdsValue" class="block mb-2 text-sm font-bold text-black">TDS</label>
+                    {{ test_form.tds_value }}
                 </div>
+
+                <div>
+                    <label for="formIronValue" class="block mb-2 text-sm font-bold text-black">Iron</label>
+                    {{ test_form.iron_value }}
+                </div>
+
+                <div>
+                    <label for="formHardnessValue" class="block mb-2 text-sm font-bold text-black">Hardness</label>
+                    {{ test_form.hardness_value }}
+                </div>
+
+                <div>
+                    <label for="formTubuetValue" class="block mb-2 text-sm font-bold text-black">Turbuet</label>
+                    {{ test_form.turbuet_value }}
+                </div>
+
 
             </div>
 

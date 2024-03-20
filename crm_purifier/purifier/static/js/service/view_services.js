@@ -1,13 +1,15 @@
 $(document).ready(function () {
 
-    var deleteServiceLinks = document.querySelectorAll('.delete-service-btn');
+    var deleteServiceLinks = document.querySelectorAll('.service-delete-icon');
+
+    console.log(deleteServiceLinks);
 
     deleteServiceLinks.forEach(function(link) {
         link.addEventListener('click', function(event) {
             event.preventDefault();
 
-            var service_id = link.getAttribute('data-bs-serviceId');
-            var service_name = link.getAttribute('data-bs-serviceName');
+            var service_id = link.getAttribute('data-serviceId');
+            var service_name = link.getAttribute('data-serviceName');
             console.log(service_id);
             console.log(service_name);
 
@@ -17,19 +19,19 @@ $(document).ready(function () {
             deleteUrl = `/delete_service/${service_id}`;
 
             confirmDeleteLink.href = deleteUrl;
-            deleteModalBody.innerHTML = 'you want to delete <b>' + service_name + '</b> from services list.';
+            deleteModalBody.innerHTML = "Are you sure you want to delete this customer <b>" + service_name + "</b>? This customer user access will loss and can't retrieve it later."
         });
     });
 
 
-    var updateServiceLinks = document.querySelectorAll('.update-service-btn');
+    var updateServiceLinks = document.querySelectorAll('.service-update-icon');
 
     updateServiceLinks.forEach(function(link) {
         link.addEventListener('click', function(event) {
             event.preventDefault();
 
-            var service_id = link.getAttribute('data-bs-serviceId');
-            var service_name = link.getAttribute('data-bs-serviceName');
+            var service_id = link.getAttribute('data-serviceId');
+            var service_name = link.getAttribute('data-serviceName');
             console.log(service_id);
             console.log(service_name);
             
@@ -37,7 +39,7 @@ $(document).ready(function () {
             console.log($('#formServiceName'));
 
             // Set the href attribute of the "Update" link
-            var confirmServiceLink = document.getElementById('updateServiceBtn');
+            // var confirmServiceLink = document.getElementById('updateServiceBtn');
 
             updateUrl = `/update_service/${service_id}`;
             $('#serviceUpdateForm').attr('action', updateUrl)

@@ -3,90 +3,94 @@
 
 {% block head %}
     <title>View Tests</title>
-    <link href="{% static 'css/test/view_tests.css' %}" rel="stylesheet" type="text/css">
+    {% comment %} <link href="{% static 'css/test/view_tests.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
 {% endblock head %}
 
 {% block content %}
 
-<div class="d-grid">
-    <div class="d-flex justify-content-between">
-        <span class="page_heading">Tests</span>
-        <a href="{% url "purifier:create_test" %}" class="btn btn-sm btn-primary">Add</a>
+    <div class="flex justify-between">
+        <span class="text-2xl font-bold flex self-end">Tests</span>
+        <button class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white"><a href="{% url "purifier:create_test" %}">New Test</a></button>
     </div>
 
-    <hr class="mt-1">
+    <!-- Delete confirm modal -->
+    <div id="delete-modal" data-modal-backdrop="static" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="p-4 md:p-5 text-center">
+                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    <h3 id="deleteTestModalBody" class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"></h3>
+                    <button data-modal-hide="delete-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                        <a href="" id="confirmTestDelete">Yes, I'm sure</a>
+                    </button>
+                    <button data-modal-hide="delete-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="mt-1">
-        {% if tests_exists %}
-        <div class="table-responsive">
-            <table id="testTable" class="table table-bordered align-middle">
-            
-                <thead class="text-white">
+    <hr class="border dark:border-gray-800">
+
+    <div class="mt-3">
+        {% if tests_exists %}  
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table id="tests_table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th></th>
-                        <th>Test</th>
-                        <th>Customer</th>
-                        <th>PH</th>
-                        <th>TDS</th>
-                        <th>Iron</th>
-                        <th>Hardness</th>
-                        <th>Turbuet</th>
-                        <th></th>
+                        <th scope="col" class="px-6 py-3 text-center"></th>
+                        <th scope="col" class="px-6 py-3">Test Name</th>
+                        <th scope="col" class="px-6 py-3">Customer</th>
+                        <th scope="col" class="px-6 py-3">PH</th>
+                        <th scope="col" class="px-6 py-3">TDS</th>
+                        <th scope="col" class="px-6 py-3">Iron</th>
+                        <th scope="col" class="px-6 py-3">Hardness</th>
+                        <th scope="col" class="px-6 py-3">Turbuet</th>
+                        <th scope="col" class="px-6 py-3">Created_on</th>
+                        <th scope="col" class="px-6 py-3"></th>
                     </tr>
                 </thead>
 
-                <tbody class="bg-white">
-
+                <tbody>
                     {% for test in tests %}
-
-                        <tr>
-                            <td class="text-center">{{ forloop.counter }}</td>
-                            <td>{{ test.test_name }}</td>
-                            <td class="d-flex align-items-center">
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">{{ forloop.counter }}</th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ test.test_name }}</th>
+                            <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white gap-x-1">
                                 {% if test.customer_code.profile %}
-                                    <img src="{{test.customer_code.profile.url}}" class="me-1" alt="Profile not loading..." style="width: 25px; height: 25px; border-radius: 50%;">
+                                    <img src="{{test.customer_code.profile.url}}" alt="Profile not loading..." class="h-7 w-7 rounded-full">
                                 {% else %}
-                                    <img src="{% static 'images/default.png' %}" class="me-1" alt="Profile not loading..." style="width: 25px; height: 25px; border-radius: 50%;">
+                                    <img src="{% static 'images/default.png' %}" alt="Profile not loading..." class="h-7 w-7 rounded-full">
                                 {% endif %}
                                 {{ test.customer_code }}
-                            </td>
-                            <td>{{ test.ph_value }}</td>
-                            <td>{{ test.tds_value }}</td>
-                            <td>{{ test.iron_value }}</td>
-                            <td>{{ test.hardness_value }}</td>
-                            <td>{{ test.turbuet_value }}</td>
-                            <td class="text-center"><a href="" class="delete-test-btn" data-bs-toggle="modal" data-bs-target="#deleteTestModal" data-bs-test="{{test.id}}"><i class="bi bi-trash"></i></a></td>
+                            </th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ test.ph_value }}</th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ test.tds_value }}</th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ test.iron_value }}</th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ test.hardness_value }}</th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ test.turbuet_value }}</th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ test.created_on }}</th>
+                            <th scope="row">
+                                <div class="flex justify-center">
+                                    <!-- delete icon -->
+                                    <div data-modal-target="delete-modal" data-modal-toggle="delete-modal" data-testId="{{test.id}}" data-testName="{{test.test_name}}" data-testCustomer="{{test.customer_code}}" class="test-delete-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-red-600 w-4 h-4 cursor-pointer">
+                                            <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
+                                        </svg>    
+                                    </div>
+                                </div>
+                            </th>
                         </tr>
-
                     {% endfor %}
-
-
-                    {% comment %} Delete Test modal {% endcomment %}
-                    <div class="modal fade" id="deleteTestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteTestModalTitle" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteTestModalTitle">Are you sure?</h5>
-                                    <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body" id="deleteTestModalBody">
-                                    
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="" id="confirmTestDelete" class="btn btn-danger">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% comment %} modal ends {% endcomment %}
 
                 </tbody>
 
             </table>
         </div>
         {% else %}
-        <div class="d-flex justify-content-center">
-            <span>No Tests to view</span>
+        <div class="flex justify-center">
+            <span class="font-bold text-xl">No Tests to view</span>
         </div>
         {% endif %}
     </div>

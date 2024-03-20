@@ -120,7 +120,6 @@ class ServiceAssign(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
     service = models.ForeignKey(ServiceWork, on_delete=models.CASCADE, blank=True)
     servicer = models.ForeignKey(Servicer, on_delete=models.SET_NULL, null=True, blank=True)
-    notification = models.CharField(max_length=500, blank=True)
     
     def __str__(self):
         return str(self.service)

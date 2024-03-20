@@ -10,13 +10,13 @@ class CustomUserBackend(BaseBackend):
             user = CustomUser.objects.filter(email=email).first()
             print(user)
         else:
-            return None  # Neither email nor username provided
+            return None
 
         # if user and user.check_password(password):
         if user and user.check_password(password):
             print(f'the data is here already {user}')
-            return user  # Return the user object if authentication is successful
-        return None  # Return None if authentication fails
+            return user
+        return None
 
     def get_user(self, user_id):
         try:

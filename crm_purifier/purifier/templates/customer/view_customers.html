@@ -23,6 +23,7 @@
                             <th scope="col" class="px-6 py-3 text-center"></th>
                             <th scope="col" class="px-6 py-3">Customer_code</th>
                             <th scope="col" class="px-6 py-3">Name</th>
+                            <th scope="col" class="px-6 py-3">Email</th>
                             <th scope="col" class="px-6 py-3">Mobile</th>
                             <th scope="col" class="px-6 py-3">Whatsapp</th>
                         </tr>
@@ -37,12 +38,15 @@
                                 <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <a href="{% url "purifier:each_customer" customer.id %}">
                                         {% if customer.profile %}
-                                            <img src="{{customer.profile.url}}" alt="Profile not loading..." class="h-7 w-7">
+                                            <img src="{{customer.profile.url}}" alt="Profile not loading..." class="h-7 w-7 rounded-full">
                                         {% else %}
-                                            <img src="{% static 'images/default.png' %}" alt="Profile not loading..." class="h-7 w-7">
+                                            <img src="{% static 'images/default.png' %}" alt="Profile not loading..." class="h-7 w-7 rounded-full">
                                         {% endif %}
                                     </a>
                                     <a href="{% url "purifier:each_customer" customer.id %}" class="ms-1">{{ customer.name }}</a>
+                                </th>
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <a href="{% url "purifier:each_customer" customer.id %}">{{ customer.email }}</a>
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <a href="{% url "purifier:each_customer" customer.id %}">{{ customer.mobile }}</a>

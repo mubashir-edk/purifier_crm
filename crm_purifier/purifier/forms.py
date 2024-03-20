@@ -148,8 +148,8 @@ class ServicerForm(forms.ModelForm):
         
         widgets = {
             'name': forms.Select(attrs={
-                'class': 'form-select',
                 'id': 'formServicerName',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
             }),
         }
         
@@ -207,32 +207,38 @@ class TestForm(forms.ModelForm):
         
         widgets = {
             'test_name': forms.TextInput(attrs={
-                'class': 'form-control',    
                 'id': 'formTestName',    
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',   
+                'placeholder': 'Test Name', 
             }),
             'customer_code': forms.Select(attrs={
-                'class': 'form-select',    
                 'id': 'formTestCustomerCode',     
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',   
             }),
             'ph_value': forms.TextInput(attrs={
-                'class': 'form-control',    
                 'id': 'formPhValue',    
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5', 
+                'placeholder': 'PH Value',   
             }),
             'tds_value': forms.TextInput(attrs={
-                'class': 'form-control',    
                 'id': 'formTdsValue',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'TDS Value',    
             }),
             'iron_value': forms.TextInput(attrs={
-                'class': 'form-control',     
                 'id': 'formIronValue',    
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Iron Value',     
             }),
             'hardness_value': forms.TextInput(attrs={
-                'class': 'form-control',    
                 'id': 'formHardnessValue',    
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5', 
+                'placeholder': 'Hardness Value',   
             }),
             'turbuet_value': forms.TextInput(attrs={
-                'class': 'form-control',    
                 'id': 'formTurbuetValue', 
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5', 
+                'placeholder': 'Turbuet Value',   
             }),
         }
         
@@ -243,15 +249,11 @@ class ServiceWorkAssignForm(forms.ModelForm):
         
         widgets = {
             'service': forms.Select(attrs={
-                'class': 'form-select',    
                 'id': 'formAssignService',    
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',     
             }),
             'servicer': forms.Select(attrs={
-                'class': 'form-select',    
                 'id': 'formAssignServicer',     
-            }),
-            'notification': forms.TextInput(attrs={
-                'class': 'form-control',    
-                'id': 'formAssignNotification',    
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',     
             }),
         }

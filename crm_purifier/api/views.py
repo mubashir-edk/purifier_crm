@@ -1,6 +1,5 @@
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from user_management.permissions import CustomIsAuthenticated, EmployeeIsAuthenticated, CustomerIsAuthenticated
 
 from django.contrib.auth.tokens import default_token_generator
@@ -18,10 +17,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct
-from user_management.models import CustomUser
+from api.models import StoreRefreshToken
 from user_management.backends import CustomUserBackend
-from .serializers import EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer, CustomerProductSerializer
+from .serializers import CustomUserSerializer, EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer, CustomerProductSerializer
 
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 class LoginAPIView(APIView):
     permission_classes = [AllowAny]
@@ -30,26 +35,66 @@ class LoginAPIView(APIView):
         username_or_email = request.data.get('username')
         password = request.data.get('password')
         
-        user = authenticate(username=username_or_email, password=password)
-        # user = CustomUserBackend().authenticate(request, username=username_or_email, password=password)
+        user = CustomUserBackend().authenticate(request, username=username_or_email, password=password)
         
         if not user:
             try:
-                user = authenticate(email=username_or_email, password=password)
-                # user = CustomUserBackend().authenticate(request, email=username_or_email, password=password)
+                user = CustomUserBackend().authenticate(request, email=username_or_email, password=password)
             except User.DoesNotExist:
                 pass
 
         if user:
             # Authentication successful, generate tokens
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'access': str(refresh.access_token),
-                'refresh': str(refresh)
-            }, status=status.HTTP_200_OK)
+            token = get_tokens_for_user(user)
+            StoreRefreshToken.objects.update_or_create(user=user, defaults={'token': token['refresh']})
+            
+            user_serializer = CustomUserSerializer(user)
+            
+            return Response({'token': token, 'user':user_serializer.data, 'msg': 'Login successful'})
+            
         else:
             # Authentication failed
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+class LogoutAPI(APIView):
+    
+    permission_classes = [CustomIsAuthenticated]
+    
+    def post(self,request):
+        
+        refresh_token = request.data.get('refresh')
+        if refresh_token is None:
+            return Response({'error': 'Refresh token is required'})
+        
+        token = get_object_or_404(StoreRefreshToken, token=refresh_token)
+        
+        if token:
+            token.delete()
+            return Response({'success': 'logout successfully'}, status=status.HTTP_200_OK)
+        return Response({'error': 'Refresh token not correct'}, status=status.HTTP_400_BAD_REQUEST)
+        
+class RefreshTokenApi(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request, format=None, *args, **kwargs):
+        
+        refresh_token = request.data.get('refresh_token')
+        user_id = request.data.get('user_id')
+        
+        custom_refresh_token = StoreRefreshToken.objects.get(user_id=user_id)
+        print(custom_refresh_token)
+        
+        if custom_refresh_token.token == refresh_token:
+            
+            user = custom_refresh_token.user
+            new_tokens = get_tokens_for_user(user)
+            custom_refresh_token.token = new_tokens['refresh']
+            custom_refresh_token.save()
+            
+            return Response(new_tokens, status=status.HTTP_200_OK)
+        
+        else:
+            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
         
 class PasswordChangeAPIView(APIView):
     permission_classes = [CustomIsAuthenticated]
@@ -57,20 +102,18 @@ class PasswordChangeAPIView(APIView):
     def post(self, request):
         user = request.user
         current_password = request.data.get('current_password')
-        # new_password = request.data.get('new_password')
+        new_password = request.data.get('new_password')
+        confirm_password = request.data.get('confirm_new_password')
 
-        # Check if the current password is correct
         if not user.check_password(current_password):
             return Response({'error': 'Current password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Use Django's built-in PasswordChangeForm to validate and change password
-        form = PasswordChangeForm(user, {'old_password': request.data['current_password'], 'new_password1': request.data['new_password'], 'new_password2': request.data['confirm_new_password']})
+        form = PasswordChangeForm(user, {'old_password': current_password, 'new_password1': new_password, 'new_password2': confirm_password})
         
         if form.is_valid():
             form.save()
             return Response({'detail': 'Password changed successfully.'}, status=status.HTTP_200_OK)
         else:
-            # If the form is not valid, return the errors
             return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PasswordResetRequestAPIView(APIView):
@@ -82,7 +125,6 @@ class PasswordResetRequestAPIView(APIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            # User with this email address does not exist
             return Response({'error': 'User with this email address does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
         # Generate password reset token
@@ -102,7 +144,6 @@ class PasswordResetRequestAPIView(APIView):
             fail_silently=False,
         )
 
-        # Always respond with success to prevent email enumeration
         return Response({'detail': 'Password reset link sent to your email.'}, status=status.HTTP_200_OK)
 
 class PasswordResetAPIView(APIView):

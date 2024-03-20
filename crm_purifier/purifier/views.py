@@ -604,7 +604,7 @@ def createServiceWork(request):
             for service_name_id in selected_service_names:
                 servicework.service_name.add(service_name_id)
             
-            servicework_toassign = ServiceAssign(service=servicework, notification=f'{servicework.service_date} is the service date for the customer {servicework.customer_code}')
+            servicework_toassign = ServiceAssign(service=servicework)
             
             servicework_toassign.save()
             
@@ -762,7 +762,6 @@ def assignServicer(request, id):
     servicework = get_object_or_404(ServiceAssign, pk=id)
     
     assigned_servicework = servicework.service
-    assigned_servicework_notification = servicework.notification
     
     if request.method == 'POST':
         
@@ -773,7 +772,6 @@ def assignServicer(request, id):
             save_form = servicework_assign_form.save(commit=False)
             
             save_form.service = assigned_servicework
-            save_form.notification = assigned_servicework_notification
             
             save_form.save()
             
@@ -797,7 +795,7 @@ def unAssignServicer(request, id):
 @login_required
 def viewTests(request):
     
-    tests = Test.objects.all()
+    tests = Test.objects.all().order_by('-created_on')
     
     tests_exists = tests.exists()
     

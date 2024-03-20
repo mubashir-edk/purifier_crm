@@ -1,12 +1,13 @@
 from django.urls import path
-from .views import LoginAPIView, EmployeeProfileAPIView, PasswordChangeAPIView, PasswordResetRequestAPIView, PasswordResetAPIView, CustomerAPIView, TestAPIView, ServiceWorkAPIView, CustomerProfileAPIView, CustomerServiceWorkAPIView, CustomerProductsAPIView
-# from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .views import LoginAPIView, LogoutAPI, RefreshTokenApi, EmployeeProfileAPIView, PasswordChangeAPIView, PasswordResetRequestAPIView, PasswordResetAPIView, CustomerAPIView, TestAPIView, ServiceWorkAPIView, CustomerProfileAPIView, CustomerServiceWorkAPIView, CustomerProductsAPIView
 
 app_name = 'api'
 
 urlpatterns = [
     
     path('login/', LoginAPIView.as_view(), name='login'),
+    path('logout/', LogoutAPI.as_view(), name='logout'),
+    path('refresh_token/', RefreshTokenApi.as_view(), name='refresh_token'),
     path('password_change/', PasswordChangeAPIView.as_view(), name='password_change'),
     path('password_reset_request/', PasswordResetRequestAPIView.as_view(), name='password_reset_request'),
     path('password_reset/<uidb64>/<token>/', PasswordResetAPIView.as_view(), name='password_reset'),

@@ -37,9 +37,9 @@
                             <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <a href="{% url "purifier:each_employee" employee.id %}">
                                     {% if employee.profile %}
-                                        <img src="{{employee.profile.url}}" alt="Profile not loading..." class="h-7 w-7">
+                                        <img src="{{employee.profile.url}}" alt="Profile not loading..." class="h-7 w-7 rounded-full">
                                     {% else %}
-                                        <img src="{% static 'images/default.png' %}" alt="Profile not loading..." class="h-7 w-7">
+                                        <img src="{% static 'images/default.png' %}" alt="Profile not loading..." class="h-7 w-7 rounded-full">
                                     {% endif %}
                                 </a>
                                 <a href="{% url "purifier:each_employee" employee.id %}" class="ms-1">{{ employee.name }}</a>

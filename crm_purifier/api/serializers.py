@@ -1,5 +1,11 @@
 from rest_framework import serializers
+from user_management.models import CustomUser
 from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'username', 'email',)
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
