@@ -58,8 +58,8 @@
             </table>
         </div>
         {% else %}
-        <div class="d-flex justify-content-center">
-            <span>No employees added. <a href="{% url 'purifier:create_employee' %}">Create</a> a new employee.</span>
+        <div class="flex justify-center">
+            <span class="font-bold text-xl">No employees added. <a href="{% url "purifier:create_employee" %}" class="text-blue-700">Create</a> a new employee.</span>
         </div>
         {% endif %}
     </div>

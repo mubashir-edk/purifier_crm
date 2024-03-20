@@ -1,0 +1,70 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>Create ServiceWork</title>
+{% endblock head %}
+
+{% block content %}
+
+<div>
+
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="flex justify-between items-center">
+            <a href="{% url "purifier:view_serviceworks" %}" class="text-2xl font-bold rounded text-black"><i class="fa-solid fa-circle-left"></i></a>
+            <input type="submit" id="submit" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white" value="Save"/>
+        </div>
+
+        <hr class="border dark:border-gray-800">
+
+        <div class="grid gap-6 mb-6 md:grid-cols-2 mt-3">
+            <div>
+                <label for="formServiceWorkCustomer" class="block mb-2 text-sm font-bold text-black">Customer</label>
+                {{ service_work_form.customer_code }}
+            </div>
+            <div>
+                <label for="formServiceWorkProduct" class="block mb-2 text-sm font-bold text-black">Product</label>
+                {{ service_work_form.product }}
+            </div>  
+            <div>
+                <label for="formServiceWorkService" class="block mb-2 text-sm font-bold text-black">Services</label>
+                <input id="toShowServices" type="text" class="bg-white text-gray-400 text-sm rounded-lg border-none block w-full p-2.5" value="Select Product to show services" readonly/>
+                <div class="overflow-y-auto h-28">
+                    {{ service_work_form.service_name }}
+                </div>
+            </div>
+            <div>
+                <label for="formServiceWorkDate" class="block mb-2 text-sm font-bold text-black">Service Date</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                        </svg>
+                      </div>
+                    {{ service_work_form.service_date }}
+                </div>
+            </div>
+            <div>
+                <label for="formServiceWorkComment" class="block mb-2 text-sm font-bold text-black">Comment</label>
+                {{ service_work_form.comment_section }}
+            </div>
+            <div>
+                <label for="formServiceWorkRemark" class="block mb-2 text-sm font-bold text-black">Remark</label>
+                {{ service_work_form.remark_section }}
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#formServiceWorkService div').find('label').addClass('flex items-center gap-x-1');
+    });
+</script>
+
+<script src="{% static 'js/servicework/servicework.js' %}"></script>
+
+{% endblock content %}

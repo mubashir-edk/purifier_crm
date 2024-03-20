@@ -554,11 +554,12 @@ def viewServiceWorks(request):
 @login_required
 def createServiceWork(request):
     
+    service_work_form = ServiceWorkForm()
+    
     if request.method == 'POST':
         
         service_work_form = ServiceWorkForm(request.POST)
-        
-        
+    
         # Generating Service Work Code
         servicework_codes_only = ServiceWork.objects.values_list('service_work_code', flat=True)
         
@@ -612,8 +613,10 @@ def createServiceWork(request):
         
         else:
             print(service_work_form.errors)
+            
+    context = {'service_work_form': service_work_form}
     
-    return redirect('purifier:view_serviceworks')
+    return render(request, 'servicework/servicework.html', context)
         
 @login_required
 def eachServiceWork(request, id):

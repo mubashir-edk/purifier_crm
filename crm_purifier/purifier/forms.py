@@ -166,31 +166,35 @@ class ServiceWorkForm(forms.ModelForm):
         
         widgets = {
             'customer_code': forms.Select(attrs={
-                'class': 'form-select',    
                 'id': 'formServiceWorkCustomer',    
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',    
             }),
             'product': forms.Select(attrs={
-                'class': 'form-select',    
                 'id': 'formServiceWorkProduct',    
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',    
             }),
             'service_name': forms.CheckboxSelectMultiple(attrs={
-                'class': 'form-checkbox',    
                 'id': 'formServiceWorkService',   
+                'class': 'w-4 h-4 text-black border-gray-300 rounded',    
             }),
             'comment_section': forms.Textarea(attrs={
-                'class': 'form-control',    
                 'id': 'formServiceWorkComment',
-                'rows': '3',  
+                'class': 'block bg-white p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',
+                'rows': '4',
+                'placeholder': 'Comments...',
             }),
             'service_date': forms.DateInput(attrs={
-                'type': 'date',
-                'class': 'form-control',     
                 'id': 'formServiceWorkDate',    
+                'class': 'bblock bg-white ps-10 p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',   
+                'placeholder': 'Select Date',  
+                'autocomplete': 'off',     
+                'datepicker': True,     
             }),
             'remark_section': forms.Textarea(attrs={
-                'class': 'form-control',    
                 'id': 'formServiceWorkRemark',
-                'rows': '3',    
+                'class': 'block bg-white p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',
+                'rows': '4',
+                'placeholder': 'Remark...',
             }),
         }
         
