@@ -25,55 +25,73 @@
 
             <div class="mt-3">
 
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-center">
+                <div class="flex justify-center">
 
-                        <img id="image-preview" src="" alt="Image Preview" style="width: 250px; height: 250px; border-radius: 4px; display: none;">
+                    <img id="image-preview" src="" alt="Image Preview" class="object-fill h-48 w-48 border border-gray-400 rounded-lg" style="display: none;">
 
-                        {% if product.image %}
-                            <img src="{{ product.image.url }}" alt="Profile not loading..." style="width: 250px; height: 250px; border-radius: 4px;">
-                        {% else %}
-                            <img src="{% static 'images/empty_img.jpg' %}" id="productDefaultImage" alt="Image not loading..." style="width: 250px; height: 250px; border-radius: 4px">  
-                        {% endif %}
-                            
-                        <label for="formProductImage" id="imageSelectIcon" class="form-label ms-2">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </label>
-                        {{ product_form.image }}
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="Profile not loading..." class="product-image object-fill h-48 w-48 border border-gray-400 rounded-lg">
+                    {% else %}
+                        <img src="{% static 'images/empty_img.jpg' %}" id="productDefaultImage" alt="Image not loading..." class="object-fill h-48 w-48 border border-gray-400 rounded-lg">  
+                    {% endif %}
+                        
+                    <label for="formProductImage" id="imageSelectIcon" class="form-label ms-2">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </label>
+                    {{ product_form.image }}
 
-                    </div>
                 </div>
 
-                <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between justify-content-center">
+                {% comment %} <div class="col-12 col-md">
+                    <label for="formProductName" class="form-label mt-3">Name</label>
+                    {{ product_form.name }}
+                </div>
+                <div class="col-12 col-md">
+                    <label for="formProductSerial" class="form-label mt-3">Serial</label>
+                    {{ product_form.product_serial }}
+                </div>
 
-                    <div class="col-12 col-md">
-                        <label for="formProductName" class="form-label mt-3">Name</label>
-                        {{ product_form.name }}
+                <div class="col-12 col-md">
+                    <label for="formProductCategory" class="form-label mt-3">Category</label>
+                    {{ product_form.category }}
+                    <input type="text" class="form-control" id="categoryReadonly" value="{{ product.category }}" readonly>
+                </div>
+
+                <div class="col-12 col-md">
+                    <label for="formProductServices" class="form-label mt-3">Services</label>
+                    {{ product_form.services }}
+                    <div id="servicesView">
+                        {% for service in product.services.all  %}
+                            <input type="text" class="form-control mb-1" value="{{service}}" readonly>
+                        {% endfor %}
                     </div>
-                    <div class="col-12 col-md">
-                        <label for="formProductSerial" class="form-label mt-3">Serial</label>
+                </div> {% endcomment %}
+
+                <div class="grid gap-6 mb-6 md:grid-cols-2 mt-3">
+                    <div>
+                        <label for="formProductSerial" class="block mb-2 text-sm font-bold text-black">Product Serial</label>
                         {{ product_form.product_serial }}
                     </div>
-
-                </div>
-
-                <div class="row row-cols-md-2 d-lg-flex justify-content-lg-between justify-content-center">
-
-                    <div class="col-12 col-md">
-                        <label for="formProductCategory" class="form-label mt-3">Category</label>
-                        {{ product_form.category }}
-                        <input type="text" class="form-control" id="categoryReadonly" value="{{ product.category }}" readonly>
+                    <div>
+                        <label for="formProductName" class="block mb-2 text-sm font-bold text-black">Product Name</label>
+                        {{ product_form.name }}
                     </div>
-                    <div class="col-12 col-md">
-                        <label for="formProductServices" class="form-label mt-3">Services</label>
-                        {{ product_form.services }}
-                        <div id="servicesView">
+                    <div>
+                        <label for="formProductCategory" class="block mb-2 text-sm font-bold text-black">Category</label>
+                        {{ product_form.category }}
+                        <input type="text" class="bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5" id="categoryReadonly" value="{{ product.category }}" readonly>
+                    </div>  
+                    <div>
+                        <label for="formProductServices" class="block mb-2 text-sm font-bold text-black">Services</label>
+                        <div id="productServiceDiv" class="overflow-y-auto h-28">
+                            {{ product_form.services }}
+                        </div>
+                        <div id="servicesView" class="grid grid-cols-2 gap-2">
                             {% for service in product.services.all  %}
-                                <input type="text" class="form-control mb-1" value="{{service}}" readonly>
+                            <input type="text" id="eachProductService" class="bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5" value="{{service}}" readonly>
                             {% endfor %}
                         </div>
                     </div>
-
                 </div>
 
             </div>
@@ -81,7 +99,7 @@
     </div>
 
     {% comment %} Delete product confirmation modal {% endcomment %}
-    <div class="modal fade" id="deleteProductModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteProductModalTitle" aria-hidden="true">
+    {% comment %} <div class="modal fade" id="deleteProductModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteProductModalTitle" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -97,7 +115,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> {% endcomment %}
     {% comment %} modal ends {% endcomment %}
 
 

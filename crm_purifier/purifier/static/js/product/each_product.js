@@ -1,6 +1,6 @@
 const imageInput = document.getElementById('formProductImage');
 const imagePreview = document.getElementById('image-preview');
-const existingImage = document.querySelector('.col-12.d-flex.justify-content-center img:not(#image-preview)');
+const existingImage = document.querySelector('.product-image');
 
 imageInput.style.display = 'none';
 
@@ -30,16 +30,20 @@ $(document).ready(function() {
     productName = $('#formProductName');
     productSerial = $('#formProductSerial');
     productCategory = $('#formProductCategory');
-    productServices = $('#formProductServices');
     categoryReadonly = $('#categoryReadonly');
-    servicesReadonly = $('#servicesView');
     imageSelectIcon = $('#imageSelectIcon');
 
     productName.attr('readonly', 'readonly');
     productSerial.attr('readonly', 'readonly');
     productCategory.hide();
-    productServices.hide();
     imageSelectIcon.hide();
+
+    // productServices = $('#formProductServices');
+    productServiceDiv = $('#productServiceDiv');
+    servicesReadonly = $('#servicesView');
+
+    productServiceDiv.hide();
+    // productServices.hide();
 
     $('#openProductEdit').change(function() {
 
@@ -47,22 +51,24 @@ $(document).ready(function() {
             console.log('Checkbox is checked');
 
             $('#productSaveBtn').show();
-
             $('#openProductEditLabel').hide();
-
             $('#productDeleteBtn').hide();
 
             productName.removeAttr('readonly');
             productSerial.removeAttr('readonly');
             productCategory.show();
             categoryReadonly.hide();
-            productServices.show();
-            servicesReadonly.hide();
             imageSelectIcon.show();
+
+            // productServices.show();
+            productServiceDiv.show();
+            servicesReadonly.hide();
+
+            $('#formProductServices div').find('label').addClass('flex items-center ms-1');
+            $('#formProductServices div label').find('input').addClass('me-1');
 
         } else {
             console.log('Checkbox is unchecked');
-
         }
 
     });
