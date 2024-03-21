@@ -38,12 +38,10 @@ $(document).ready(function() {
     productCategory.hide();
     imageSelectIcon.hide();
 
-    // productServices = $('#formProductServices');
     productServiceDiv = $('#productServiceDiv');
     servicesReadonly = $('#servicesView');
 
     productServiceDiv.hide();
-    // productServices.hide();
 
     $('#openProductEdit').change(function() {
 
@@ -51,7 +49,7 @@ $(document).ready(function() {
             console.log('Checkbox is checked');
 
             $('#productSaveBtn').show();
-            $('#openProductEditLabel').hide();
+            $('#openProductEditBtn').hide();
             $('#productDeleteBtn').hide();
 
             productName.removeAttr('readonly');
@@ -60,7 +58,6 @@ $(document).ready(function() {
             categoryReadonly.hide();
             imageSelectIcon.show();
 
-            // productServices.show();
             productServiceDiv.show();
             servicesReadonly.hide();
 
@@ -74,7 +71,7 @@ $(document).ready(function() {
     });
 
     $('#productSaveBtn').click(function() {
-        $('#openProductEditLabel').show();
+        $('#openProductEditBtn').show();
     });
 
 });
