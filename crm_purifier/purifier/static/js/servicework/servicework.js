@@ -49,10 +49,11 @@ $(document).ready(function () {
 
         } else {
             $("#formServiceWorkProduct").prop("disabled", true);
-            var defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.text = '---------';
-            productSelect.appendChild(defaultOption);
+            var option = document.createElement('option');
+                        option.value = '';
+                        option.text = '---------';
+                        option.selected;
+                        productSelect.add(option);
         }
 
     });
@@ -61,6 +62,7 @@ $(document).ready(function () {
     var serviceSelect = document.getElementById('formServiceWorkService');
 
     $(serviceSelect).hide();
+    $('#toShowServices').show();
 
     $("#formServiceWorkProduct").change(function () {
         var selectedProduct = $('#formServiceWorkProduct').val();
@@ -95,6 +97,8 @@ $(document).ready(function () {
                         container.append(checkbox).append(label);
 
                         $(serviceSelect).append(container);
+
+                        $('#servicesListing').addClass('overflow-y-auto h-28');
                     });
                 },
                 error: function (error) {
@@ -104,6 +108,7 @@ $(document).ready(function () {
         } else {
             $(serviceSelect).hide();
             $('#toShowServices').show();
+            $('#servicesListing').addClass('overflow-none h-auto');
         }
     });
 

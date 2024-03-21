@@ -1,23 +1,11 @@
 $(document).ready(function () {
 
-    var formSelects = document.getElementById("serviceworkUpdateForm").getElementsByTagName("select");
-    var formInputs = document.getElementById("serviceworkUpdateForm").getElementsByTagName("input");
-    var formTextareas = document.getElementById("serviceworkUpdateForm").getElementsByTagName("textarea");
-
-    for (var i = 0; i < formSelects.length; i++) {
-        formSelects[i].setAttribute("disabled", "true");
-    }
-
-    for (var i = 0; i < formInputs.length; i++) {
-        formInputs[i].setAttribute("readonly", "true");
-    }
-
-    for (var i = 0; i < formTextareas.length; i++) {
-        formTextareas[i].setAttribute("readonly", "true");
-    }
+    $("#formServiceWorkCustomer").prop("disabled", true);
+    $("#formServiceWorkProduct").prop("disabled", true);
+    
+    $('#formServiceWorkDate').hide();
 
     $("#productServiceDiv").hide();
-
     $("#serviceworkSaveBtn").hide();
 
 
@@ -25,16 +13,11 @@ $(document).ready(function () {
     var selectedCustomer = $('#formServiceWorkCustomer').val();
 
     var productSelect = document.getElementById('formServiceWorkProduct');
-    var productSelectLabel = document.getElementById('serviceWorkProductLabel');
-
     var serviceSelect = document.getElementById('formServiceWorkService');
-    var serviceSelectLabel = document.getElementById('serviceWorkServiceLabel');
 
-    $(serviceSelectLabel).show();
     $(serviceSelect).show();
-
-    $(productSelectLabel).show();
     $(productSelect).show();
+    $('#toShowServices').hide();
 
 
     function productChange() {
@@ -45,7 +28,6 @@ $(document).ready(function () {
 
         if (selectedCustomer !== '') {
             
-            $(productSelectLabel).show();
             $(productSelect).show();
 
             $.ajax({
@@ -80,11 +62,12 @@ $(document).ready(function () {
             });
 
         } else {
-            $(productSelectLabel).hide();
-            $(productSelect).hide();
-
-            $(serviceSelectLabel).hide();
-            $(serviceSelect).hide();
+            $("#formServiceWorkProduct").prop("disabled", true);
+            var option = document.createElement('option');
+                        option.value = '';
+                        option.text = '---------';
+                        option.selected;
+                        productSelect.add(option);
         }
 
     }
@@ -98,8 +81,8 @@ $(document).ready(function () {
 
         if (selectedProduct !== '') {
             
-            $(serviceSelectLabel).show();
             $(serviceSelect).show();
+            $('#toShowServices').hide();
 
             $.ajax({
                 url: `/each_service_work/${selectedServiceWorkId}`,
@@ -117,7 +100,7 @@ $(document).ready(function () {
                             id: 'service_' + service.id,
                             value: service.id,
                             name: 'service_name', // Use the same name for all checkboxes
-                            class: 'form-checkbox',
+                            class: 'w-4 h-4 text-black border-gray-300 rounded ms-2',
                         });
 
                         data.default_services.forEach(function (default_service) {
@@ -129,7 +112,13 @@ $(document).ready(function () {
 
                         var label = $('<label>').attr('for', 'service_' + service.id).addClass('form-label ms-1').text(service.name);
 
-                        $(serviceSelect).append(checkbox).append(label).append('<br>');
+                        container = $('<div>').addClass('flex items-center gap-x-1');
+
+                        container.append(checkbox).append(label);
+
+                        $(serviceSelect).append(container);
+
+                        $('#productServiceDiv').addClass('overflow-y-auto h-28');
 
                     });
 
@@ -141,8 +130,9 @@ $(document).ready(function () {
             });
 
         } else {
-            $(serviceSelectLabel).hide();
             $(serviceSelect).hide();
+            $('#toShowServices').show();
+            $('#productServiceDiv').addClass('overflow-none h-auto');
         }
     }
 
@@ -156,62 +146,24 @@ $(document).ready(function () {
         $("#productServiceDiv").show();
         $("#serviceworkSaveBtn").show();
 
-        for (var i = 0; i < formSelects.length; i++) {
-            formSelects[i].removeAttribute("disabled");
-        }
-    
-        for (var i = 0; i < formInputs.length; i++) {
-            formInputs[i].removeAttribute("readonly");
-        }
-    
-        for (var i = 0; i < formTextareas.length; i++) {
-            formTextareas[i].removeAttribute("readonly");
-        }
+        $("#formServiceWorkCustomer").prop("disabled", false);
+        $("#formServiceWorkProduct").prop("disabled", false);
+
+        $('#dateReadonly').hide();
+        $('#formServiceWorkDate').show();
 
         serviceChange();
-
     });
-
-
-    $("#serviceworkChangeStatus").click(function (event) {
-        event.preventDefault();
-
-        $.ajax({
-            url: `/servicework_change_status/${selectedServiceWorkId}`,
-            type: "GET",
-            dataType: "json",
-            // data: {
-            //     'selectedProduct': selectedProduct,
-            // },
-            success: function (data) {
-
-                console.log(data);
-
-                // $('.status-of-work ').html(data.html_content);
-
-
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
-
-    });
-
 
     $("#formServiceWorkCustomer").change(function () {
-
         serviceSelect.innerHTML = '';
-        productChange(); 
-
+        $("#formServiceWorkProduct").prop("disabled", false);
+        productChange();
     });
 
 
     $("#formServiceWorkProduct").change(function () {
-
         serviceChange();
-
     });
-
 
 });

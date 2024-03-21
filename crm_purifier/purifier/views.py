@@ -284,6 +284,8 @@ def deleteCategory(request, id):
 @login_required
 def createProduct(request):
     
+    product_form = ProductForm()
+    
     if request.method == 'POST':
         
         product_form = ProductForm(request.POST, request.FILES)
@@ -293,8 +295,10 @@ def createProduct(request):
             product_form.save()
             
             return redirect('purifier:view_products')   
+        
+    context = {'product_form': product_form}
     
-    return render(request, 'product/product.html')
+    return render(request, 'product/product.html', context)
 
 @login_required
 def viewProducts(request):
@@ -309,7 +313,7 @@ def viewProducts(request):
     
     context = {'category_form': category_form, 'product_form': product_form, 'products': products, 'products_exists': products_exists}
     
-    return render(request, 'product/product.html', context)
+    return render(request, 'product/view_products.html', context)
 
 @login_required
 def viewAndUpdateEachProduct(request, id):
@@ -726,12 +730,8 @@ def serviceWorkChangeStatus(request, id):
         print(f"Unknown status: {current_work_status}")
         
     servicework.save()
-    
-    # html_content = render(request, 'servicework/each_servicework.html', {'servicework': servicework}).content
-    
-    return JsonResponse({'servicework': servicework})
         
-    # return redirect(reverse('purifier:each_service_work', kwargs={'id': servicework.id}))
+    return redirect(reverse('purifier:each_service_work', kwargs={'id': servicework.id}))
 
 @login_required
 def deleteServiceWork(request, id):

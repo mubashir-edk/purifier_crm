@@ -1,0 +1,147 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+    <title>Products</title>
+    {% comment %} <link href="{% static 'css/product/product.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
+{% endblock head %}
+
+{% block content %}
+
+    <div class="flex justify-between">
+        <span class="text-2xl font-bold flex self-end">Products</span>
+        <div class="flex gap-x-1">
+            <button id="dropdownCategoryButton" data-dropdown-toggle="dropdownCategory" data-dropdown-placement="bottom-end" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white" type="button">Category</button>
+            <div id="dropdownCategory" class="z-20 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+                <ul class="py-2 text-sm text-center text-gray-700 dark:text-gray-200 divide-y divide-gray-500" aria-labelledby="dropdownCategoryButton">
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Category</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View Categories</a>
+                    </li>
+                </ul>
+            </div>
+            <a href="{% url "purifier:create_product" %}"><button type="button" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white">Create Product</button></a>
+        </div>
+    </div>
+
+    {% comment %} Create Category modal {% endcomment %}
+    {% comment %} <div class="modal fade" id="createCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createCategoryModalTitle" aria-hidden="true">
+        <form method="post" action="{% url "purifier:create_category" %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createCategoryModalTitle">Create Category</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div class="col-12 d-flex justify-content-center">
+
+                            <img id="image-preview-category" src="" alt="Image Preview" class="mt-2" style="width: 150px; height: 150px; display: none;">
+                              
+                            <img src="{% static 'images/empty_img.jpg' %}" id="categoryDefaultImage" alt="Image not loading..." class="mt-2" style="width: 150px; height: 150px;">  
+                                
+                            <label for="formCategoryImage" class="form-label ms-2 anchor_tag">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </label>
+                            {{ category_form.image }}
+    
+                        </div>
+
+                        <label for="formServiceName" class="form-label mt-3">Product Name</label>
+                        {{ category_form.name }}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Create</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div> {% endcomment %}
+
+    {% comment %} Create Product modal {% endcomment %}
+    {% comment %} <div class="modal fade" id="createProductModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createProductModalTitle" aria-hidden="true">
+        <form method="post" action="{% url "purifier:create_product" %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createProductModalTitle">Create Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="col-12 d-flex justify-content-center">
+
+                            <img id="image-preview-product" src="" alt="Image Preview" class="mt-2" style="width: 150px; height: 150px; display: none;">
+
+                            <img src="{% static 'images/empty_img.jpg' %}" id="productDefaultImage" alt="Image not loading..." class="mt-2" style="width: 150px; height: 150px;">  
+                                
+                            <label for="formProductImage" class="form-label ms-2">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </label>
+                            {{ product_form.image }}
+    
+                        </div>
+
+                        <label for="formProductSerial" class="form-label mt-3">Serial No.</label>
+                        {{ product_form.product_serial }}
+
+                        <label for="formProductName" class="form-label mt-3">Product Name</label>
+                        {{ product_form.name }}
+
+                        <label for="formProductCategory" class="form-label mt-3">Product Category</label>
+                        {{ product_form.category }}
+
+                        <label for="formProductServices" class="form-label mt-3">Services Provide</label>
+                        {{ product_form.services }}
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Create</button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div> {% endcomment %}
+
+    <hr class="border dark:border-gray-800">
+
+    <div class="mt-3">
+        {% if products_exists %}
+        <div id="productsCardView" class="grid grid-cols-5 gap-3">
+            {% for product in products  %}
+            <div>
+                <a href="{% url "purifier:each_product" product.id %}">
+                    <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        {% if product.image %}
+                            <img src="{{product.image.url}}" class="object-fill rounded-t-lg w-full h-40" alt="Profile not loading...">
+                        {% else %}
+                            <img src="{% static 'images/empty_img.jpg' %}" class="object-fill rounded-t-lg w-full h-40" alt="Profile not loading...">
+                        {% endif %}
+                        <div class="p-5 py-2">
+                            <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white truncate uppercase">{{product.name}}</h5>
+                            <p class="mb-3 font-medium text-gray-700 dark:text-gray-400 truncate"><span>Category:</span> {{ product.category }}</p>
+                            <p class="mb-3 font-medium text-gray-700 dark:text-gray-400 truncate"><span>Serial:</span> {{ product.product_serial }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="flex justify-center">
+            <span class="font-bold text-xl">No products added. <a href="" class="text-blue-700">Create</a> a new product.</span>
+        </div>
+        {% endif %}
+    </div>
+
+<script src="{% static 'js/product/view_products.js' %}"></script>
+
+{% endblock content %}  

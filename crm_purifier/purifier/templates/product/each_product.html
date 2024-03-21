@@ -3,7 +3,6 @@
 
 {% block head %}
     <title>{{product.name}}</title>
-    {% comment %} <link href="{% static 'css/customer/each_customer.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
 {% endblock head %}
 
 {% block content %}
@@ -11,21 +10,20 @@
 
         <form method="post" action="{% url "purifier:each_product" product.id %}" enctype="multipart/form-data">
         {% csrf_token %}
-            <div class="d-flex justify-content-between">
-                <a href="{% url "purifier:view_products" %}" class="btn btn-sm btn-secondary">&lt;Back</a>
+            <div class="flex justify-between">
+                <a href="{% url "purifier:view_products" %}" class="text-2xl font-bold rounded text-black"><i class="fa-solid fa-circle-left"></i></a>
 
                 <div>
-                    <label for="openProductEdit" id="openProductEditLabel" class="btn btn-sm btn-dark">Edit</label>
-                    <input type="checkbox" id="openProductEdit" class="d-none">
-                    <button type="submit" id="productSaveBtn" class="btn btn-sm btn-primary">Save</button>
-                    <a href="" id="productDeleteBtn" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal">Delete</a>
+                    <label for="openProductEdit" id="openProductEditLabel" class="bg-black p-1 px-2 mb-1 text-base font-bold rounded text-white">Edit</label>
+                    <input type="checkbox" id="openProductEdit" class="hidden">
+                    <button type="submit" id="productSaveBtn" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white">Save</button>
+                    <a href="" id="productDeleteBtn" class="bg-red-600 p-1 px-2 mb-1 text-base font-bold rounded text-white" data-bs-toggle="modal" data-bs-target="#deleteProductModal">Delete</a>
                 </div>
-
             </div>
 
-            <hr class="mt-1">
+            <hr class="border dark:border-gray-800">
 
-            <div class="d-grid">
+            <div class="mt-3">
 
                 <div class="row">
                     <div class="col-12 d-flex justify-content-center">

@@ -12,45 +12,6 @@
         <button class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white"><a href="{% url "purifier:create_servicework" %}">Create</a></button>
     </div>
 
-    {% comment %} Create Service modal {% endcomment %}
-    {% comment %} <form id="serviceWorkFormG" action="{% url "purifier:create_servicework" %}" method="post">
-        {% csrf_token %}
-        <div class="modal fade" id="createServiceWorkModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createServiceWorkModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createServiceWorkModalTitle">Add Service for Customer</h5>
-                        <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-
-                        <label for="formServiceWorkCustomer" class="form-label mt-3">Customer</label>
-                        {{ service_work_form.customer_code }}
-
-                        <label for="formServiceWorkProduct" id="serviceWorkProductLabel" class="form-label mt-3">Product</label>
-                        {{ service_work_form.product }}
-
-                        <label for="formServiceWorkService" id="serviceWorkServiceLabel" class="form-label mt-3">Service</label>
-                        {{ service_work_form.service_name }}
-
-                        <label for="formServiceWorkDate" class="form-label mt-3">Service Date</label>
-                        {{ service_work_form.service_date }}
-
-                        <label for="formServiceWorkComment" class="form-label mt-3">Comments</label>
-                        {{ service_work_form.comment_section }}
-
-                        <label for="formServiceWorkRemark" class="form-label mt-3">Remarks</label>
-                        {{ service_work_form.remark_section }}
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form> {% endcomment %}
-
     <hr class="border dark:border-gray-800">
 
     <div class="mt-3">

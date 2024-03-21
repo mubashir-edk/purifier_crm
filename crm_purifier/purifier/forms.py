@@ -107,24 +107,26 @@ class ProductForm(forms.ModelForm):
         
         widgets = {
             'product_serial': forms.TextInput(attrs={
-                'class': 'form-control',
                 'id': 'formProductSerial',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Product Serial',
             }),
             'category': forms.Select(attrs={
-                'class': 'form-select',
                 'id': 'formProductCategory',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
             }),
             'name': forms.TextInput(attrs={
-                'class': 'form-control',
                 'id': 'formProductName',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Product Name',
             }),
             'image': forms.FileInput(attrs={
-                'class': 'form-control',
                 'id': 'formProductImage',
+                'class': '',
             }),
             'services': forms.CheckboxSelectMultiple(attrs={
-                'class': 'form-checkbox',
                 'id': 'formProductServices',
+                'class': 'w-4 h-4 text-black border-gray-300 rounded',
             }),
         }
         
@@ -185,7 +187,7 @@ class ServiceWorkForm(forms.ModelForm):
             }),
             'service_date': forms.DateInput(attrs={
                 'id': 'formServiceWorkDate',    
-                'class': 'bblock bg-white ps-10 p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',   
+                'class': 'block bg-white ps-10 p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',   
                 'placeholder': 'Select Date',  
                 'autocomplete': 'off',     
                 'datepicker': True,     

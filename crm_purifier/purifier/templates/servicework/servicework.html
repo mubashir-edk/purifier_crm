@@ -19,7 +19,7 @@
 
         <hr class="border dark:border-gray-800">
 
-        <div class="grid gap-6 mb-6 md:grid-cols-2 mt-3">
+        <div class="grid gap-6 mt-3">
             <div>
                 <label for="formServiceWorkCustomer" class="block mb-2 text-sm font-bold text-black">Customer</label>
                 {{ service_work_form.customer_code }}
@@ -30,8 +30,8 @@
             </div>  
             <div>
                 <label for="formServiceWorkService" class="block mb-2 text-sm font-bold text-black">Services</label>
-                <input id="toShowServices" type="text" class="bg-white text-gray-400 text-sm rounded-lg border-none block w-full p-2.5" value="Select Product to show services" readonly/>
-                <div class="overflow-y-auto h-28">
+                <input id="toShowServices" type="text" class="bg-white text-gray-400 text-sm outline-none ring-none rounded-lg border-none block w-full p-2.5" value="Select Product to show services" readonly/>
+                <div id="servicesListing">
                     {{ service_work_form.service_name }}
                 </div>
             </div>
