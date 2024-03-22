@@ -238,7 +238,7 @@ def viewCategories(request):
     
     context = {'categories': categories, 'categories_exists': categories_exists, 'category_form': category_form}
     
-    return render(request, 'product/category.html', context)
+    return render(request, 'product/view_category.html', context)
 
 @login_required
 def createCategory(request):
@@ -251,7 +251,7 @@ def createCategory(request):
             
             category_form.save()
             
-        return redirect('purifier:view_products')
+        return redirect('purifier:view_categories')
 
 @login_required
 def updateCategory(request, id):
@@ -272,7 +272,7 @@ def updateCategory(request, id):
         
     context = {'category': category, 'category_form': category_form}
         
-    return render(request, 'product/category.html',context)
+    return render(request, 'product/view_category.html',context)
 
 @login_required
 def deleteCategory(request, id):

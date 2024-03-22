@@ -3,7 +3,6 @@
 
 {% block head %}
     <title>Products</title>
-    {% comment %} <link href="{% static 'css/product/product.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
 {% endblock head %}
 
 {% block content %}
@@ -15,10 +14,10 @@
             <div id="dropdownCategory" class="z-20 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
                 <ul class="py-2 text-sm text-center text-gray-700 dark:text-gray-200 divide-y divide-gray-500" aria-labelledby="dropdownCategoryButton">
                     <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Category</a>
+                        <a href="#" data-modal-target="create-modal" data-modal-toggle="create-modal" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Category</a>
                     </li>
                     <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View Categories</a>
+                        <a href="{% url "purifier:view_categories" %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View Categories</a>
                     </li>
                 </ul>
             </div>
@@ -43,18 +42,26 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form method="post" action="{% url "purifier:view_services" %}" class="p-4 md:p-5">
+                    <form method="post" action="{% url "purifier:create_category" %}" class="p-4 md:p-5" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="grid gap-4 mb-4 grid-cols-2">
+                        <div class="grid gap-4 mb-4">
+                            <div class="col-span-2 flex justify-center">
+                                <img id="image-preview-category" src="" alt="Image Preview" class="object-fill h-48 w-48 border border-gray-400 rounded-lg" style="display: none;">
+
+                                <img src="{% static 'images/empty_img.jpg' %}" id="categoryDefaultImage" alt="Image not loading..." class="object-fill h-48 w-48 border border-gray-400 rounded-lg"> 
+
+                                <label for="formCategoryImage" class="block mb-2 text-sm font-bold text-white"><i class="fa-solid fa-pen-to-square ms-2 cursor-pointer"></i></label>
+                                {{ category_form.image }}
+                            </div>
                             <div class="col-span-2">
-                                <label for="formServiceName" class="block mb-2 text-sm font-bold text-white">Name</label>
-                                {{ category_form.name.name }}
+                                <label for="formCategoryName" class="block mb-2 text-sm font-bold text-white">Category Name</label>
+                                {{ category_form.name }}
                             </div>
                         </div>
                         <div class="flex justify-center">
                             <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                                Add Service
+                                Add Category
                             </button>
                         </div>
                     </form>

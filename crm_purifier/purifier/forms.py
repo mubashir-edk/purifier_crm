@@ -91,12 +91,13 @@ class CategoryForm(forms.ModelForm):
         
         widgets = {
             'image': forms.FileInput(attrs={
-                'class': 'form-control',
                 'id': 'formCategoryImage',
+                'class': '',
             }),
             'name': forms.TextInput(attrs={
-                'class': 'form-control',
                 'id': 'formCategoryName',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Category Name',
             }),
         }
         

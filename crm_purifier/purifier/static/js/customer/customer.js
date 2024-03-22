@@ -22,3 +22,5 @@ imageInput.addEventListener('change', function () {
         existingImage.style.display = 'block';
     }
 });
+
+$('#formCustomerInstalledProduct div').find('label').addClass('flex items-center gap-x-1');

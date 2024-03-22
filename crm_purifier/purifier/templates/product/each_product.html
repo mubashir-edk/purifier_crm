@@ -50,7 +50,7 @@
                     <img id="image-preview" src="" alt="Image Preview" class="object-fill h-48 w-48 border border-gray-400 rounded-lg" style="display: none;">
 
                     {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="Profile not loading..." class="product-image object-fill h-48 w-48 border border-gray-400 rounded-lg">
+                        <img src="{{ product.image.url }}" id="product-image" alt="Profile not loading..." class="object-fill h-48 w-48 border border-gray-400 rounded-lg">
                     {% else %}
                         <img src="{% static 'images/empty_img.jpg' %}" id="productDefaultImage" alt="Image not loading..." class="object-fill h-48 w-48 border border-gray-400 rounded-lg">  
                     {% endif %}

@@ -63,7 +63,9 @@
                 </div>
                 <div>
                     <label for="formCustomerInstalledProduct" class="block mb-2 text-sm font-bold text-black">Installed Products</label>
-                    {{ customer_form.installed_product }}
+                    <div class="overflow-y-auto h-28">
+                        {{ customer_form.installed_product }}
+                    </div>
                 </div>
             </div>
         </form>

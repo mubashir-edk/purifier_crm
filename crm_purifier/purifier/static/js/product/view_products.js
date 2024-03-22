@@ -23,8 +23,6 @@ imageInputCategory.addEventListener('change', function () {
     }
 });
 
-console.log("before");
-
 // $(document).ready(function() {
 //     // DataTable
 //     var table = $('#productsTable').DataTable({

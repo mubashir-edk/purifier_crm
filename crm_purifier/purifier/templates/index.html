@@ -19,6 +19,10 @@
         <!-- JQUERY CDN -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
+        {% comment %} Toastify {% endcomment %}
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
         <!-- Datatables CDN -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
         <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -169,7 +173,11 @@
         <button id="scrollToTopBtn"><i class="bi bi-caret-up-fill"></i></button>
 
 
-        {% comment %} <script>
+        {% comment %} Toastify {% endcomment %}
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+
+        <script>
             $(document).ready(function(){
                 var socket = new WebSocket('ws://localhost:8080/ws/notifications/');
         
@@ -184,25 +192,27 @@
 
                     $('#notificationDropdownItems').append('<li>' + notification + '</li>');
 
-                    $.toast({
-                        text: notification,
-                        heading: 'Service Work',
-                        icon: 'success',
-                        showHideTransition: 'fade',
-                        allowToastClose: true,
-                        hideAfter: 5000,
-                        position: 'bottom-right',
-                        textAlign: 'left',
-                        loader: true,
-                        loaderBg: '#9EC600',
-                    });
+                    Toastify({
+                        text: "This is a toast",
+                        duration: 3000,
+                        destination: "https://github.com/apvarun/toastify-js",
+                        newWindow: true,
+                        close: true,
+                        gravity: "top", // `top` or `bottom`
+                        position: "left", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                          background: "linear-gradient(to right, #00b09b, #96c93d)",
+                        },
+                        onClick: function(){} // Callback after click
+                      }).showToast();
                 };
         
                 socket.onclose = function(){
                     console.log('WebSocket connection closed.');
                 };
             });
-        </script> {% endcomment %}
+        </script>
 
         <!-- common js file -->
         <script src="{% static 'js/index/index_common.js' %}"></script>

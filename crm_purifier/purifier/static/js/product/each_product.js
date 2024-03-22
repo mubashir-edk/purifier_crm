@@ -1,6 +1,6 @@
 const imageInput = document.getElementById('formProductImage');
 const imagePreview = document.getElementById('image-preview');
-const existingImage = document.querySelector('.product-image');
+const existImage = document.getElementById('product-image');
 
 imageInput.style.display = 'none';
 
@@ -12,7 +12,7 @@ imageInput.addEventListener('change', function () {
         reader.onload = function (e) {
             imagePreview.src = e.target.result;
             imagePreview.style.display = 'block';
-            existingImage.style.display = 'none';
+            existImage.style.display = 'none';
         };
 
         reader.readAsDataURL(file);

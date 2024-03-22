@@ -1,12 +1,12 @@
 $(document).ready(function() {
 
     // Wait for the page to fully load
-    window.addEventListener('load', function() {
-        document.getElementById('loadingPage').style.display = 'none';
+    // window.addEventListener('load', function() {
+    //     document.getElementById('loadingPage').style.display = 'none';
         
-        document.getElementById('navBar').style.display = 'block';
-        document.getElementById('mainContent').style.display = 'block';
-    });
+    //     document.getElementById('navBar').style.display = 'block';
+    //     document.getElementById('mainContent').style.display = 'block';
+    // });
 
 
     // sidenav toggle
@@ -40,7 +40,7 @@ $(document).ready(function() {
 
 
     // main content page sroll up
-    document.getElementById("mainContent").onscroll = function() {scrollFunction()};
+    // document.getElementById("mainContent").onscroll = function() {scrollFunction()};
 
     function scrollFunction() {
         if (document.getElementById("mainContent").scrollTop > 200) {
