@@ -2,7 +2,7 @@ from django.db.models.signals import post_save, m2m_changed, pre_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from user_management.models import CustomUser
-from .models import Employee, ServiceWork, Notification, Customer, CustomerProduct
+from .models import Employee, ServiceWork, Customer, CustomerProduct, ServiceAssign, AdminNotification, EmployeeNotification, CustomerNotification
 import string
 import random
 
@@ -128,38 +128,53 @@ def delete_user_customer(sender, instance, **kwargs):
     CustomUser.objects.filter(email=instance.email).delete()
     
 
-def send_notification_to_frontend(notification_data):
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        'notifications_group',
-        {
-            'type': 'send_notification',
-            'notification': notification_data
-        }
-    )
+# def send_notification_to_frontend(notification_data):
+#     channel_layer = get_channel_layer()
+#     async_to_sync(channel_layer.group_send)(
+#         'notifications_group',
+#         {
+#             'type': 'send_notification',
+#             'notification': notification_data
+#         }
+#     )
     
-
 @receiver(post_save, sender=ServiceWork)
 def service_work_notification(sender, instance, created, **kwargs):
 
     if instance.status == 'completed':
         
-        Notification.objects.create(
+        AdminNotification.objects.create(
             message=f"{instance.service_work_code} completed.",
-            message_of="WORK"
+            message_of="SERVICE_WORK_COMPLETED"
         )
         
-        send_notification_to_frontend(f"{instance.service_work_code} completed.")
+        CustomerNotification.objects.create(
+            user=instance.customer_code,
+            message=f"Your service work {instance.service_work_code} has completed.",
+            message_of="SERVICE_COMPLETED"
+        )
+        
+        # send_notification_to_frontend(f"{instance.service_work_code} completed.")
 
+@receiver(post_save, sender=ServiceAssign)
+def serviceassign_notification(sender, instance, created, **kwargs):
+    
+    if instance.servicer:
+        
+        EmployeeNotification.objects.create(
+            user=instance.servicer.name,
+            message=f"Your new assigned work is {instance.service}.",
+            message_of="SERVICE_ASSIGNED"
+        )
 
 @receiver(post_save, sender=Customer)
 def customer_notification(sender, instance, created, **kwargs):
     
     if created:
         
-        Notification.objects.create(
+        AdminNotification.objects.create(
             message=f"{instance.customer_code} has been added.",
-            message_of="CUSTOMER"
+            message_of="NEW_CUSTOMER"
         )
         
-        send_notification_to_frontend(f"{instance.customer_code} has been added.")
+        # send_notification_to_frontend(f"{instance.customer_code} has been added.")

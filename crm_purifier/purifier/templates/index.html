@@ -19,9 +19,9 @@
         <!-- JQUERY CDN -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        {% comment %} Toastify {% endcomment %}
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js" integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
         <!-- Datatables CDN -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -44,35 +44,56 @@
         
         <!-- NAVBAR -->
         <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-            <div class="flex justify-between p-2 px-4">
+            <div class="flex items-center justify-between p-2 px-4">
                 <a href="{% url "purifier:view_dashboard" %}" class="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src="{% static 'images/brandlogo.png' %}" class="h-8" alt="Brand Logo" />
                 </a>
-                <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-
-                    <button id="dropdownLeftEndButton" data-dropdown-toggle="dropdownLeftEnd" data-dropdown-placement="bottom-start" class="mb-3 md:mb-0 text-white font-bold text-sm uppercase tracking-wider text-center inline-flex items-center" type="button">{{request.user}}</button>
-                        
-                    <!-- Dropdown menu -->
-                    <div id="dropdownLeftEnd" class="z-20 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
-                        <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                            <div class="uppercase font-bold tracking-wider">{{request.user}}</div>
-                            <div class="font-medium">{{request.user.email}}</div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center me-2">
+                        <button id="dropdownLeftEndButton" data-dropdown-toggle="dropdownLeftEnd" data-dropdown-placement="bottom-start" class="mb-3 md:mb-0 text-white font-bold text-sm uppercase tracking-wider text-center inline-flex items-center" type="button">{{request.user}}</button>
+                            
+                        <!-- Dropdown menu -->
+                        <div id="dropdownLeftEnd" class="z-20 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+                            <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                                <div class="uppercase font-bold tracking-wider">{{request.user}}</div>
+                                <div class="font-medium">{{request.user.email}}</div>
+                            </div>
+                            <ul class="py-2 text-sm text-center text-gray-700 dark:text-gray-200 divide-y divide-gray-500" aria-labelledby="dropdownLeftEndButton">
+                                <li>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><i class="fa-solid fa-key fa-fade me-1"></i>Change Password</a>
+                                </li>
+                                <li>
+                                    <form method="post" id="logoutFormUrl" action="/auth/logout/">
+                                        <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" href="" onclick="this.closest('#logoutFormUrl').submit(); return false;">
+                                        {% csrf_token %}
+                                        <i class="fa-solid fa-power-off fa-beat-fade me-1"></i>Logout
+                                        </a>
+                                    </form>
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="py-2 text-sm text-center text-gray-700 dark:text-gray-200 divide-y divide-gray-500" aria-labelledby="dropdownLeftEndButton">
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><i class="fa-solid fa-key fa-fade me-1"></i>Change Password</a>
-                            </li>
-                            <li>
-                                <form method="post" id="logoutFormUrl" action="/auth/logout/">
-                                    <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" href="" onclick="this.closest('#logoutFormUrl').submit(); return false;">
-                                    {% csrf_token %}
-                                    <i class="fa-solid fa-power-off fa-beat-fade me-1"></i>Logout
-                                    </a>
-                                </form>
-                            </li>
-                        </ul>
                     </div>
-
+                    <div class="">
+                        <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" data-dropdown-placement="bottom-start" class="relative inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button">
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 14 20">
+                            <path d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z"/>
+                            </svg>
+                            
+                            <div id="ifNotificationDiv" class="absolute block w-3 h-3 bg-red-500 border-2 border-white rounded-full -top-0.5 start-2.5 dark:border-gray-900"></div>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="dropdownNotification" class="z-20 hidden w-80 bg-white rounded-lg shadow">
+                            <div class="px-4 py-2 text-sm flex justify-between itemc-center text-black">
+                                <div class="font-bold tracking-wider text-center">Notifications</div>
+                                <div class="text-sm text-sky-500 hover:text-sky-300 tracking-wider text-center"><span class="mark-all-read cursor-pointer">Mark all as read</span></div>
+                            </div>
+                            <hr class="border-gray-400">
+                            <div class="overflow-auto max-h-80 bg-gray-400 rounded-b-lg">
+                                <ul class="m-1 grid gap-y-1 text-sm text-black" aria-labelledby="dropdownLeftEndButton">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -172,11 +193,7 @@
 
         <button id="scrollToTopBtn"><i class="bi bi-caret-up-fill"></i></button>
 
-
-        {% comment %} Toastify {% endcomment %}
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
-
+{% comment %} 
         <script>
             $(document).ready(function(){
                 var socket = new WebSocket('ws://localhost:8080/ws/notifications/');
@@ -212,7 +229,7 @@
                     console.log('WebSocket connection closed.');
                 };
             });
-        </script>
+        </script> {% endcomment %}
 
         <!-- common js file -->
         <script src="{% static 'js/index/index_common.js' %}"></script>

@@ -80,156 +80,88 @@ $(document).ready(function() {
 
 
     // notification
-    // var hrAndMarkAllReadAppended = false;
-    
+    function fetchNotifications() {
+        $.ajax({
+            url: '/admin_notifications/',
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
 
-    // function fetchNotifications() {
-    //     $.ajax({
-    //         url: '/notifications/',  // URL to fetch notifications
-    //         type: "GET",
-    //         dataType: "json",
-    //         success: function(data) {
-    //             console.log(data.notification_data);
+                console.log(data);
 
-    //             var dropdownMenu = $('#notificationDropdownItems');
+                $("ul[aria-labelledby='dropdownLeftEndButton']").empty();
 
-    //             // Get existing notifications count
-    //             var existingCount = dropdownMenu.find('li.custom-item').length;
+                if (data.notification_data.length === 0) {
+                    $("ul[aria-labelledby='dropdownLeftEndButton']").append(`<li class="cursor-default text-center"><a href="#" class="block text-lg font-base px-4 py-2 cursor-default">No Notifications</a></li>`);
+                }
 
-    //             console.log(data.notifications);
+                data.notification_data.forEach(function (notification) {
 
-    //             const spanElement = $('<span>').addClass('position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle');
+                    if (!notification.once_passed) {
 
-    //             if (data.notification_data.length > 0) {
+                        if (notification.message_of == "SERVICE_WORK_COMPLETED") {
+                            $.toast({
+                                text: notification.message,
+                                heading: 'Service Work',
+                                showHideTransition: 'plain',
+                                hideAfter: 5000,
+                                position: 'bottom-right', 
+                            })
+                        }
 
-    //                 if (!hrAndMarkAllReadAppended) {
-    //                     var markAllRead = '<a class="dropdown-item text-center" id="markAllRead" href="/all_notification_read/">Mark all as read</a>';
-    //                     var hrLine = '<hr class="m-0 p-0">';
-    //                     dropdownMenu.append(markAllRead);
-    //                     dropdownMenu.append(hrLine);
-    //                     hrAndMarkAllReadAppended = true;
-    //                 }
+                        if (notification.message_of == "NEW_CUSTOMER") {
+                            $.toast({
+                                text: notification.message,
+                                heading: 'New Customer',
+                                showHideTransition: 'plain',
+                                hideAfter: 5000,
+                                position: 'bottom-right', 
+                            })
+                        }
 
-                    
-    //                 $('#bellIcon').append(spanElement);
+                        $.ajax({
+                            url: `/update_notification_status/${notification.id}`,
+                            type: "POST",
+                            data: {},
+                            dataType: "json",
+                            headers: { "X-CSRFToken": getCookie("csrftoken") },
+                            success: function(data) {
+                                console.log('AJAX request successful:', data);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error in AJAX request:', error);
+                            }
+                        });
+                    } else {
+                        console.log("Once toast appeared");
+                    }
 
-    //                 data.notification_data.forEach(function (notification, index) {
+                    $("ul[aria-labelledby='dropdownLeftEndButton']").append(`<li class="cursor-default"><a href="#" class="block text-lg font-base px-4 py-2 rounded-lg bg-white shadow hover:bg-gray-500 hover:text-white cursor-default">${notification.message}</a></li>`);
 
-    //                     console.log(notification.message);
-    //                     // Only add new notifications
-    //                     if (index >= existingCount) {
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error in AJAX request:', error);
+            }
+        });
+    }
 
-    //                         if (notification.message_of == "CUSTOMER") {
-    //                             var listItem = $('<li class="custom-item d-flex justify-content-between"></li>');
-    //                             var anchorTag = '<a class="dropdown-item" href="#">New Customer : ' + notification.message +'</a>';
-    //                         } else {
-    //                             var listItem = $('<li class="custom-item d-flex justify-content-between"></li>');
-    //                             var anchorTag = '<a class="dropdown-item" href="#">Service Work : ' + notification.message +'</a>';
-    //                         }
-    //                         // var markAsReadAnchorTag = $('<a id="notificationRead" class="dropdown-item text-end w-auto" href="#">Clear</a>');
-    //                         listItem.append(anchorTag);
-    //                         // listItem.append(markAsReadAnchorTag);
-    //                         dropdownMenu.append(listItem);
+    fetchNotifications();
+    setInterval(fetchNotifications, 5000);
 
-    //                         if ( notification.once_passed !== true ) {
-
-    //                             $.toast({
-    //                                 text: notification.message,
-    //                                 heading: notification.message_of == "CUSTOMER" ? 'New Customer' : 'Service Work',
-    //                                 icon: notification.message_of == "CUSTOMER" ? 'info' : 'success',
-    //                                 showHideTransition: 'fade',
-    //                                 allowToastClose: true,
-    //                                 hideAfter: 5000,
-    //                                 position: 'bottom-right',
-    //                                 textAlign: 'left',
-    //                                 loader: true,
-    //                                 loaderBg: '#9EC600',
-    //                             });
-
-    //                             // Trigger AJAX request here
-    //                             $.ajax({
-    //                                 url: `/update_notification_status/${notification.id}`,
-    //                                 type: "POST",
-    //                                 data: {},
-    //                                 dataType: "json",
-    //                                 headers: { "X-CSRFToken": getCookie("csrftoken") },
-    //                                 success: function(data) {
-    //                                     console.log('AJAX request successful:', data);
-    //                                 },
-    //                                 error: function(xhr, status, error) {
-    //                                     console.error('Error in AJAX request:', error);
-    //                                 }
-    //                             });
-
-    //                         }
-                            
-    //                     }
-
-    //                 });
-
-    //             } else {
-    //                 spanElement.remove();
-    //                 spanText = '<span class="d-flex justify-content-center">No notifications to show.</span>'
-    //                 dropdownMenu.empty().append(spanText);
-    //             }
-    //         }
-    //     });
-    // }
-    // // fetchNotifications();
-    // setInterval(fetchNotifications, 5000);
-
-    // $('#markAllRead').click(function() {
-    //     fetchNotifications();
-    // });
-
-
-    // frontend.js
-
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const socket = new WebSocket('ws://http://127.0.0.1:8000/ws/notifications/');
-
-    //     socket.onopen = function () {
-    //         console.log('WebSocket connection established.');
-    //     };
-
-    //     socket.onmessage = function (e) {
-    //         const notification = JSON.parse(e.data);
-    //         console.log(notification);
-
-    //         // Display toast notification based on the message_of attribute
-    //         if (notification.message_of === "CUSTOMER") {
-    //             $.toast({
-    //                 text: notification.message,
-    //                 heading: 'New Customer',
-    //                 icon: 'info',
-    //                 showHideTransition: 'fade',
-    //                 allowToastClose: true,
-    //                 hideAfter: 5000,
-    //                 position: 'bottom-right',
-    //                 textAlign: 'left',
-    //                 loader: true,
-    //                 loaderBg: '#9EC600',
-    //             });
-    //         } else if (notification.message_of === "WORK") {
-    //             $.toast({
-    //                 text: notification.message,
-    //                 heading: 'Service Work',
-    //                 icon: 'success',
-    //                 showHideTransition: 'fade',
-    //                 allowToastClose: true,
-    //                 hideAfter: 5000,
-    //                 position: 'bottom-right',
-    //                 textAlign: 'left',
-    //                 loader: true,
-    //                 loaderBg: '#9EC600',
-    //             });
-    //         }
-    //     };
-
-    //     socket.onclose = function () {
-    //         console.log('WebSocket connection closed.');
-    //     };
-    // });
-
+    // mark all notifications read
+    $('.mark-all-read').click(function() {
+        $.ajax({
+            url: '/mark_all_notification_read/',
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error in AJAX request:', error);
+            }
+        });
+    });
 
 });

@@ -872,43 +872,42 @@ def viewDashboard(request):
 
 
 # Notification Functions ----------------------------------------------------------------------------------------------------------------------------
-# def getNotifications(request):
+@login_required
+def getNotifications(request):
 
-#     if request.method == 'GET':
+    if request.method == 'GET':
             
-#         try:
-#             notifications = Notification.objects.filter(is_read=False).order_by('-timestamp')
+        try:
             
-#             notification_data = [{'id': notification.id, 'message': notification.message, 'message_of': notification.message_of, 'once_passed':notification.once_passed, 'timestamp': notification.timestamp} for notification in notifications]
+            notifications = AdminNotification.objects.filter(is_read=False).order_by('-timestamp')
+
+            notification_data = [{'id': notification.id, 'message': notification.message, 'message_of': notification.message_of, 'once_passed':notification.once_passed, 'timestamp': notification.timestamp} for notification in notifications]
             
-#             data = {
-#                 'notification_data': notification_data,
-#             }
-#             return JsonResponse(data)
-#         except Notification.DoesNotExist:
-#             return JsonResponse({'error': 'Notification not found'}, status=404)
+            data = {
+                'notification_data': notification_data,
+            }
+            
+            return JsonResponse(data)
+        except AdminNotification.DoesNotExist:
+            return JsonResponse({'error': 'Notification not found'}, status=404)
         
-# def updateNotificationStatus(request, id):
+@login_required
+def updateNotificationStatus(request, id):
 
-#     if request.method == 'POST':
-#         try:
-#             notification = get_object_or_404(Notification, pk=id)
-#             notification.once_passed = True
-#             notification.save()
-#             return JsonResponse({'success': True})
-#         except Notification.DoesNotExist:
-#             return JsonResponse({'error': 'Notification not found'}, status=404)
-#     else:
-#         return JsonResponse({'error': 'Invalid request method'}, status=400)
+    if request.method == 'POST':
+        try:
+            notification = get_object_or_404(AdminNotification, pk=id)
+            notification.once_passed = True
+            notification.save()
+            return JsonResponse({'success': True})
+        except AdminNotification.DoesNotExist:
+            return JsonResponse({'error': 'Notification not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
     
-# def markEachNotificationRead(request, id):
+@login_required
+def markAllNotificationsRead(request):
     
-#     notification = get_object_or_404(Notification, pk=id)
-#     notification.delete()
-#     return f"Notification read."
-    
-# def markAllNotificationsRead(request):
-    
-    notifications = Notification.objects.filter(is_read=False, once_passed=True)
+    notifications = AdminNotification.objects.filter(is_read=False, once_passed=True)
     notifications.delete()
     return HttpResponse(status=204)

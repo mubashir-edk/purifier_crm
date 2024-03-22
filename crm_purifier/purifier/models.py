@@ -124,24 +124,6 @@ class ServiceAssign(models.Model):
     def __str__(self):
         return str(self.service)
     
-class Notification(models.Model):
-    
-    STATUS_CHOICES = (
-        ('WORK', 'WORK'),
-        ('CUSTOMER', 'CUSTOMER'),
-        ('TODAY_WORK', 'TODAY_WORK'),
-    )
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
-    message = models.TextField()
-    message_of = models.CharField(max_length=30, choices=STATUS_CHOICES, default='')
-    once_passed = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return str(self.message)
-    
 class CustomerProduct(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
@@ -155,3 +137,57 @@ class CustomerProduct(models.Model):
     def __str__(self):
         return f"{self.customer_code}, {self.product}"
     
+class AdminNotification(models.Model):
+    
+    STATUS_CHOICES = (
+        ('SERVICE_WORK_COMPLETED', 'SERVICE_WORK_COMPLETED'),
+        ('NEW_CUSTOMER', 'NEW_CUSTOMER'),
+        ('TODAY_WORK', 'TODAY_WORK'),
+    )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
+    message = models.TextField()
+    message_of = models.CharField(max_length=30, choices=STATUS_CHOICES, default='')
+    once_passed = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return str(self.message)
+
+class EmployeeNotification(models.Model):
+    
+    STATUS_CHOICES = (
+        ('SERVICE_ASSIGNED', 'SERVICE_ASSIGNED'),
+        ('TODAY_WORKS', 'TODAY_WORKS'),
+    )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
+    user = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    message = models.TextField()
+    message_of = models.CharField(max_length=30, choices=STATUS_CHOICES, default='')
+    once_passed = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return str(self.message)
+
+class CustomerNotification(models.Model):
+    
+    STATUS_CHOICES = (
+        ('SERVICE_COMPLETED', 'SERVICE_COMPLETED'),
+        ('TOMORROW_SERVICES', 'TOMORROW_SERVICES'),
+        ('TODAY_SERVICES', 'TODAY_SERVICES'),
+    )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    message = models.TextField()
+    message_of = models.CharField(max_length=30, choices=STATUS_CHOICES, default='')
+    once_passed = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return str(self.message)

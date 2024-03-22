@@ -63,9 +63,8 @@ urlpatterns = [
     path('', views.viewDashboard, name='view_dashboard'),
     
     # Notification
-    # path('notifications/', views.getNotifications, name='notifications'),
-    # path('update_notification_status/<uuid:id>', views.updateNotificationStatus, name='update_notification_status'),
-    # path('each_notification_read/<uuid:id>', views.markEachNotificationRead, name='each_notification_read'),
-    # path('all_notification_read/', views.markAllNotificationsRead, name='all_notification_read'),
+    path('admin_notifications/', views.getNotifications, name='admin_notifications'),
+    path('update_notification_status/<uuid:id>', views.updateNotificationStatus, name='update_notification_status'),
+    path('mark_all_notification_read/', views.markAllNotificationsRead, name='mark_all_notification_read'),
 
 ]
