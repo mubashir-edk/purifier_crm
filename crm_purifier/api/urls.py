@@ -15,11 +15,11 @@ urlpatterns = [
     # for employees
     path('employee_profile/', EmployeeProfileAPIView.as_view(), name='employee_profile'),
     path('customers/', CustomerAPIView.as_view()),
-    path('customers/<uuid:id>/', CustomerAPIView.as_view()),
+    path('customer/<uuid:id>/', CustomerAPIView.as_view()),
     path('tests/', TestAPIView.as_view()),
-    path('tests/<uuid:id>/', TestAPIView.as_view()),
+    path('test/<uuid:id>/', TestAPIView.as_view()),
     path('serviceworks/', ServiceWorkAPIView.as_view()),
-    path('serviceworks/<uuid:id>/', ServiceWorkAPIView.as_view()),
+    path('servicework/<uuid:id>/', ServiceWorkAPIView.as_view()),
     
     # for customers
     path('customer_profile/', CustomerProfileAPIView.as_view()),

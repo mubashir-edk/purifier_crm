@@ -50,7 +50,7 @@ class LoginAPIView(APIView):
             
             user_serializer = CustomUserSerializer(user)
             
-            return Response({'token': token, 'user':user_serializer.data, 'msg': 'Login successful'})
+            return Response({'access_token': token['access'], 'user': user_serializer.data, 'msg': 'Login successful'})
             
         else:
             # Authentication failed
@@ -233,8 +233,10 @@ class CustomerAPIView(APIView):
 
     def put(self, request, id):
         customer = get_object_or_404(Customer, pk=id)
+        store_customer_code = customer.customer_code
         serializer = CustomerSerializer(customer, data=request.data)
         if serializer.is_valid():
+            serializer.customer_code = store_customer_code
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -319,8 +321,10 @@ class ServiceWorkAPIView(APIView):
 
     def put(self, request, id):
         servicework = get_object_or_404(ServiceWork, pk=id)
+        store_servicework_code = servicework.service_work_code
         serializer = ServiceWorkSerializer(servicework, data=request.data)
         if serializer.is_valid():
+            serializer.service_work_code = store_servicework_code
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
