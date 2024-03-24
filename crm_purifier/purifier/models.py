@@ -38,7 +38,7 @@ class Service(models.Model):
 class Product(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
-    product_serial = models.CharField(max_length=100, blank=True, unique=True)
+    product_serial = models.CharField(max_length=100, unique=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
     name = models.CharField(max_length=100)
     image = models.ImageField(null=True, blank=True, upload_to="product_images/")

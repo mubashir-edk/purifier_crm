@@ -9,7 +9,7 @@
 
     <div class="flex justify-between">
         <span class="text-2xl font-bold flex self-end">Services</span>
-        <button data-modal-target="create-modal" data-modal-toggle="create-modal" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white">Create</button>
+        <button data-modal-target="create-modal" data-modal-toggle="create-modal" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white cursor-pointer">Create</button>
     </div>
 
 
@@ -40,9 +40,9 @@
                         </div>
                     </div>
                     <div class="flex justify-center">
-                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">
                             <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                            Add Service
+                            Add
                         </button>
                     </div>
                 </form>
@@ -78,9 +78,8 @@
                         </div>
                     </div>
                     <div class="flex justify-center">
-                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                            Update Service
+                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">
+                            Update
                         </button>
                     </div>
                 </form>
@@ -98,9 +97,9 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
                     <h3 id="deleteServiceModalBody" class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"></h3>
-                    <button data-modal-hide="delete-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                        <a href="" id="confirmServiceDelete">Yes, I'm sure</a>
-                    </button>
+                    <a href="" id="confirmServiceDelete"><button data-modal-hide="delete-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                        Yes, I'm sure
+                    </button></a>
                     <button data-modal-hide="delete-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
                 </div>
             </div>
@@ -149,7 +148,7 @@
             </div>
         {% else %}
             <div class="flex justify-center">
-                <span class="font-bold text-xl">No services added. <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-blue-700">Create</button> a new service.</span>
+                <span class="font-bold text-xl">No services added. <span data-modal-target="create-modal" data-modal-toggle="create-modal" class="text-blue-700 cursor-pointer">Create</span> a new service.</span>
             </div>
         {% endif %}
     </div>

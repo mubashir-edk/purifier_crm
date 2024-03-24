@@ -9,15 +9,29 @@
 
     <div class="flex justify-between">
         <span class="text-2xl font-bold flex self-end">Service Works</span>
-        <button class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white"><a href="{% url "purifier:create_servicework" %}">Create</a></button>
+        <a href="{% url "purifier:create_servicework" %}" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white">Create</a>
     </div>
 
     <hr class="border dark:border-gray-800">
 
     <div class="mt-3">
         {% if service_works_exists %}
+
+        <div class="flex justify-between mb-1">
+            <div class="flex items-end">
+                <span class="font-medium">No. of rows</span>
+                <select id="showEntriesSelect" class="ms-1 px-2 py-1 w-18 h-8 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                    <option value="1">10</option>
+                    <option value="2">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <input type="text" id="searchInput" placeholder="Search..." class="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+        </div>
+
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table id="employees_table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table id="servicework_table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center"></th>
@@ -71,12 +85,118 @@
                 </tbody>
             </table>
         </div>
+
+        <div id="pagination" class="flex justify-end mt-4">
+            <!-- Pagination buttons will be added dynamically here -->
+        </div>
         {% else %}
         <div class="flex justify-center">
             <span class="font-bold text-xl">No service works added. <a href="{% url "purifier:create_servicework" %}" class="text-blue-700">Create</a> a new service work.</span>
         </div>
         {% endif %}
     </div>
+
+    <script>
+        $(document).ready(function() {
+            // Search functionality
+            $('#searchInput').on('keyup', function() {
+                var searchText = $(this).val().toLowerCase();
+                var totalRows = $('#servicework_table tbody tr').length;
+                
+                if (searchText === '') {
+                    // If search input is empty, re-run pagination
+                    var entries = parseInt($('#showEntriesSelect').val());
+                    var totalPages = Math.ceil(totalRows / entries);
+                    var currentPage = 1;
+                    
+                    showPage(currentPage, entries);
+                    generatePaginationButtons(totalPages, currentPage);
+                } else {
+                    $('#servicework_table tbody tr').filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(searchText) > -1);
+                    });
+                }
+            });
+        
+            // Show entries functionality
+            $('#showEntriesSelect').on('change', function() {
+                var entries = parseInt($(this).val());
+                var totalRows = $('#servicework_table tbody tr').length;
+                var totalPages = Math.ceil(totalRows / entries);
+                var currentPage = 1;
+        
+                showPage(currentPage, entries);
+                generatePaginationButtons(totalPages, currentPage);
+            });
+        
+            // Pagination logic
+            var rowsPerPage = parseInt($('#showEntriesSelect').val()); // Default rows per page
+            var totalRows = $('#servicework_table tbody tr').length;
+            var totalPages = Math.ceil(totalRows / rowsPerPage);
+            var currentPage = 1;
+            var maxPaginationButtons = 7;
+        
+            // Function to show specified page
+            function showPage(page, entries) {
+                var start = (page - 1) * entries;
+                var end = start + entries;
+        
+                $('#servicework_table tbody tr').hide(); // Hide all rows
+                $('#servicework_table tbody tr').slice(start, end).show(); // Show rows for current page
+            }
+        
+            // Function to generate pagination buttons
+            function generatePaginationButtons(totalPages, currentPage) {
+                $('#pagination').empty(); // Clear previous buttons
+        
+                // Calculate start and end page numbers for pagination
+                var startPage = Math.max(1, currentPage - Math.floor(maxPaginationButtons / 2));
+                var endPage = Math.min(totalPages, startPage + maxPaginationButtons - 1);
+        
+                // Adjust startPage and endPage if required to maintain maxPaginationButtons count
+                if (endPage - startPage + 1 < maxPaginationButtons) {
+                    startPage = Math.max(1, endPage - maxPaginationButtons + 1);
+                }
+        
+                // Add first page button
+                $('#pagination').append('<button class="paginationButton bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-700" data-page="1">&lt;&lt;</button>');
+        
+                // Add step backward button
+                if (currentPage > 1) {
+                    $('#pagination').append('<button class="paginationButton bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-700" data-page="' + (currentPage - 1) + '">&lt;</button>');
+                }
+        
+                // Add page buttons
+                for (var i = startPage; i <= endPage; i++) {
+                    var activeClass = i === currentPage ? 'bg-red-500' : '';
+                    $('#pagination').append('<button class="paginationButton ' + activeClass + ' text-white px-4 py-2 rounded mr-2 hover:bg-blue-700" data-page="' + i + '">' + i + '</button>');
+                }
+        
+                // Add step forward button
+                if (currentPage < totalPages) {
+                    $('#pagination').append('<button class="paginationButton bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-700" data-page="' + (currentPage + 1) + '">&gt;</button>');
+                }
+        
+                // Add last page button
+                $('#pagination').append('<button class="paginationButton bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-700" data-page="' + totalPages + '">&gt;&gt;</button>');
+            }
+        
+            // Show first page initially
+            showPage(currentPage, rowsPerPage);
+            generatePaginationButtons(totalPages, currentPage);
+        
+            // Event listener for pagination buttons
+            $(document).on('click', '.paginationButton', function() {
+                currentPage = parseInt($(this).attr('data-page'));
+                showPage(currentPage, rowsPerPage);
+                generatePaginationButtons(totalPages, currentPage);
+            });
+        });
+        
+        
+        
+        
+    </script>
 
 <script src="{% static 'js/servicework/view_serviceworks.js' %}"></script>
 

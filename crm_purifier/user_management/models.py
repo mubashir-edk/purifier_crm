@@ -5,27 +5,27 @@ from django.contrib.auth import password_validation
 
 class CustomUserManager(BaseUserManager):
     
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
+    def create_user(self, email, username, password=None, **extra_fields):
+        if not email and not username:
+            raise ValueError('The Email and Username field must be set')
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
     
-    def create_employee(self, email, password=None, **extra_fields):
+    def create_employee(self, email, username, password=None, **extra_fields):
         extra_fields.setdefault('is_employee', True)
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(email, username, password, **extra_fields)
 
-    def create_customer(self, email, password=None, **extra_fields):
+    def create_customer(self, email, username, password=None, **extra_fields):
         extra_fields.setdefault('is_customer', True)
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(email, username, password, **extra_fields)
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, email, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(email, username, password, **extra_fields)
     
     def get_by_natural_key(self, username, **extra_fields):
         return self.get(username=username)

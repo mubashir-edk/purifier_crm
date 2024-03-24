@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-n@tssnumdf(-f$*p_f^luy-pruc+2)mrz%vit6sxva%u=j1k(g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -182,7 +182,7 @@ CHANNEL_LAYERS = {
 }
 
 # Api Email Connect
-FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:8000')
+FRONTEND_URL = config('FRONTEND_URL', default='*')
 
 # TWILIO DETAILS
 TWILIO_ACCOUNT_SID = ''

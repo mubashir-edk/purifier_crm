@@ -32,10 +32,6 @@ class EmployeeForm(forms.ModelForm):
                 'rows': '4',
                 'placeholder': 'Address...',
             }),
-            'initial_password': forms.TextInput(attrs={
-                'id': 'employeeInitialPassword',
-                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
-            }),
         }
         
 class CustomerForm(forms.ModelForm):

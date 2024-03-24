@@ -18,10 +18,16 @@
                 {% else %}
                 <a href="{% url "purifier:view_employees" %}" class="text-2xl font-bold rounded text-black"><i class="fa-solid fa-circle-left"></i></a>
                 {% endif %}
-                <input type="submit" id="submit" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white" value="Save"/>
+                <input type="submit" id="submit" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white cursor-pointer" value="Save"/>
             </div>
 
             <hr class="border dark:border-gray-800">
+
+            {% if employee %}
+                <div>
+                    <span class="text-2xl font-bold flex self-end">{{employee.employee_code}}<span>
+                </div>
+            {% endif %}
 
             <div class="flex justify-center mt-3">
 
@@ -42,19 +48,24 @@
 
             <div class="grid gap-6 mb-6 md:grid-cols-2 mt-3">
                 <div>
-                    <label for="formCustomerEmail" class="block mb-2 text-sm font-bold text-black">Name</label>
+                    <label for="formEmployeeName" class="block mb-2 text-sm font-bold text-black">Name</label>
                     {{ employee_form.name }}
                 </div>
                 <div>
-                    <label for="formCustomerMobile" class="block mb-2 text-sm font-bold text-black">Email</label>
-                    {{ employee_form.email }}
+                    {% if employee %}
+                        <label for="formEmployeeEmail" class="block mb-2 text-sm font-bold text-black flex justify-between">Email<p class="text-xs flex items-end text-red-600">Edit restricted</p></label>
+                        <input type="email" class="relative bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5" name="email" id="formEmployeeEmail" value="{{ employee.email }}" readonly/>
+                    {% else %}
+                        <label for="formEmployeeEmail" class="block mb-2 text-sm font-bold text-black flex justify-between">Email<p class="text-xs flex items-end text-red-600">This field can't edit it later</p></label>
+                        {{ employee_form.email }}
+                    {% endif %}
                 </div>  
                 <div>
-                    <label for="formCustomerWhatsappNumber" class="block mb-2 text-sm font-bold text-black">Mobile</label>
+                    <label for="formEmployeeMobile" class="block mb-2 text-sm font-bold text-black">Mobile</label>
                     {{ employee_form.mobile }}
                 </div>
                 <div>
-                    <label for="formCustomerAddress" class="block mb-2 text-sm font-bold text-black">Address</label>
+                    <label for="formEmployeeAddress" class="block mb-2 text-sm font-bold text-black">Address</label>
                     {{ employee_form.address }}
                 </div>
             </div>

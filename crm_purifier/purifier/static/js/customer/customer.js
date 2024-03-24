@@ -24,3 +24,4 @@ imageInput.addEventListener('change', function () {
 });
 
 $('#formCustomerInstalledProduct div').find('label').addClass('flex items-center gap-x-1');
+$('#formCustomerInstalledProduct div').addClass('ms-1');

@@ -837,36 +837,39 @@ def deleteTest(request, id):
 @login_required
 def viewDashboard(request):
     
+    customers_count =Customer.objects.all().count()
+    employees_count = Employee.objects.all().count()
+    products_count = Product.objects.all().count()
+    
     today_date = timezone.now().date()
 
     servicework_today = ServiceWork.objects \
     .exclude(status='completed') \
     .filter(service_date=today_date) \
-    .order_by('-service_work_code')
+    .order_by('service_work_code')         # includes both pending and wokring states
     
     servicework_today_exists = servicework_today.exists()
     servicework_today_count = servicework_today.count()
     
-    servicework_pending = ServiceWork.objects.exclude(status='completed')
-    servicework_pending_exists = servicework_pending.exists()
-    pending_count = servicework_pending.count()
-    
     servicework_upcoming = ServiceWork.objects \
     .exclude(service_date=today_date) \
     .filter(status='pending') \
-    .order_by('-service_work_code')
+    .order_by('service_work_code')
     servicework_upcoming_exists = servicework_upcoming.exists()
     upcoming_count = servicework_upcoming.count()
     
     servicework_completed = ServiceWork.objects.filter(status='completed').order_by('-service_work_code')
     completed_count = servicework_completed.count()
     
-    customers_count =Customer.objects.all().count()
-    employees_count = Employee.objects.all().count()
-    products_count = Product.objects.all().count()
+    servicework_pending = ServiceWork.objects.exclude(status='completed')
+    servicework_pending_exists = servicework_pending.exists()
+    pending_count = servicework_pending.count()
+    
+    all_serviceworks = ServiceWork.objects.all()
+    all_serviceworks_exists = all_serviceworks.exists()
 
     
-    context = {'servicework_today': servicework_today, 'servicework_completed': servicework_completed, 'servicework_pending': servicework_pending, 'servicework_pending_exists': servicework_pending_exists, 'servicework_today_exists': servicework_today_exists, 'servicework_upcoming': servicework_upcoming, 'servicework_upcoming_exists': servicework_upcoming_exists, 'completed_count': completed_count, 'upcoming_count': upcoming_count, 'pending_count': pending_count,'customers_count': customers_count, 'employees_count': employees_count, 'products_count': products_count, 'servicework_today_count': servicework_today_count}
+    context = {'servicework_today': servicework_today, 'servicework_completed': servicework_completed, 'servicework_pending': servicework_pending, 'servicework_pending_exists': servicework_pending_exists, 'servicework_today_exists': servicework_today_exists, 'servicework_upcoming': servicework_upcoming, 'servicework_upcoming_exists': servicework_upcoming_exists, 'completed_count': completed_count, 'upcoming_count': upcoming_count, 'pending_count': pending_count,'customers_count': customers_count, 'employees_count': employees_count, 'products_count': products_count, 'servicework_today_count': servicework_today_count, 'all_serviceworks_exists': all_serviceworks_exists}
     
     return render(request, 'dashboard/dashboard.html', context)
 

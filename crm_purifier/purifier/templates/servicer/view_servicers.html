@@ -10,7 +10,7 @@
 
     <div class="flex justify-between">
         <span class="text-2xl font-bold flex self-end">Servicers</span>
-        <button id="add-servicer-modal" data-modal-target="add-modal" data-modal-toggle="add-modal" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white">Add</button>
+        <button id="add-servicer-modal" data-modal-target="add-modal" data-modal-toggle="add-modal" class="bg-blue-700 p-1 px-2 mb-1 text-base font-bold rounded text-white cursor-pointer">Add</button>
     </div>
 
     <!-- Add modal -->
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div id="confirmAddServicer" class="flex justify-center">
-                            <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">
                                 Add Servicer
                             </button>
                         </div>
@@ -134,7 +134,7 @@
         {% else %}
         <div class="d-flex justify-content-center">
             <div class="flex justify-center">
-                <span class="font-bold text-xl">No servicers added. <button id="ifNoServicer" data-modal-target="add-modal" data-modal-toggle="add-modal" class="text-blue-700">Add</button> a new servicer.</span>
+                <span class="font-bold text-xl">No servicers added. <button id="ifNoServicer" data-modal-target="add-modal" data-modal-toggle="add-modal" class="text-blue-700 cursor-pointer">Add</button> a new servicer.</span>
             </div>
         </div>
         {% endif %}

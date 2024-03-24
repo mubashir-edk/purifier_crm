@@ -92,7 +92,7 @@ $(document).ready(function() {
                 $("ul[aria-labelledby='dropdownLeftEndButton']").empty();
 
                 if (data.notification_data.length === 0) {
-                    $("ul[aria-labelledby='dropdownLeftEndButton']").append(`<li class="cursor-default text-center"><a href="#" class="block text-lg font-base px-4 py-2 cursor-default">No Notifications</a></li>`);
+                    $("ul[aria-labelledby='dropdownNotificationButton']").append(`<li class="cursor-default text-center text-white"><a href="#" class="block text-lg font-base px-4 py-2 cursor-default">No Notifications</a></li>`);
                 }
 
                 data.notification_data.forEach(function (notification) {
@@ -136,7 +136,7 @@ $(document).ready(function() {
                         console.log("Once toast appeared");
                     }
 
-                    $("ul[aria-labelledby='dropdownLeftEndButton']").append(`<li class="cursor-default"><a href="#" class="block text-lg font-base px-4 py-2 rounded-lg bg-white shadow hover:bg-gray-500 hover:text-white cursor-default">${notification.message}</a></li>`);
+                    $("ul[aria-labelledby='dropdownNotificationButton']").append(`<li class="cursor-default"><a href="#" class="block text-lg font-base px-4 py-2 rounded-lg bg-white shadow hover:bg-gray-500 hover:text-white cursor-default">${notification.message}</a></li>`);
 
                 });
             },
