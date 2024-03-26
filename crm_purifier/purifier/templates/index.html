@@ -194,44 +194,6 @@
 
         <button id="scrollToTopBtn"><i class="bi bi-caret-up-fill"></i></button>
 
-{% comment %} 
-        <script>
-            $(document).ready(function(){
-                var socket = new WebSocket('ws://localhost:8080/ws/notifications/');
-        
-                socket.onopen = function(){
-                    console.log('WebSocket connection established.');
-                };
-        
-                socket.onmessage = function(event){
-
-                    var notification = JSON.parse(event.data);
-                    console.log({notification});
-
-                    $('#notificationDropdownItems').append('<li>' + notification + '</li>');
-
-                    Toastify({
-                        text: "This is a toast",
-                        duration: 3000,
-                        destination: "https://github.com/apvarun/toastify-js",
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // `top` or `bottom`
-                        position: "left", // `left`, `center` or `right`
-                        stopOnFocus: true, // Prevents dismissing of toast on hover
-                        style: {
-                          background: "linear-gradient(to right, #00b09b, #96c93d)",
-                        },
-                        onClick: function(){} // Callback after click
-                      }).showToast();
-                };
-        
-                socket.onclose = function(){
-                    console.log('WebSocket connection closed.');
-                };
-            });
-        </script> {% endcomment %}
-
         <!-- common js file -->
         <script src="{% static 'js/index/index_common.js' %}"></script>
 

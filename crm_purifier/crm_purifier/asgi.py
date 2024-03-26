@@ -16,9 +16,4 @@ from purifier.consumers import NotificationConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crm_purifier.settings')
 
-# application = get_asgi_application()
-
-application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
-    "websocket": NotificationConsumer.as_asgi(),
-})
+application = get_asgi_application()

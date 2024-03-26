@@ -16,10 +16,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct
+from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct, ServiceAssign, Servicer
 from api.models import StoreRefreshToken
 from user_management.backends import CustomUserBackend
 from .serializers import CustomUserSerializer, EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer, CustomerProductSerializer
+from django.utils import timezone
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -35,6 +36,9 @@ class LoginAPIView(APIView):
         username_or_email = request.data.get('username')
         password = request.data.get('password')
         
+        print(username_or_email)
+        print(password)
+        
         user = CustomUserBackend().authenticate(request, username=username_or_email, password=password)
         
         if not user:
@@ -42,8 +46,11 @@ class LoginAPIView(APIView):
                 user = CustomUserBackend().authenticate(request, email=username_or_email, password=password)
             except User.DoesNotExist:
                 pass
+            
+            print(user)
 
         if user:
+            print("user is there")
             # Authentication successful, generate tokens
             token = get_tokens_for_user(user)
             StoreRefreshToken.objects.update_or_create(user=user, defaults={'token': token['refresh']})
@@ -225,11 +232,22 @@ class CustomerAPIView(APIView):
             serializer.save(customer_code=generated_customer_code)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def get(self, request):
+    
+    def get_all_customers(self, request):
         customers = Customer.objects.all()
         serializer = CustomerSerializer(customers, many=True)
         return Response(serializer.data)
+
+    def get_customer_by_id(self, request, id):
+        customer = get_object_or_404(Customer, pk=id)
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data)
+
+    def get(self, request, id=None):
+        if id:
+            return self.get_customer_by_id(request, id)
+        else:
+            return self.get_all_customers(request)
 
     def put(self, request, id):
         customer = get_object_or_404(Customer, pk=id)
@@ -256,11 +274,22 @@ class TestAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def get(self, request):
+    
+    def get_all_tests(self, request):
         tests = Test.objects.all()
         serializer = TestSerializer(tests, many=True)
         return Response(serializer.data)
+
+    def get_test_by_id(self, request, id):
+        test = get_object_or_404(Test, pk=id)
+        serializer = TestSerializer(test)
+        return Response(serializer.data)
+
+    def get(self, request, id=None):
+        if id:
+            return self.get_test_by_id(request, id)
+        else:
+            return self.get_all_tests(request)
 
     def put(self, request, id):
         test = get_object_or_404(Customer, pk=id)
@@ -314,10 +343,29 @@ class ServiceWorkAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request):
-        serviceworks = ServiceWork.objects.all()
+    def get_all_serviceworks(self, request):
+        user = request.user
+        employee = Servicer.objects.get(name__employee_code=user.username)  
+        works_assigned_for_employee = ServiceAssign.objects.filter(servicer=employee)
+        serviceworks = []
+        
+        for work_assigned in works_assigned_for_employee:   
+            servicework = get_object_or_404(ServiceWork, service_work_code=work_assigned)
+            serviceworks.append(servicework)
+        
         serializer = ServiceWorkSerializer(serviceworks, many=True)
         return Response(serializer.data)
+
+    def get_servicework_by_id(self, request, id):
+        servicework = get_object_or_404(ServiceWork, pk=id)
+        serializer = ServiceWorkSerializer(servicework)
+        return Response(serializer.data)
+
+    def get(self, request, id=None):
+        if id:
+            return self.get_servicework_by_id(request, id)
+        else:
+            return self.get_all_serviceworks(request)
 
     def put(self, request, id):
         servicework = get_object_or_404(ServiceWork, pk=id)
@@ -333,6 +381,38 @@ class ServiceWorkAPIView(APIView):
         servicework = get_object_or_404(ServiceWork, pk=id)
         servicework.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+# For Employee
+class ServiceWorkDueAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get_all_serviceworks_due(self, request):
+        today_date = timezone.now().date()
+        user = request.user
+        employee = Servicer.objects.get(name__employee_code=user.username)  
+        works_assigned_for_employee = ServiceAssign.objects.filter(servicer=employee)
+        serviceworks = []
+        
+        for work_assigned in works_assigned_for_employee:   
+            servicework = get_object_or_404(ServiceWork, service_work_code=work_assigned)
+            if servicework.service_date == today_date:
+                serviceworks.append(servicework)
+        
+        serializer = ServiceWorkSerializer(serviceworks, many=True)
+        return Response(serializer.data)
+
+    def get_servicework_due_by_id(self, request, id):
+        today_date = timezone.now().date()
+        servicework = get_object_or_404(ServiceWork, pk=id)
+        if servicework.service_date == today_date:
+            serializer = ServiceWorkSerializer(servicework)
+        return Response(serializer.data)
+
+    def get(self, request, id=None):
+        if id:
+            return self.get_servicework_due_by_id(request, id)
+        else:
+            return self.get_all_serviceworks_due(request)
     
 
 # For Customer  
