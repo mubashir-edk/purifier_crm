@@ -344,7 +344,7 @@ class ServiceWorkAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_all_serviceworks(self, request):
-        user = request.user
+        user = self.request.user
         employee = Servicer.objects.get(name__employee_code=user.username)  
         works_assigned_for_employee = ServiceAssign.objects.filter(servicer=employee)
         serviceworks = []
@@ -384,11 +384,11 @@ class ServiceWorkAPIView(APIView):
     
 # For Employee
 class ServiceWorkDueAPIView(APIView):
-    permission_classes = [AllowAny]
-    
-    def get_all_serviceworks_due(self, request):
+    permission_classes = [EmployeeIsAuthenticated]
+
+    def get(self, request, id=None):
         today_date = timezone.now().date()
-        user = request.user
+        user = self.request.user
         employee = Servicer.objects.get(name__employee_code=user.username)  
         works_assigned_for_employee = ServiceAssign.objects.filter(servicer=employee)
         serviceworks = []
@@ -400,19 +400,6 @@ class ServiceWorkDueAPIView(APIView):
         
         serializer = ServiceWorkSerializer(serviceworks, many=True)
         return Response(serializer.data)
-
-    def get_servicework_due_by_id(self, request, id):
-        today_date = timezone.now().date()
-        servicework = get_object_or_404(ServiceWork, pk=id)
-        if servicework.service_date == today_date:
-            serializer = ServiceWorkSerializer(servicework)
-        return Response(serializer.data)
-
-    def get(self, request, id=None):
-        if id:
-            return self.get_servicework_due_by_id(request, id)
-        else:
-            return self.get_all_serviceworks_due(request)
     
 
 # For Customer  
@@ -432,23 +419,43 @@ class CustomerProfileAPIView(APIView):
 # For Customer
 class CustomerServiceWorkAPIView(APIView):
     permission_classes = [CustomerIsAuthenticated]
-
-    def get(self, request):
-        serviceworks = ServiceWork.objects.all()
-        serializer = ServiceWorkSerializer(serviceworks, many=True)
+    
+    def get_all_serviceworks(self, request):
+        user = self.request.user
+        customer = get_object_or_404(Customer, customer_code=user.username)
+        customer_Serviceworks = ServiceWork.objects.filter(customer_code=customer)
+        
+        serializer = ServiceWorkSerializer(customer_Serviceworks, many=True)
         return Response(serializer.data)
+
+    def get_servicework_by_id(self, request, id):
+        servicework = get_object_or_404(ServiceWork, pk=id)
+        serializer = ServiceWorkSerializer(servicework)
+        return Response(serializer.data)
+
+    def get(self, request, id=None):
+        if id:
+            return self.get_servicework_by_id(request, id)
+        else:
+            return self.get_all_serviceworks(request)
     
 # For Customer
 class CustomerProductsAPIView(APIView):
     permission_classes = [CustomerIsAuthenticated]
     
-    def get_object(self):
+    def get_all_customerproducts(self, request):
         user = self.request.user
         customer_products =  CustomerProduct.objects.filter(customer_code__customer_code=user)
-        print(customer_products)
-        return customer_products
-    
-    def get(self, request):
-        customer_products = self.get_object()
         serializer = CustomerProductSerializer(customer_products, many=True)
         return Response(serializer.data)
+
+    def get_customerproduct_by_id(self, request, id):
+        customer_product = get_object_or_404(CustomerProduct, pk=id)
+        serializer = CustomerProductSerializer(customer_product)
+        return Response(serializer.data)
+
+    def get(self, request, id=None):
+        if id:
+            return self.get_customerproduct_by_id(request, id)
+        else:
+            return self.get_all_customerproducts(request)

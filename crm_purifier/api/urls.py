@@ -21,10 +21,11 @@ urlpatterns = [
     path('serviceworks/', ServiceWorkAPIView.as_view()),
     path('servicework/<uuid:id>/', ServiceWorkAPIView.as_view()),
     path('serviceworks_due/', ServiceWorkDueAPIView.as_view()),
-    path('servicework_due/<uuid:id>/', ServiceWorkDueAPIView.as_view()),
     
     # for customers
     path('customer_profile/', CustomerProfileAPIView.as_view()),
     path('customer_serviceworks/', CustomerServiceWorkAPIView.as_view()),
+    path('customer_servicework/<uuid:id>/', CustomerServiceWorkAPIView.as_view()),
     path('customer_products/', CustomerProductsAPIView.as_view()),
+    path('customer_product/<uuid:id>/', CustomerProductsAPIView.as_view()),
 ]

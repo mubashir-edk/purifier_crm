@@ -195,10 +195,6 @@ TWILIO_PHONE_NUMBER = ''
 #     ('23 10 * * *', 'purifier.utils.delete_read_notifications')
 # ]
 
-# ASGI
-ASGI_APPLICATION = 'crm_purifier.asgi.application'
-
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'user_management.backends.CustomUserBackend',
