@@ -1,14 +1,5 @@
 $(document).ready(function() {
 
-    // Wait for the page to fully load
-    // window.addEventListener('load', function() {
-    //     document.getElementById('loadingPage').style.display = 'none';
-        
-    //     document.getElementById('navBar').style.display = 'block';
-    //     document.getElementById('mainContent').style.display = 'block';
-    // });
-
-
     // sidenav toggle
     var isViewModify = localStorage.getItem('isViewModify') === 'true';
     
@@ -38,30 +29,6 @@ $(document).ready(function() {
         }
     });
 
-
-    // main content page sroll up
-    // document.getElementById("mainContent").onscroll = function() {scrollFunction()};
-
-    function scrollFunction() {
-        if (document.getElementById("mainContent").scrollTop > 200) {
-            document.getElementById("scrollToTopBtn").classList.add("show");
-
-        } else {
-            document.getElementById("scrollToTopBtn").classList.remove("show");
-
-        }
-    }
-
-    $('#scrollToTopBtn').click(function() {
-        console.log('Scroll to top');
-        var maincontent = document.getElementById("mainContent");
-  
-        maincontent.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    });
-
     // Function to get CSRF token from cookies
     function getCookie(name) {
         var cookieValue = null;
@@ -78,8 +45,9 @@ $(document).ready(function() {
         return cookieValue;
     }
 
-
     // notification
+    let noNotificationsShown = false;
+
     function fetchNotifications() {
         $.ajax({
             url: '/admin_notifications/',
@@ -89,10 +57,16 @@ $(document).ready(function() {
 
                 console.log(data);
 
-                $("ul[aria-labelledby='dropdownLeftEndButton']").empty();
+                const notificationList = $("ul[aria-labelledby='dropdownNotificationButton']");
 
                 if (data.notification_data.length === 0) {
-                    $("ul[aria-labelledby='dropdownNotificationButton']").append(`<li class="cursor-default text-center text-white"><a href="#" class="block text-lg font-base px-4 py-2 cursor-default">No Notifications</a></li>`);
+                    if (!noNotificationsShown) {
+                        notificationList.append(`<li class="cursor-default text-center text-white"><a href="#" class="block text-lg font-base px-4 py-2 cursor-default">No Notifications</a></li>`);
+                        noNotificationsShown = true;
+                    }
+                } else {
+                    notificationList.empty(); // Empty the list before adding new notifications
+                    noNotificationsShown = false; // Reset the flag if there are notifications
                 }
 
                 data.notification_data.forEach(function (notification) {
@@ -147,7 +121,7 @@ $(document).ready(function() {
     }
 
     fetchNotifications();
-    setInterval(fetchNotifications, 10000);
+    setInterval(fetchNotifications, 100);
 
     // mark all notifications read
     $('.mark-all-read').click(function() {
@@ -157,6 +131,7 @@ $(document).ready(function() {
             dataType: "json",
             success: function(data) {
                 console.log(data);
+                $("ul[aria-labelledby='dropdownNotificationButton']").empty();
             },
             error: function(xhr, status, error) {
                 console.error('Error in AJAX request:', error);

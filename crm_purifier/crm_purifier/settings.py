@@ -143,8 +143,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# LOGIN_REDIRECT_URL = '/'
-
 LOGOUT_REDIRECT_URL = '/admin_login/'
 
 LOGIN_URL = '/admin_login/'
@@ -159,8 +157,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Gmail SMTP server settings
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587  # For TLS
-EMAIL_HOST_USER = 'mubashiredk.drive@gmail.com'  # Your Gmail address
-EMAIL_HOST_PASSWORD = 'izzeqcjgryyxkqql'  # Your Gmail password
+EMAIL_HOST_USER = ''  # Your Gmail address
+EMAIL_HOST_PASSWORD = ''  # Your Gmail password
 EMAIL_USE_TLS = True
 
 # RESTFRAMEWORK
@@ -184,16 +182,11 @@ CHANNEL_LAYERS = {
 # Api Email Connect
 FRONTEND_URL = config('FRONTEND_URL', default='*')
 
-# TWILIO DETAILS
-TWILIO_ACCOUNT_SID = ''
-TWILIO_AUTH_TOKEN = ''
-TWILIO_PHONE_NUMBER = ''
-
 # CRONJOBS
-# CRONJOBS = [
-#     ('46 11 * * *', 'purifier.utils.today_works'),
-#     ('23 10 * * *', 'purifier.utils.delete_read_notifications')
-# ]
+CRONJOBS = [
+    ('1 0 * * *', 'purifier.utils.today_works_notification'),
+    ('0 10 * * *', 'purifier.utils.tomorrow_works_notification'),
+]
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

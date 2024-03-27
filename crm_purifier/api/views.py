@@ -16,10 +16,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct, ServiceAssign, Servicer
+from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct, ServiceAssign, Servicer, EmployeeNotification, CustomerNotification
 from api.models import StoreRefreshToken
 from user_management.backends import CustomUserBackend
-from .serializers import CustomUserSerializer, EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer, CustomerProductSerializer
+from .serializers import CustomUserSerializer, EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer, CustomerProductSerializer,EmployeeNotificationSerializer, CustomerNotificationSerializer
 from django.utils import timezone
 
 def get_tokens_for_user(user):
@@ -401,6 +401,28 @@ class ServiceWorkDueAPIView(APIView):
         serializer = ServiceWorkSerializer(serviceworks, many=True)
         return Response(serializer.data)
     
+# For Employee
+class employeeNotificationAPIView(APIView):
+    permission_classes = [EmployeeIsAuthenticated]
+    
+    def get(self, request):
+        user = self.request.user
+        employee = get_object_or_404(Employee, employee_code=user.username)
+        notifications = EmployeeNotification.objects.filter(user=employee)
+        serializer = EmployeeNotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+
+# For Customer
+class customerNotificationAPIView(APIView):
+    permission_classes = [CustomerIsAuthenticated]
+    
+    def get(self, request):
+        user = self.request.user
+        customer = get_object_or_404(Customer, customer_code=user.username)
+        notifications = CustomerNotification.objects.filter(user=customer)
+        serializer = CustomerNotificationSerializer(notifications, many=True)
+        return Response(serializer.data)        
 
 # For Customer  
 class CustomerProfileAPIView(APIView):

@@ -40,6 +40,7 @@
                         <th scope="col" class="px-6 py-3">Customer</th>
                         <th scope="col" class="px-6 py-3">Product</th>
                         <th scope="col" class="px-6 py-3">Created_On</th>
+                        <th scope="col" class="px-6 py-3">Servicer</th>
                         <th scope="col" class="px-6 py-3 text-center">Status</th>
                     </tr>
                 </thead>
@@ -68,6 +69,9 @@
                             </th>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <a href='{% url "purifier:each_service_work" service_work.id %}'>{{ service_work.created_on }}</a>
+                            </th>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <a href='{% url "purifier:each_service_work" service_work.id %}'>{{ service_work.servicer }}</a>
                             </th>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                 <a href='{% url "purifier:each_service_work" service_work.id %}'>

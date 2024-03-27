@@ -97,6 +97,23 @@ class CategoryForm(forms.ModelForm):
             }),
         }
         
+class UpdateCategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = '__all__'
+        
+        widgets = {
+            'image': forms.FileInput(attrs={
+                'id': 'formCategoryImage1',
+                'class': '',
+            }),
+            'name': forms.TextInput(attrs={
+                'id': 'formCategoryName1',
+                'class': 'bg-white text-gray-900 text-sm rounded-lg border-none focus:ring-blue-500 block w-full p-2.5',
+                'placeholder': 'Category Name',
+            }),
+        }
+        
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
@@ -184,10 +201,9 @@ class ServiceWorkForm(forms.ModelForm):
             }),
             'service_date': forms.DateInput(attrs={
                 'id': 'formServiceWorkDate',    
-                'class': 'block bg-white ps-10 p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',   
+                'class': 'block bg-white p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500',   
                 'placeholder': 'Select Date',  
-                'autocomplete': 'off',     
-                'datepicker': True,     
+                'type': 'date'
             }),
             'remark_section': forms.Textarea(attrs={
                 'id': 'formServiceWorkRemark',

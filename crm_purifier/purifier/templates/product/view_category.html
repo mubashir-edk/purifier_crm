@@ -78,24 +78,22 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form id="categoryUpdateForm" method="post" action="" class="p-4 md:p-5">
+                    <form id="categoryUpdateForm" method="post" action="" class="p-4 md:p-5" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="grid gap-4 mb-4">
                             <div class="col-span-2 flex justify-center">
-                                <img src="" alt="Image Preview" class="updateImagePreviewCategory object-fill h-48 w-48 border border-gray-400 rounded-lg" style="display: none;">
-                                
-                                {% if category.image %}
-                                    <img src="" alt="Profile not loading..." class="viewExistImageCategory object-fill h-48 w-48 border border-gray-400 rounded-lg" style="">
-                                {% else %}
-                                    <img src="{% static 'images/empty_img.jpg' %}" alt="Image not loading..." class="updateCategoryDefaultImage object-fill h-48 w-48 border border-gray-400 rounded-lg" style="">  
-                                {% endif %}
+                                <img src="" id="updateImagePreviewCategory" alt="Image Preview" class="object-fill h-48 w-48 border border-gray-400 rounded-lg" style="display: none;">
 
-                                <label for="formCategoryImage" class="block mb-2 text-sm font-bold text-white"><i class="fa-solid fa-pen-to-square ms-2 cursor-pointer"></i></label>
-                                {{ category_form.image }}
+                                <img src="" id="viewExistImageCategory" alt="Profile not loading..." class="object-fill h-48 w-48 border border-gray-400 rounded-lg" style="">
+
+                                <img src="{% static 'images/empty_img.jpg' %}" id="updateCategoryDefaultImage" alt="Image not loading..." class="object-fill h-48 w-48 border border-gray-400 rounded-lg" style="">  
+
+                                <label for="formCategoryImage1" class="block mb-2 text-sm font-bold text-white"><i class="fa-solid fa-pen-to-square ms-2 cursor-pointer"></i></label>
+                                {{ update_category_form.image }}
                             </div>
                             <div class="col-span-2">
-                                <label for="formCategoryName" class="block mb-2 text-sm font-bold text-white">Category Name</label>
-                                {{ category_form.name }}
+                                <label for="formCategoryName1" class="block mb-2 text-sm font-bold text-white">Category Name</label>
+                                {{ update_category_form.name }}
                             </div>
                         </div>
                         <div class="flex justify-center">

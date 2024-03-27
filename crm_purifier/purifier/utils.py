@@ -1,26 +1,52 @@
-from datetime import datetime, timedelta
 from django.utils import timezone
-from django.conf import settings
-from .models import ServiceWork, Notification
+from datetime import timedelta
+from .models import ServiceWork, AdminNotification, CustomerNotification, EmployeeNotification, ServiceAssign
         
-def today_works():
+def today_works_notification():
     
     today = timezone.now().date()
-    service_works_today = ServiceWork.objects.filter(service_date=today)
+    service_works_today = ServiceWork.objects \
+        .exclude(status='completed') \
+        .filter(service_date=today)
 
     for service_work in service_works_today:
-        Notification.objects.create(
+        AdminNotification.objects.create(
             message=f"Today service work: {service_work.service_work_code}",
             message_of="TODAY_WORK"
         )
+        
+        CustomerNotification.objects.create(
+            user=service_work.customer_code,
+            message=f"Today service work: {service_work.service_work_code}",
+            message_of="TODAY_SERVICES"
+        )
+        
+        service_assigns = ServiceAssign.objects.all()
+        
+        for service_assign in service_assigns:
+            if service_assign.servicer and service_assign.service == service_work:
+                EmployeeNotification.objects.create(
+                    user=service_assign.servicer.name,
+                    message=f"Today service work: {service_work.service_work_code}",
+                    message_of="TODAY_SERVICES"
+                )
 
     print(f"Notifications created successfully.")
-    
 
-def delete_read_notifications():
+
+def tomorrow_works_notification():
     
-    five_days_ago = timezone.now() - timedelta(days=5)
-    notifications_to_delete = Notification.objects.filter(is_read=True, timestamp__lte=five_days_ago)
+    tomorrow = timezone.now().date() + timedelta(days=1)
     
-    for notification in notifications_to_delete:
-        notification.delete()
+    service_works_today = ServiceWork.objects \
+        .exclude(status='completed') \
+        .filter(service_date=tomorrow)
+
+    for service_work in service_works_today:
+        CustomerNotification.objects.create(
+            user=service_work.customer_code,
+            message=f"Tomorrow service work: {service_work.service_work_code}",
+            message_of="TOMORROW_SERVICES"
+        )
+
+    print(f"Notifications created successfully.")

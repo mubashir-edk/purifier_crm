@@ -236,7 +236,9 @@ def viewCategories(request):
     
     category_form = CategoryForm()
     
-    context = {'categories': categories, 'categories_exists': categories_exists, 'category_form': category_form}
+    update_category_form = UpdateCategoryForm()
+    
+    context = {'categories': categories, 'categories_exists': categories_exists, 'category_form': category_form, 'update_category_form': update_category_form}
     
     return render(request, 'product/view_category.html', context)
 
@@ -258,21 +260,23 @@ def updateCategory(request, id):
     
     category = get_object_or_404(Category, pk=id)
     
-    category_form = CategoryForm(instance=category)
+    category_form = UpdateCategoryForm(instance=category)
     
     if request.method == 'POST':
         
-        category_form = CategoryForm(request.POST, request.FILES, instance=category)
+        print("getting piost response")
+        
+        category_form = UpdateCategoryForm(request.POST, request.FILES, instance=category)
+        
+        print(request.FILES)
         
         if category_form.is_valid():
+            
+            print("updating piost response")
             
             category_form.save()
             
             return redirect('purifier:view_categories')
-        
-    context = {'category': category, 'category_form': category_form}
-        
-    return render(request, 'product/view_category.html',context)
 
 @login_required
 def deleteCategory(request, id):
@@ -747,7 +751,7 @@ def viewAssigning(request):
     
     servicework_assign_form = ServiceWorkAssignForm()
     
-    serviceworks_toassign = ServiceAssign.objects.all().order_by('-service__service_work_code')
+    serviceworks_toassign = ServiceAssign.objects.exclude(service__status="completed").order_by('-service__service_work_code')
     
     serviceworks_toassign_exists = serviceworks_toassign.exists()
     
@@ -762,13 +766,15 @@ def viewAssigning(request):
 @login_required
 def assignServicer(request, id):
     
-    servicework = get_object_or_404(ServiceAssign, pk=id)
+    servicework_assign = get_object_or_404(ServiceAssign, pk=id)
     
-    assigned_servicework = servicework.service
+    assigned_servicework = servicework_assign.service
+    
+    servicework = get_object_or_404(ServiceWork, pk=assigned_servicework.id)
     
     if request.method == 'POST':
         
-        servicework_assign_form = ServiceWorkAssignForm(request.POST, instance=servicework)
+        servicework_assign_form = ServiceWorkAssignForm(request.POST, instance=servicework_assign)
         
         if servicework_assign_form.is_valid():
             
@@ -777,6 +783,10 @@ def assignServicer(request, id):
             save_form.service = assigned_servicework
             
             save_form.save()
+            
+            servicework.servicer = save_form.servicer
+            
+            servicework.save()
             
             return redirect('purifier:view_assigns')
         
@@ -789,6 +799,11 @@ def unAssignServicer(request, id):
     
     service_assigned.servicer = None
     
+    servicework = get_object_or_404(ServiceWork, pk=service_assigned.service.id)
+    
+    servicework.servicer = None
+    
+    servicework.save()
     service_assigned.save()
     
     return redirect('purifier:view_assigns')

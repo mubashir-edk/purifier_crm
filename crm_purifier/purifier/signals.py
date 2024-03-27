@@ -127,16 +127,7 @@ def delete_user_employee(sender, instance, **kwargs):
 def delete_user_customer(sender, instance, **kwargs):
     CustomUser.objects.filter(email=instance.email).delete()
     
-
-# def send_notification_to_frontend(notification_data):
-#     channel_layer = get_channel_layer()
-#     async_to_sync(channel_layer.group_send)(
-#         'notifications_group',
-#         {
-#             'type': 'send_notification',
-#             'notification': notification_data
-#         }
-#     )
+    
     
 @receiver(post_save, sender=ServiceWork)
 def service_work_notification(sender, instance, created, **kwargs):
@@ -154,7 +145,14 @@ def service_work_notification(sender, instance, created, **kwargs):
             message_of="SERVICE_COMPLETED"
         )
         
-        # send_notification_to_frontend(f"{instance.service_work_code} completed.")
+    if created:
+        
+        CustomerNotification.objects.create(
+            user=instance.customer_code,
+            message=f"New service work {instance.service_work_code} has created for product {instance.product}.",
+            message_of="SERVICE_NEW"
+        )
+        
 
 @receiver(post_save, sender=ServiceAssign)
 def serviceassign_notification(sender, instance, created, **kwargs):
@@ -167,6 +165,7 @@ def serviceassign_notification(sender, instance, created, **kwargs):
             message_of="SERVICE_ASSIGNED"
         )
 
+
 @receiver(post_save, sender=Customer)
 def customer_notification(sender, instance, created, **kwargs):
     
@@ -176,5 +175,3 @@ def customer_notification(sender, instance, created, **kwargs):
             message=f"{instance.customer_code} has been added.",
             message_of="NEW_CUSTOMER"
         )
-        
-        # send_notification_to_frontend(f"{instance.customer_code} has been added.")

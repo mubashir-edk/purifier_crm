@@ -109,6 +109,7 @@ class ServiceWork(models.Model):
     service_date = models.DateField()
     remark_section = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='pending')
+    servicer = models.ForeignKey(Servicer, on_delete=models.SET_NULL, null=True, blank=True)
     
     created_on = models.DateField(auto_now_add=True)
     
@@ -177,6 +178,7 @@ class CustomerNotification(models.Model):
     
     STATUS_CHOICES = (
         ('SERVICE_COMPLETED', 'SERVICE_COMPLETED'),
+        ('SERVICE_NEW', 'SERVICE_NEW'),
         ('TOMORROW_SERVICES', 'TOMORROW_SERVICES'),
         ('TODAY_SERVICES', 'TODAY_SERVICES'),
     )

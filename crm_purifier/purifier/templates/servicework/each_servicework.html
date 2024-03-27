@@ -22,9 +22,9 @@
                 <div>
 
                     {% if service_work.status == 'pending' %}
-                        <a href="{% url "purifier:servicework_change_status" service_work.id %}"><button id="serviceworkChangeStatus" class="bg-yellow-900 p-1 px-2 mb-1 text-base font-bold rounded text-yellow-300">Working</button></a>
+                        <a href="{% url "purifier:servicework_change_status" service_work.id %}" class="bg-yellow-900 p-1.5 px-2 mb-1 text-base font-bold rounded text-yellow-300">Working</a>
                     {% elif service_work.status == 'working' %}
-                        <a href="{% url "purifier:servicework_change_status" service_work.id %}"><button id="serviceworkChangeStatus" class="bg-green-900 p-1 px-2 mb-1 text-base font-bold rounded text-green-300">Work Done</button></a>
+                        <a href="{% url "purifier:servicework_change_status" service_work.id %}" class="bg-green-900 p-1.5 px-2 mb-1 text-base font-bold rounded text-green-300">Work Done</a>
                     {% else %}
                         <button type="button" data-modal-target="status-modal" data-modal-toggle="status-modal" class="bg-blue-900 p-1 px-2 mb-1 text-base font-bold rounded text-blue-300 cursor-pointer">Sent to Pending</button>
                     {% endif %}
@@ -81,6 +81,14 @@
                 <div>
                     <span class="text-2xl font-bold flex self-end">{{service_work.service_work_code}}<span>
                 </div>
+                <div class="flex">
+                    <span class="text-2xl font-bold flex self-end">Servicer: &nbsp;</span>
+                    {% if service_work.servicer %}
+                        <span class="text-2xl font-bold flex self-end">{{service_work.servicer}}</span>
+                    {% else %}
+                        <span class="text-2xl font-bold flex self-end">Not Assigned</span>
+                    {% endif %}
+                </div>
                 <div class="flex items-center">
                     <span style="font-weight: 500;">Status:</span>
                     <div class="ms-1 status-of-work">
@@ -118,15 +126,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="formServiceWorkDate" class="block mb-2 text-sm font-bold text-black">Service Date</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                            </svg>
-                          </div>
-                        {{ service_work_form.service_date }}
-                        <input type="text" id="dateReadonly" class="block bg-white ps-10 p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500" value="{{service_work.service_date}}">
-                    </div>
+                    {{ service_work_form.service_date }}
+                    <input type="text" id="dateReadonly" class="block bg-white p-2.5 w-full text-sm rounded-lg border-none focus:ring-blue-500" value="{{service_work.service_date}}">
                 </div>
                 <div class="mb-3">
                     <label for="formServiceWorkComment" class="block mb-2 text-sm font-bold text-black">Comments</label>

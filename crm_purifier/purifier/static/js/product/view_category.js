@@ -5,9 +5,9 @@ $(document).ready(function () {
     create_btn.addEventListener('click', function(event) {
         event.preventDefault();
 
-        const imageInputCategory = document.getElementById('formCategoryImage');
-        const imagePreviewCategory = document.getElementById('image-preview-category');
-        const existingImageCategory = document.getElementById('categoryDefaultImage');
+        const imageInputCategory = document.querySelector('#formCategoryImage');
+        const imagePreviewCategory = document.querySelector('#image-preview-category');
+        const existingImageCategory = document.querySelector('#categoryDefaultImage');
 
         imageInputCategory.style.display = 'none';
 
@@ -42,57 +42,55 @@ $(document).ready(function () {
             var category_id = link.getAttribute('data-categoryId');
             var category_image = link.getAttribute('data-categoryImage');
             var category_name = link.getAttribute('data-categoryName');
-
-            console.log(category_image)
             
-            const updateImageInputCategory = document.querySelector('#formCategoryImage');
-            const updateImagePreviewCategory = document.querySelector('.updateImagePreviewCategory');
-            const viewExistingImageCategory = document.querySelector('.viewExistImageCategory');
-            const viewDefaultImageCategory = document.querySelector('.updateCategoryDefaultImage');
+            const updateImageInputCategory = document.getElementById('formCategoryImage1');
 
-            $('#categoryUpdateForm #formCategoryName').val(category_name);
-            updateImageInputCategory.style.display = 'none';
-            // $('#categoryUpdateForm #formCategoryImage').hide();
+            const updateImagePreviewCategory = document.getElementById('updateImagePreviewCategory');
 
-            $(viewExistingImageCategory).attr('src', category_image);
+            const viewExistingImageCategory = document.getElementById('viewExistImageCategory');
+
+            const viewDefaultImageCategory = document.getElementById('updateCategoryDefaultImage');
+
+            $('#formCategoryName1').val(category_name);
+            $('#formCategoryImage1').hide();
 
             if (category_image) {
+                viewExistingImageCategory.src = category_image;
+                viewExistingImageCategory.style.display = 'block';
                 viewDefaultImageCategory.style.display = 'none';
             } else {
                 viewExistingImageCategory.style.display = 'none';
+                viewDefaultImageCategory.style.display = 'block';
             }
 
-            // updateImageInputCategory.addEventListener('change', function () {
-            //     const file = updateImageInputCategory.files[0];
-            //     if (file) {
-            //         console.log("there is already a file");
-            //         const reader = new FileReader();
+            console.log(updateImageInputCategory);
 
-            //         reader.onload = function (e) {
-            //             // updateImagePreviewCategory.src = e.target.result;
-            //             $(updateImagePreviewCategory).attr('src', e.target.result);
-            //             $(updateImagePreviewCategory).show();
-            //             $(viewExistingImageCategory).hide();
-            //             $(viewDefaultImageCategory).hide();
-            //         };
+            updateImageInputCategory.addEventListener('change', function () {
+                const file = updateImageInputCategory.files[0];
+                if (file) {
+                    const reader = new FileReader();
 
-            //         reader.readAsDataURL(file);
-            //     } else {
-            //         // updateImagePreviewCategory.src = '';
-            //         $(updateImagePreviewCategory).attr('src', '');
-            //         $(updateImagePreviewCategory).hide();
-            //         $(viewExistingImageCategory).show();
-            //         $(viewDefaultImageCategory).show();
-            //     }
-            // });
+                    reader.onload = function (e) {
+                        updateImagePreviewCategory.src = e.target.result;
+                        updateImagePreviewCategory.style.display = 'block';
+                        viewExistingImageCategory.style.display = 'none';
+                        viewDefaultImageCategory.style.display = 'none';
+                    };
+
+                    reader.readAsDataURL(file);
+                } else {
+                    updateImagePreviewCategory.src = '';
+                    updateImagePreviewCategory.style.display = 'none';
+                    viewExistingImageCategory.style.display = 'block';
+                    viewDefaultImageCategory.style.display = 'block';
+                }
+            });
 
             updateUrl = `/update_category/${category_id}`;
             $('#categoryUpdateForm').attr('action', updateUrl)
 
         });
     });
-    
-    
 
     // delete modal
     var deleteCategoryLinks = document.querySelectorAll('.category-delete-icon');
