@@ -182,17 +182,9 @@ CHANNEL_LAYERS = {
 # Api Email Connect
 FRONTEND_URL = config('FRONTEND_URL', default='*')
 
-# CRONJOBS
-CRONJOBS = [
-    ('1 0 * * *', 'purifier.utils.today_works_notification'),
-    ('0 10 * * *', 'purifier.utils.tomorrow_works_notification'),
-]
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'user_management.backends.CustomUserBackend',
 ]
 
 AUTH_USER_MODEL = 'user_management.CustomUser'
-
-

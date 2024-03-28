@@ -1,6 +1,8 @@
 from django.utils import timezone
 from datetime import timedelta
 from .models import ServiceWork, AdminNotification, CustomerNotification, EmployeeNotification, ServiceAssign
+import schedule
+import time
         
 def today_works_notification():
     
@@ -50,3 +52,17 @@ def tomorrow_works_notification():
         )
 
     print(f"Notifications created successfully.")
+    
+    
+
+def run_scheduler():
+    
+    schedule.every().day.at("00:01").do(today_works_notification)
+    schedule.every().day.at("10:00").do(tomorrow_works_notification)
+
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(60)  # Check for pending tasks every minute
+
+# If you want to start the scheduler automatically when Django starts
+run_scheduler()

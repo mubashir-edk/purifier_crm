@@ -112,19 +112,4 @@ $(document).ready(function () {
         }
     });
 
-    // SERVICES SELECT CHECK
-    // document.getElementById('serviceWorkFormG').addEventListener('submit', function(event) {
-    //     var checkboxes = document.querySelectorAll('#formServiceWorkService input[type="checkbox"]');
-    //     var checked = false;
-    //     checkboxes.forEach(function(checkbox) {
-    //         if (checkbox.checked) {
-    //             checked = true;
-    //         }
-    //     });
-    //     if (!checked) {
-    //         event.preventDefault();
-    //         alert('Please select at least one service.');
-    //     }
-    // });
-
 });

@@ -239,59 +239,6 @@
         }
   
     </script>
-
-    {% comment %} $(document).ready(function() {
-
-        $('#serviceNotDoneTable #searchInputUpcoming').on('keyup', function() {
-            var value = $(this).val().toLowerCase();
-            var found = false;
-            $('#serviceNotDoneTable tbody tr').each(function() {
-                var text = $(this).text().toLowerCase();
-                $(this).toggle(text.indexOf(value) > -1);
-                if (text.indexOf(value) > -1) {
-                    found = true;
-                }
-            });
-            if (!found) {
-                $('#serviceNotDoneTable #noRecordsFound').remove();
-                $('#serviceNotDoneTable tbody').append('<tr id="noRecordsFound"><td colspan="2" class="text-center">No matching records found</td></tr>');
-            } else {
-                $('#serviceNotDoneTable #noRecordsFound').remove();
-            }
-        });
-
-        $('#serviceNotDoneTable').DataTable();
-        $('#serviceNotDoneTable').DataTable({
-            "searching": true, // Enable searching
-            "paging": false, // Disable pagination (optional)
-            "info": false // Disable table information display (optional)
-        });
-
-        $('#serviceTodayTable #searchInputToday').on('keyup', function() {
-            var value = $(this).val().toLowerCase();
-            var found = false;
-            $('#serviceTodayTable tbody tr').each(function() {
-                var text = $(this).text().toLowerCase();
-                $(this).toggle(text.indexOf(value) > -1);
-                if (text.indexOf(value) > -1) {
-                    found = true;
-                }
-            });
-            if (!found) {
-                $('#serviceTodayTable #noRecordsFound').remove();
-                $('#serviceTodayTable tbody').append('<tr id="noRecordsFound"><td colspan="2" class="text-center">No matching records found</td></tr>');
-            } else {
-                $('#serviceTodayTable #noRecordsFound').remove();
-            }
-        });
-
-        $('#serviceTodayTable').DataTable({
-            "searching": true, // Enable searching
-            "paging": false, // Disable pagination (optional)
-            "info": false // Disable table information display (optional)
-        });
-
-    }); {% endcomment %}
     
     
 
