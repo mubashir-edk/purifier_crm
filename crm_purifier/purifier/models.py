@@ -87,7 +87,7 @@ class Test(models.Model):
     hardness_value = models.CharField(max_length=30)
     turbuet_value = models.CharField(max_length=30)
     
-    created_on = models.DateField(auto_now_add=True)
+    created_on = models.DateTimeField(auto_now_add=True)
     
     def __str__(self) -> str:
         return self.test_name
