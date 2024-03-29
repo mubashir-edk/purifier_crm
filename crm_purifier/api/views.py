@@ -16,10 +16,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct, ServiceAssign, Servicer, EmployeeNotification, CustomerNotification
+from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct, ServiceAssign, Servicer, EmployeeNotification, CustomerNotification, Product
 from api.models import StoreRefreshToken
 from user_management.backends import CustomUserBackend
-from .serializers import CustomUserSerializer, EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer, CustomerProductSerializer,EmployeeNotificationSerializer, CustomerNotificationSerializer
+from .serializers import CustomUserSerializer, EmployeeSerializer, CustomerSerializer, TestSerializer, ServiceWorkSerializer, CustomerProductSerializer,EmployeeNotificationSerializer, CustomerNotificationSerializer, ProductSerializer
 from django.utils import timezone
 
 def get_tokens_for_user(user):
@@ -412,6 +412,14 @@ class employeeNotificationAPIView(APIView):
         serializer = EmployeeNotificationSerializer(notifications, many=True)
         return Response(serializer.data)
 
+# For Customer and Employee  
+class ProductAPIView(APIView):
+    permission_classes = [CustomIsAuthenticated]
+    
+    def get(self, request, id):
+        product = get_object_or_404(Product, pk=id)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
 
 # For Customer
 class customerNotificationAPIView(APIView):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from user_management.models import CustomUser
-from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct, EmployeeNotification, CustomerNotification, Product, Category
+from purifier.models import Employee, Customer, Test, ServiceWork, CustomerProduct, EmployeeNotification, CustomerNotification, Product, Category, Service
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,8 +17,14 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
         
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = '__all__'
+        
 class ProductSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True)
+    servicers = serializers.PrimaryKeyRelatedField(queryset=Service.Objects.all(), many=True)
     
     class Meta:
         model = Product
@@ -26,10 +32,17 @@ class ProductSerializer(serializers.ModelSerializer):
         
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        
         category_instance = instance.category
         if category_instance:
             category_serializer = CategorySerializer(category_instance)
             representation['category_details'] = category_serializer.data
+            
+        service_instances = instance.installed_product.all()
+        if service_instances:
+            service_serializer = ServiceSerializer(service_instances, many=True)
+            representation['service_details'] = service_serializer.data
+            
         return representation
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -121,4 +134,3 @@ class CustomerNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerNotification
         fields = '__all__'
-

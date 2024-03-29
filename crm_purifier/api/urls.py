@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import LoginAPIView, LogoutAPI, RefreshTokenApi, EmployeeProfileAPIView, PasswordChangeAPIView, PasswordResetRequestAPIView, PasswordResetAPIView, CustomerAPIView, TestAPIView, ServiceWorkAPIView, CustomerProfileAPIView, CustomerServiceWorkAPIView, CustomerProductsAPIView, ServiceWorkDueAPIView, employeeNotificationAPIView, customerNotificationAPIView
+from .views import LoginAPIView, LogoutAPI, RefreshTokenApi, EmployeeProfileAPIView, PasswordChangeAPIView, PasswordResetRequestAPIView, PasswordResetAPIView, CustomerAPIView, TestAPIView, ServiceWorkAPIView, CustomerProfileAPIView, CustomerServiceWorkAPIView, CustomerProductsAPIView, ServiceWorkDueAPIView, employeeNotificationAPIView, customerNotificationAPIView, ProductAPIView
 
 app_name = 'api'
 
@@ -11,6 +11,8 @@ urlpatterns = [
     path('password_change/', PasswordChangeAPIView.as_view(), name='password_change'),
     path('password_reset_request/', PasswordResetRequestAPIView.as_view(), name='password_reset_request'),
     path('password_reset/<uidb64>/<token>/', PasswordResetAPIView.as_view(), name='password_reset'),
+    
+    path('product/<uidb64>/', ProductAPIView.as_view(), name='product'),
     
     # for employees
     path('employee_profile/', EmployeeProfileAPIView.as_view(), name='employee_profile'),
