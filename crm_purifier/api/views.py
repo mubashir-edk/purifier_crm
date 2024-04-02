@@ -345,7 +345,9 @@ class ServiceWorkAPIView(APIView):
 
     def get_all_serviceworks(self, request):
         user = self.request.user
-        employee = Servicer.objects.get(name__employee_code=user.username)  
+        print(user.username)
+        employee = get_object_or_404(Servicer, name__employee_code=user.username)  
+        print("employee:",employee)
         works_assigned_for_employee = ServiceAssign.objects.filter(servicer=employee)
         serviceworks = []
         

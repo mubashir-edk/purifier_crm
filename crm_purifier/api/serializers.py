@@ -38,7 +38,7 @@ class ProductSerializer(serializers.ModelSerializer):
             category_serializer = CategorySerializer(category_instance)
             representation['category_details'] = category_serializer.data
             
-        service_instances = instance.installed_product.all()
+        service_instances = instance.services
         if service_instances:
             service_serializer = ServiceSerializer(service_instances, many=True)
             representation['service_details'] = service_serializer.data
@@ -54,6 +54,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        print(instance)
         products_instances = instance.installed_product.all()
         if products_instances:
             product_serializer = ProductSerializer(products_instances, many=True)
