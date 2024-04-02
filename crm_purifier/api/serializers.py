@@ -23,7 +23,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class ProductSerializer(serializers.ModelSerializer):
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     services = serializers.PrimaryKeyRelatedField(queryset=Service.objects.all(), many=True)
     
     class Meta:
