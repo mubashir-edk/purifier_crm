@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 # Employee Functions --------------------------------------------------------------------------------------------------------------------------------
@@ -157,6 +158,8 @@ def createCustomer(request):
             customer.customer_code = generated_customer_code
  
             customer.save()
+            
+            messages.success(request, "Customer Added Successfully")
             
             installed_products = request.POST.getlist('installed_product')
             customer.installed_product.set(installed_products)

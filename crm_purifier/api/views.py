@@ -416,12 +416,23 @@ class employeeNotificationAPIView(APIView):
 
 # For Customer and Employee  
 class ProductAPIView(APIView):
-    permission_classes = [CustomIsAuthenticated]
+    permission_classes = [AllowAny]
     
-    def get(self, request, id):
+    def get_product_by_id(self, request, id):
         product = get_object_or_404(Product, pk=id)
         serializer = ProductSerializer(product)
         return Response(serializer.data)
+    
+    def get_all_products(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    
+    def get(self, request, id=None):
+        if id:
+            return self.get_product_by_id(request, id)
+        else:
+            return self.get_all_products(request)
 
 # For Customer
 class customerNotificationAPIView(APIView):

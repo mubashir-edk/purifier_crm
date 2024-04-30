@@ -12,6 +12,7 @@ urlpatterns = [
     path('password_reset_request/', PasswordResetRequestAPIView.as_view(), name='password_reset_request'),
     path('password_reset/<uidb64>/<token>/', PasswordResetAPIView.as_view(), name='password_reset'),
     
+    path('products/', ProductAPIView.as_view(), name='product'),
     path('product/<uuid:id>/', ProductAPIView.as_view(), name='product'),
     
     # for employees
