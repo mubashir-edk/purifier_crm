@@ -201,6 +201,11 @@ def updateCustomer(request , id):
     customer_code_stored = customer.customer_code
     customer_pass_stored = customer.initial_password
     
+    if customer.location:
+        customer_location = customer.location
+    else:
+        customer_location = None
+    
     if request.method == 'POST':
         
         customer_form = CustomerForm(request.POST, request.FILES, instance=customer)
@@ -209,6 +214,7 @@ def updateCustomer(request , id):
             
             customer_save = customer_form.save(commit=False)
             customer_save.customer_code = customer_code_stored
+            customer_save.location = customer_location
             customer_save.initial_password = customer_pass_stored
             customer_save.save() 
             
